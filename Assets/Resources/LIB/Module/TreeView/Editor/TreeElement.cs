@@ -95,7 +95,9 @@ namespace UnityEditor.TreeViewExamples
         {
             װאיכû.Clear();
             if (Directory.Exists(this.path) == false) return;
-            foreach (string f in Directory.GetFiles(this.path,"*.cs"))
+            foreach (string f in Directory.GetFiles(this.path, "*.cs"))
+                װאיכû.Add(f);
+            foreach (string f in Directory.GetFiles(this.path, "*.shader"))
                 װאיכû.Add(f);
         }
         public MyTreeElement(bool NoProject, string name, string description, string path, int depth, int id) : base(name, depth, id)

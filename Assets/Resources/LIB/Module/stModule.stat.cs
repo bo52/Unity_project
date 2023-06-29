@@ -50,10 +50,6 @@ static public class Class
                     if (комментарий && line.IndexOf("///") == -1)
                     {
                         Ўапка = ќпределитьЎапку(ref ID, line);
-                        if (Ўапка == "field230625213403")
-                        {
-                            var text = "";
-                        }
                         uses.Class.ќбработка—трокиƒл€ћодул€(numbers, line, M, bs.Count, Ўапка);
                         комментарий = false;
                     }

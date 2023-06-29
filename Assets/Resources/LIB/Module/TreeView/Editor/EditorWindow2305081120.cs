@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 using System;
+using System.Linq;
 using UnityEditor.TreeViewExamples;
 /// <summary>
 /// 
@@ -48,13 +49,18 @@ public class EditorGUILayoutTest : EditorWindow, IEditorGUILayoutPopup
         }
     }
     public int tabs = 3;
-    string[] tabOptions = new string[] {"PROJECT","GO","FUNS","CLASS","STRUCT" };
     void OnGUI()
     {
         stModule.file.Class.Открыть();
-        tabs = GUILayout.Toolbar(tabs,tabOptions);
-        Разделы[tabs].fun_project(this,tabs);
+        tabs = GUILayout.Toolbar(tabs,(from x in Разделы select Enum.GetName(typeof(stModule.path.Class.Разделы),x.Номер) as String).ToArray<string>());
+        Разделы[tabs].fun_project(this, tabs);
     }
+
+    private object GetName<T>(byte номер)
+    {
+        throw new NotImplementedException();
+    }
+
     public void Очистить()
     {
         //очистка игрового объекта
@@ -64,18 +70,19 @@ public class EditorGUILayoutTest : EditorWindow, IEditorGUILayoutPopup
                 UnityEngine.Object.DestroyImmediate(child.gameObject);
         UnityEngine.Object.DestroyImmediate(stModule.world.Class.Моно);
     }
-    private MyTree[] Разделы = new MyTree[5] {
-        new MyTree(0,stModule.path.Class.КореньМира),
-        new MyTree(1,stModule.path.Class.КореньОбъектМира),
-        new MyTree(2,stModule.path.Class.КореньФунМира),
-        new MyTree(3,stModule.path.Class.КореньКласс),
-        new MyTree(4,stModule.path.Class.КореньСтрукт),
+    private MyTree[] Разделы = new MyTree[6] {
+        new MyTree((byte)stModule.path.Class.Разделы.PROG,stModule.path.Class.КореньМира),
+        new MyTree((byte)stModule.path.Class.Разделы.GO,stModule.path.Class.КореньОбъектМира),
+        new MyTree((byte)stModule.path.Class.Разделы.CLASS,stModule.path.Class.КореньКласс),
+        new MyTree((byte)stModule.path.Class.Разделы.STRUCT,stModule.path.Class.КореньСтрукт),
+        new MyTree((byte)stModule.path.Class.Разделы.FUNS,stModule.path.Class.КореньФунМира),
+        new MyTree((byte)stModule.path.Class.Разделы.SHADER,stModule.path.Class.КореньШейдеров),
     };
     private class MyTree
     {
         string PATH;
-        byte Номер;
-        public MyTree(byte Номер,string PATH)
+        public byte Номер;
+        public MyTree(byte Номер, string PATH)
         {
             this.Номер = Номер;
             this.PATH = PATH;
@@ -96,16 +103,16 @@ public class EditorGUILayoutTest : EditorWindow, IEditorGUILayoutPopup
         }
         void InitIfNeeded()
         {
-                // Check if it already exists (deserialized from window layout file or scriptable object)
-                if (m_TreeViewState == null)
-                    m_TreeViewState = new UnityEditor.IMGUI.Controls.TreeViewState();
+            // Check if it already exists (deserialized from window layout file or scriptable object)
+            if (m_TreeViewState == null)
+                m_TreeViewState = new UnityEditor.IMGUI.Controls.TreeViewState();
 
-                m_TreeView = new CustomHeightTreeView(InitIfNeeded,m_TreeViewState, new TreeModel<MyTreeElement>(GetData()));             
+            m_TreeView = new CustomHeightTreeView(InitIfNeeded, m_TreeViewState, new TreeModel<MyTreeElement>(GetData()));
 
-                m_SearchField = new UnityEditor.IMGUI.Controls.SearchField();
-                m_SearchField.downOrUpArrowKeyPressed += m_TreeView.SetFocusAndEnsureSelectedItem;
+            m_SearchField = new UnityEditor.IMGUI.Controls.SearchField();
+            m_SearchField.downOrUpArrowKeyPressed += m_TreeView.SetFocusAndEnsureSelectedItem;
 
-                m_Initialized = true;
+            m_Initialized = true;
         }
         void SearchBar(EditorGUILayoutTest edit, Rect rect)
         {
@@ -113,6 +120,12 @@ public class EditorGUILayoutTest : EditorWindow, IEditorGUILayoutPopup
             var style = "miniButton";
             using (new EditorGUILayout.HorizontalScope())
             {
+                //if (GUILayout.Button("DIR.add", style))
+                //{
+                    //EditorUtility.DisplayDialog(name, PATH, "Добавить", "Отмена");
+                    //var dlgResult = UnityEngine.Rendering.DebugUI.MessageBox.Show("Patterns have been logged successfully", "Logtool", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    //Directory.CreateDirectory(stModule.path.Class.ОпределитьКореньРаздела(Номер));
+                //}
                 if (GUILayout.Button("Обновить", style)) m_Initialized = false;
                 if (GUILayout.Button("Expand All", style))
                     m_TreeView.ExpandAll();
@@ -130,12 +143,12 @@ public class EditorGUILayoutTest : EditorWindow, IEditorGUILayoutPopup
         {
             m_TreeView.OnGUI(rect);
         }
-        public void fun_project(EditorGUILayoutTest edit,int key)
+        public void fun_project(EditorGUILayoutTest edit, int key)
         {
             if (!m_Initialized) InitIfNeeded();
-            SearchBar(edit,edit.toolbarRect);
+            SearchBar(edit, edit.toolbarRect);
             DoTreeView(edit.multiColumnTreeViewRect);
-            if (key==0) edit.BottomToolBar(edit.bottomToolbarRect);
+            if (key == 0) edit.BottomToolBar(edit.bottomToolbarRect);
         }
     }
     Rect toolbarRect
@@ -195,7 +208,7 @@ public class EditorGUILayoutTest : EditorWindow, IEditorGUILayoutPopup
     static class MyTreeElementGenerator
     {
         static int IDCounter;
-        public static List<MyTreeElement> GenerateRandomTree(int numTotalElements,string PATH)
+        public static List<MyTreeElement> GenerateRandomTree(int numTotalElements, string PATH)
         {
             IDCounter = 0;
             var treeElements = new List<MyTreeElement>(numTotalElements);

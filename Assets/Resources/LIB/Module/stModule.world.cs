@@ -12,7 +12,7 @@ namespace stModule.world {
         {
             get
             {
-                if (_go == null) _go = GameObject.Find("Directional Light");
+                if (_go == null) _go = GameObject.Find("Root");
                 return _go;
             }
         }

@@ -61,7 +61,7 @@ namespace stModule.join
         static public path.Class.Body ВытащитьСтрокиСтатическогоОбъекта(uint m, int ID)
         {
             var arr = (from f in path.Class.Библиотеки[m].fs where f.i == ID select f).ToArray();
-            if (arr.Length == 0) Debug.Log(m+"."+ID);
+            if (arr.Length == 0) Debug.Log("ERROR:"+m+"."+ID);
             return arr[0];
         }
 

@@ -9,7 +9,7 @@ using System.IO;
 //empty
 //empty
 //empty
-namespace LIB.go2305271030
+namespace LIB.go2306252014
 {
     public interface IInspector : go2305081120.IInspector
     {
@@ -18,16 +18,19 @@ namespace LIB.go2305271030
     public class Inspector : go2305081120.Inspector, IInspector
     {
         new public IScene СЦЕНА => объектСЦЕНА as IScene;
-        private cs2306221522.IClass Редактор = new cs2306221522.Class();
-
-        public override bool Тест()
+        static T Создать<T>() where T : new()
         {
-            //st.Class.fun230626220600_ПостроитьОдинЧанкЗемлиПоУмолчанию(this.Моно.gameObject);
-            return false;
+            return new T();
+        }
+        //System.Type [] d=new System.Type { System.TypeOf(cs2306282238.Class)}
+        static class Классы
+        {
+            public static string ОдинЧанкЗемлиПоУмолчанию = cs2306282238.Class.INFO;
+            public static cs2306282238.IDefault X = st.Class.fun230514161402_СоздатьОбъектПоИмени(ОдинЧанкЗемлиПоУмолчанию) as cs2306282238.IDefault;
         }
         override public bool Выполнить()
         {
-            Редактор.ИнтерфейсПостроитьПоВДШ(this.Моно.gameObject);
+            Классы.X.ИнтерфейсПоУмолчанию(Моно.gameObject);
             return base.Выполнить();
         }
     }
@@ -86,8 +89,8 @@ public interface IInspector : go2305082132.IInspector
 public class Inspector : go2305082132.Inspector, IInspector
 {
     public IScene СЦЕНА => объектСЦЕНА as IScene;
-    private Object Scene;
-    public Object объектСЦЕНА
+    private object Scene;
+    public object объектСЦЕНА
     {
         get
         {
@@ -122,7 +125,7 @@ namespace LIB.go2305082132
     /// <summary>
     /// 
     /// </summary>
-    public class Inspector : Object, IInspector
+    public class Inspector : object, IInspector
     {
         public Inspector() { }
         public Inspector(MonoBehaviour MB) => this.MB = MB;
@@ -350,126 +353,122 @@ namespace LIB.go2305081120
 //empty
 //empty
 //empty
-namespace LIB.cs2306221522
+namespace LIB.cs2306282238
 {
     /// <summary>
     ///
     /// </summary>
-    public interface IClass
+    public interface IDefault
     {
-        void ИнтерфейсПостроитьПоВДШ(GameObject go);
+        bool ИнтерфейсПоУмолчанию(GameObject go);
     }
     /// <summary>
-    /// рекурсивный куб с координатой
+    ///
+    /// </summary>
+    public interface IClass: IDefault
+    {
+        public bool СуществуетМеш { get; }
+        public void ПривязатьМеш(GameObject go);
+        void ПостроитьОдинЧанкЗемлиПоУмолчанию(GameObject go);
+    }
+    /// <summary>
+    ///
     /// </summary>
     public class Class : IClass
     {
-        static public string INFO = "INFO";
-        Vector3 hlw = Vector3.one;
-        bool hlw_btn = false;
-        Vector3 v0 = Vector3.zero;
-        bool v0_btn = false;
-        public void ИнтерфейсПостроитьПоВДШ(GameObject go) => ИнтерфейсПостроитьПоВДШ(go, st.Class.field230626220601_Chunk_R);
-        public void ИнтерфейсПостроитьПоВДШ(GameObject go, byte R)
+        static public string INFO = "LIB.cs2306282238.Class";
+        /// <summary>
+        /// 
+        /// </summary>
+        static public byte Chunk_R = 32;
+        /// <summary>
+        /// координата по оси y по умолчанию земли
+        /// </summary>
+        static public int НулеваяВысота = 1;
+        /// <summary>
+        /// код земли
+        /// </summary>
+        static public byte КодПоУмолчанию = 51;
+        /// <summary>
+        /// 
+        /// </summary>
+        cs2306291207.Class.Struct ПараметрыЧанка = new cs2306291207.Class.Struct("chunk." + КодПоУмолчанию + "." + Chunk_R, "default/");
+        /// <summary>
+        ///
+        /// </summary>
+        public bool СуществуетМеш => st.Class.fun230516161901_СуществуетМеш(ПараметрыЧанка.namefile);
+
+        public void ПривязатьМеш(GameObject go) => st.Class.fun230507204602_ПривязатьМешОтФайлаПоИмени(ПараметрыЧанка.namefile, go, ПараметрыЧанка.path);
+
+        public void ФункцияПостройки(cs2305141202.IClass edit)
         {
-            GUILayout.BeginVertical();
-            var b_hlw = st.Class.fun230514135401_Вектор(ref hlw, ref hlw_btn, "hlw", 0, R);
-            var b_v0 = st.Class.fun230514135401_Вектор(ref v0, ref v0_btn, "v0", 0, R);
-            GUILayout.EndVertical();
-            if (b_hlw || b_v0) ПостроитьПоВДШ(go, R);
+            Vector3 v;
+            for (var z = 0; z <= Chunk_R; z++)
+                for (var x = 0; x <= Chunk_R; x++)
+                {
+                    v = new Vector3(x, НулеваяВысота, z);
+                    edit.ИзменитьТекущийБлокИПостроить(new cs2306262134.Class(v, КодПоУмолчанию));
+                }
         }
+        /// <summary>
+        ///
+        /// </summary>
+        public virtual void ПостроитьОдинЧанкЗемлиПоУмолчанию(GameObject go) => ПараметрыЧанка.ПостроитьМеш(ФункцияПостройки, go);
         /// <summary>
         /// 
         /// </summary>
         /// <param name="go"></param>
-        /// <param name="h"></param>
-        /// <param name="l"></param>
-        /// <param name="w"></param>
-        /// <param name="v0"></param>
-        public void ПостроитьПоВДШ(GameObject go, byte R)
+        /// <returns></returns>
+        public bool ИнтерфейсПоУмолчанию(GameObject go)
         {
-            var s = new cs2306271146.Class(R, new cs2306271320.Class(hlw), v0);
-            s.СобратьЧанк(go);
+            return st.Class.fun230516115102_btn_name("ОдинЧанкМираПоУмолчанию", () => ПостроитьОдинЧанкЗемлиПоУмолчанию(go));
         }
     }
 }
 //empty
 //empty
 //empty
-namespace LIB.cs2306271146
+namespace LIB.cs2306291207
 {
     /// <summary>
     ///
     /// </summary>
-    public struct Class
+    public interface IClass: cs2305141202.IClass
     {
-        static public string INFO = "INFO";
-        public Vector3 v0;
-        public cs2306271320.Class hlw;
-        public byte R;
-        public Class(byte R, cs2306271320.Class hlw, Vector3 v0)
-        {
-            this.R = R;
-            this.v0 = v0;
-            this.hlw = hlw;
-        }
-        private bool СуществуетВершина(Vector3 v)
-        {
-            if (v.x < v0.x || v.x > v0.x + hlw.Длинна) return false;
-            if (v.y < v0.y || v.y > v0.y + hlw.Высота) return false;
-            if (v.z < v0.z || v.z > v0.z + hlw.Ширина) return false;
-            return true;
-        }
-        //собрать
-        public void СобратьЧанк(GameObject go, bool Сохранить = false)
-        {
-            Vector3 v;
-            byte code;
-            var edit = new cs2305141202.Class(go);
-            for (var x = 0; x <= R; x++)
-                for (var y = 0; y <= R; y++)
-                    for (var z = 0; z <= R; z++)
-                    {
-                        //получитьКод
-                        v = new Vector3(x, y, z);
-                        code = st.Class.fun230627120900_СформироватьКодБлока(v, СуществуетВершина);
-                        edit.ИзменитьТекущийБлокИПостроить(new cs2306262134.Class(v, code));
-                    }
-            //hlw.ИмяЧанка, hlw.PATH + "/"
-            if (Сохранить)
-                st.Class.fun230516171605_СохранитьМешПоИмениОтРедактора(edit, hlw.ИмяЧанка, hlw.PATH + "/");
-            else st.Class.fun230507204601_ПривязатьМешОтРедактора(edit);
-        }
     }
-}
-//empty
-//empty
-//empty
-namespace LIB.cs2306271320
-{
     /// <summary>
-    ///
+    /// Только Сохранить
     /// </summary>
-    public struct Class
+    public class Class : cs2305141202.Class, IClass
     {
         static public string INFO = "INFO";
-        public byte Высота;//y
-        public byte Длинна;//x
-        public byte Ширина;//z
-        public Class(byte Высота, byte Длинна, byte Ширина)
+        public struct Struct
         {
-            this.Высота = Высота;
-            this.Длинна = Длинна;
-            this.Ширина = Ширина;
+            public string path;
+            public string namefile;
+            public Struct(string ИмяМеша, string ПатчМеша="")
+            {
+                this.path = ПатчМеша;
+                this.namefile = ИмяМеша;
+            }
+            public void Сохранить(Mesh M) => st.Class.fun230516171604_СохранитьМешПоИмени(M, namefile, path);
+            public void ПостроитьМеш(System.Action<cs2305141202.IClass> ФункцияПостройки, GameObject go = null)
+            {
+                cs2305141202.IClass edit = go == null ? new cs2306291207.Class(this, ФункцияПостройки)/*Save*/ : new cs2306291245.Class(this, go, ФункцияПостройки)/*Save+go*/;
+                edit.Закрыть();
+            }
         }
-        public Class(Vector3 v)
+        Struct Параметры;
+        public Class(Struct Параметры, System.Action<cs2305141202.IClass> ФункцияПостройки) :base(ФункцияПостройки)
         {
-            this.Высота = (byte)v.y;
-            this.Длинна = (byte)v.x;
-            this.Ширина = (byte)v.z;
+            this.Параметры = Параметры;
         }
-        public string PATH => "chunk.hlw";
-        public string ИмяЧанка => PATH + "." + Высота + "." + Длинна + "." + Ширина;
+        public override Mesh Закрыть()
+        {
+            var M = base.Закрыть();
+            Параметры.Сохранить(M);
+            return M;
+        }
     }
 }
 //empty
@@ -478,7 +477,7 @@ namespace LIB.cs2306271320
 namespace LIB.cs2305141202
 {
     /// <summary>
-    /// interface постройки куба
+    /// interface постройки блока
     /// </summary>
     public interface IClass : cs2305141208.IClass
     {
@@ -487,8 +486,9 @@ namespace LIB.cs2305141202
     }
     public class Class : cs2305141208.Class, IClass
     {
-        public Class(GameObject go): base(go)
+        public Class(System.Action<IClass> ФункцияПостройки) : base(ФункцияПостройки)
         {
+
         }
         /// <summary>
         /// Одинаковые методы класса и интерфейса зацикливают выполнение метода класса
@@ -520,19 +520,21 @@ namespace LIB.cs2305141208
     /// </summary>
     public interface IClass : cs2305141215.IClass
     {
-        GameObject GO { get; }
+        System.Action<cs2305141202.IClass> ФункцияПостройки { get; }
         Mesh ПолучитьМеш();
-        void Закрыть();
+        Mesh Закрыть();
     }
     public class Class : cs2305141215.Class, IClass
     {
-        private GameObject _go;  public GameObject GO => _go;
-        public Class(GameObject go) => this._go = go;
-        public virtual void Закрыть()
+        private System.Action<cs2305141202.IClass> _fun_build; public System.Action<cs2305141202.IClass> ФункцияПостройки => _fun_build;
+        public Class(System.Action<cs2305141202.IClass> ФункцияПостройки)
         {
-            var M = ПолучитьМеш();
-            var Меш = new cs2305182039.Class(M, GO);
-            Меш.Связать();
+            this._fun_build = ФункцияПостройки;
+        }
+        public virtual Mesh Закрыть()
+        {
+            ФункцияПостройки(this as cs2305141202.IClass);
+            return ПолучитьМеш();
         }
         public Mesh ПолучитьМеш()
         {
@@ -706,29 +708,66 @@ namespace LIB.cs2306262134
 }
 //empty
 //empty
-//структура из Меш и Go (без файла)
-namespace LIB.cs2305182039
+//empty
+namespace LIB.cs2306291245
 {
     /// <summary>
     ///
     /// </summary>
-    public struct Class
+    public interface IClass
     {
-        static public string INFO = "INFO";
-        public GameObject go;
-        public Mesh m;
-        public Class(Mesh m, GameObject go = null)
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    public class Class : cs2306291123.Class, IClass
+    {
+        static new public string INFO = "INFO";
+        cs2306291207.Class.Struct Параметры;
+        public Class(cs2306291207.Class.Struct Параметры, GameObject go, System.Action<cs2305141202.IClass> ФункцияПостройки) : base(go, ФункцияПостройки)
         {
-            this.m = m;
-            this.go = go;
+            this.Параметры = Параметры;
         }
-        public void Связать() => st.Class.fun230507204600_ПривязатьМешКОбъекту(m, go);
+        public override Mesh Закрыть()
+        {
+            var M = base.Закрыть();
+            Параметры.Сохранить(M);
+            return M;
+        }
     }
 }
 //empty
 //empty
 //empty
-namespace LIB.go2305271030
+namespace LIB.cs2306291123
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public interface IClass : cs2305141202.IClass
+    {
+        GameObject GO { get; }
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    public class Class : cs2305141202.Class, IClass
+    {
+        static public string INFO = "INFO";
+        private GameObject _go; public GameObject GO => _go;
+        public Class(GameObject go,System.Action<cs2305141202.IClass> ФункцияПостройки) :base(ФункцияПостройки) => this._go = go;
+        public override Mesh Закрыть()
+        {
+            var M = base.Закрыть();
+            st.Class.fun230507204600_ПривязатьМешКОбъекту(M, GO);
+            return M;
+        }
+    }
+}
+//empty
+//empty
+//empty
+namespace LIB.go2306252014
 {
 public interface IScene:go2305081120.IScene
 {
@@ -751,7 +790,7 @@ static public class Class
         /// <param name="INS"></param>
         /// <param name="ev"></param>
         /// <returns></returns>
-        static public Object fun230514161403(go2305081120.IInspector INS, string ev)
+        static public object fun230514161403(go2305081120.IInspector INS, string ev)
         {
             var mb = INS.Моно as cs2305161108.IMono;
             var obj = fun230514161402_СоздатьОбъектПоИмени("LIB.go" + mb.НомерМира.ToString() + "." + ev);
@@ -775,7 +814,7 @@ static public class Class
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        static public Object fun230514161402_СоздатьОбъектПоИмени(this string name)
+        static public object fun230514161402_СоздатьОбъектПоИмени(this string name)
         {
             System.Type TestType = System.Type.GetType(name, false, true);
             //если класс не найден
@@ -785,112 +824,7 @@ static public class Class
 
             //вызываем конструтор
             var obj = ci.Invoke(new object[] { });
-            return obj as Object;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        static public byte field230626220601_Chunk_R = 64;
-        /// <summary>
-        /// ПолзунокВектор
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="B"></param>
-        /// <param name="name"></param>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <param name="fun"></param>
-        /// <returns></returns>
-        static public bool fun230514135401_Вектор(this ref Vector3 i, ref bool B, string name = "default", int min = 1, int max = 5, System.Action<Vector3> fun = null)
-        {
-            var b = false;
-            var v = i;
-            st.Class.fun230516124600(() =>
-            {
-                var x = (int)v.x;
-                var y = (int)v.y;
-                var z = (int)v.z;
-                GUILayout.BeginVertical();
-                st.Class.fun230508154400(name);
-                var X = fun230514135400_slider_int(ref x, "x", min, max);
-                var Y = fun230514135400_slider_int(ref y, "y", min, max);
-                var Z = fun230514135400_slider_int(ref z, "z", min, max);
-                GUILayout.EndVertical();
-                if (X || Y || Z)
-                {
-                    v = new Vector3(x, y, z);
-                    b = true;
-                    return;
-                }
-                b = false;
-            }, "Векторы", ref B);
-            if (b)
-            {
-                i = v;
-                fun?.Invoke(v);
-            }
-            return b;
-        }
-        /// <summary>
-        /// Foldout
-        /// </summary>
-        /// <param name="выполнить"></param>
-        /// <param name="Заголовок"></param>
-        /// <param name="but"></param>
-        /// <returns></returns>
-        static public bool fun230516124600(System.Action выполнить, string Заголовок, ref bool but)
-        {
-            var b = EditorGUILayout.Foldout(but, Заголовок) != but;
-            if (b)
-            {
-                but = !but;
-            }
-
-
-            if (but)
-                if (Selection.activeTransform)
-                    выполнить();
-            if (!Selection.activeTransform)
-                but = false;
-            return b;
-        }
-        /// <summary>
-        /// lab
-        /// </summary>
-        /// <param name="text"></param>
-        static public void fun230508154400(string text = "lab") => GUILayout.Label(text);
-        /// <summary>
-        /// ползунок
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="name"></param>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <returns></returns>
-        static public bool fun230514135400_slider_int(ref int i, string name = "default", int min = 1, int max = 5)
-        {
-            GUILayout.BeginHorizontal();
-            st.Class.fun230508154400(name);
-            var b = st.Class.fun230514135805(ref i, min, max);
-            GUILayout.EndHorizontal();
-            return b;
-        }
-        /// <summary>
-        /// ползунок
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <returns></returns>
-        static public bool fun230514135805(this ref int i, int min = 1, int max = 5)
-        {
-            int new_lv = EditorGUILayout.IntSlider(i, min, max);
-            if (new_lv != i)
-            {
-                i = new_lv;
-                return true;
-            }
-            return false;
+            return obj;
         }
         /// <summary>
         ///
@@ -910,39 +844,6 @@ static public class Class
                 Vector2.zero,
                 Vector2.zero,
             };
-        }
-        /// <summary>
-        /// НастроитьИгровойОбъект
-        /// </summary>
-        /// <param name="m"></param>
-        /// <param name="go"></param>
-        static public void fun230507204600_ПривязатьМешКОбъекту(this Mesh m, GameObject go)
-        {
-            //GameObject
-            if (go == null) return;
-            //{
-            //go = new GameObject();
-            //go.transform.SetParent(GameObject.Find("contnent").transform);
-            //}
-
-            //MeshFilter
-            var filter = go.GetComponent<MeshFilter>();
-            if (filter == null)
-                filter = go.AddComponent<MeshFilter>();
-            //MeshCollider
-            var col = go.GetComponent<MeshCollider>();
-            if (col == null)
-                col = go.AddComponent<MeshCollider>();
-            //MeshRenderer
-            var ren = go.GetComponent<MeshRenderer>();
-            if (ren == null)
-                ren = go.AddComponent<MeshRenderer>();
-            //sharedMaterial
-            if (ren.sharedMaterial == null)
-                ren.sharedMaterial = Resources.Load("MATERIALS/default", typeof(Material)) as Material;
-
-            filter.sharedMesh = m;
-            col.sharedMesh = m;
         }
         /// <summary>
         ///собрать куб в списки vs,ns,uvs
@@ -1617,40 +1518,14 @@ static public class Class
             { 5, 1 },
         };
         /// <summary>
-        /// СформироватьКодБлока по функции
-        /// </summary>
-        static public byte fun230627120900_СформироватьКодБлока(Vector3 v, System.Func<Vector3,bool> СуществуетВершина)
-        {
-                float code = 0;
-                var arr = st.Class.field230515154300_ВекторОтЦентраКубаПоНомеруВершины;
-                for (var i = 0; i < arr.Length; i++)
-                    code += СуществуетВершина(v + arr[i]) ? Mathf.Pow(2, i) : 0;
-                return (byte)code;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="edit"></param>
-        /// <param name="namefile"></param>
-        /// <param name="path"></param>
-        static public void fun230516171605_СохранитьМешПоИмениОтРедактора(this cs2305141202.Class edit, string namefile, string path = "default/")
-        {
-            var M = edit.ПолучитьМеш();
-            st.Class.fun230516171604_СохранитьМешПоИмени(M, namefile, path);
-            if (edit.GO != null)
-            {
-                st.Class.fun230507204600_ПривязатьМешКОбъекту(M, edit.GO);
-            }
-        }
-        /// <summary>
         /// СохранитьМешПоИмени
         /// </summary>
         /// <param name="M"></param>
         /// <param name="id"></param>
         /// <param name="path"></param>
-        static public void fun230516171604_СохранитьМешПоИмени(Mesh M, string id,string path="")
+        static public void fun230516171604_СохранитьМешПоИмени(Mesh M, string namefile, string path="")
         {
-            M.fun230516171600_СохранитьМеш(st.Class.fun230518153801_ПолучитьФайлМешаПоИмени(id, path));
+            M.fun230516171600_СохранитьМеш(st.Class.fun230518153801_ПолучитьФайлМешаПоИмени(namefile, path));
         }
         /// <summary>
         /// 
@@ -1679,43 +1554,96 @@ static public class Class
         /// <summary>
         /// PATH_mesh
         /// </summary>
-        static public string field230516161900_РазделМешей => Application.dataPath + "/Resources/MESHES/";
+        static public string field230516161900_РазделМешей => "Assets/Resources/MESHES/";
+        /// <summary>
+        /// НастроитьИгровойОбъект
+        /// </summary>
+        /// <param name="m"></param>
+        /// <param name="go"></param>
+        static public void fun230507204600_ПривязатьМешКОбъекту(this Mesh m, GameObject go)
+        {
+            //GameObject
+            if (go == null) return;
+            //{
+            //go = new GameObject();
+            //go.transform.SetParent(GameObject.Find("contnent").transform);
+            //}
+
+            //MeshFilter
+            var filter = go.GetComponent<MeshFilter>();
+            if (filter == null)
+                filter = go.AddComponent<MeshFilter>();
+            //MeshCollider
+            var col = go.GetComponent<MeshCollider>();
+            if (col == null)
+                col = go.AddComponent<MeshCollider>();
+            //MeshRenderer
+            var ren = go.GetComponent<MeshRenderer>();
+            if (ren == null)
+                ren = go.AddComponent<MeshRenderer>();
+            //sharedMaterial
+            if (ren.sharedMaterial == null)
+                ren.sharedMaterial = Resources.Load("MATERIALS/default", typeof(Material)) as Material;
+
+            filter.sharedMesh = m;
+            col.sharedMesh = m;
+        }
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="edit"></param>
-        static public void fun230507204601_ПривязатьМешОтРедактора(this cs2305141202.Class edit)
+        /// <param name="namefile"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        static public bool fun230516161901_СуществуетМеш(string namefile, string path = "default/") => File.Exists(Application.dataPath + "/" + field230516161900_РазделМешей + path + namefile + ".asset");
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="NameFile"></param>
+        /// <param name="go"></param>
+        /// <returns></returns>
+        static public Mesh fun230507204602_ПривязатьМешОтФайлаПоИмени(string NameFile, GameObject go, string path)
         {
-            var M = edit.ПолучитьМеш();
-            if (edit.GO != null)
-            {
-                st.Class.fun230507204600_ПривязатьМешКОбъекту(M, edit.GO);
-            }
+            var m = st.Class.fun230628232401_ЗагрузитьМешПоИмени(NameFile, path);
+            fun230507204600_ПривязатьМешКОбъекту(m, go);
+            return m;
         }
         /// <summary>
-        ///
+        /// ФАЙЛ_МЕША
         /// </summary>
-        static public void fun230626220600_ПостроитьОдинЧанкЗемлиПоУмолчанию(GameObject go)
+        /// <param name="id"></param>
+        /// <returns></returns>
+        static public Mesh fun230628232401_ЗагрузитьМешПоИмени(string NameFile, string path)
         {
-            var edit = new cs2305141202.Class(go);
-            Vector3 v;
-            for (var z = 0; z <= field230626220601_Chunk_R; z++)
-            {
-                for (var x = 0; x <= field230626220601_Chunk_R; x++)
-                {
-                    v = new Vector3(x, field230626220602_y_zero, z);
-                    edit.ИзменитьТекущийБлокИПостроить(new cs2306262134.Class(v, field230626220603_code));
-                }
-            }
-            st.Class.fun230507204601_ПривязатьМешОтРедактора(edit);
+            var asset = st.Class.fun230518153801_ПолучитьФайлМешаПоИмени(NameFile, path);
+            var Сохранен = st.Class.fun230516161800_СуществуетЛиФайл(asset);
+
+            return fun230628232400_ЗагрузитьМеш(asset, Сохранен);
         }
         /// <summary>
-        /// координата по оси y по умолчанию земли
+        /// Сохранён
         /// </summary>
-        static public int field230626220602_y_zero = 1;
+        /// <param name="asset"></param>
+        /// <returns></returns>
+        static public bool fun230516161800_СуществуетЛиФайл(string asset) => (asset != "" && System.IO.File.Exists(asset) == true);
         /// <summary>
-        /// код земли
+        /// ФайлМеша
         /// </summary>
-        static public byte field230626220603_code = 51;
+        /// <param name="asset"></param>
+        /// <param name="Сохранен"></param>
+        /// <returns></returns>
+        static public Mesh fun230628232400_ЗагрузитьМеш(string asset, bool Сохранен) => Сохранен ? (Mesh)AssetDatabase.LoadAssetAtPath(asset, typeof(Mesh)) : null;
+        /// <summary>
+        /// btn
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="proc"></param>
+        /// <returns></returns>
+        static public bool fun230516115102_btn_name(string name = "test", System.Action proc = null)
+        {
+            var b = GUILayout.Button(name);
+            if (b)
+                proc?.Invoke();
+            return b;
+        }
 }
 }

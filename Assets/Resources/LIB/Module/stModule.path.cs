@@ -12,13 +12,15 @@ namespace stModule.path
             FUNS,
             CLASS,
             STRUCT,
+            SHADER,
         };
         public static string МусорСкриптов => КореньМодулей + "temp/";
         public static string ПереносимыеСкрипты => КореньМодулей + "backup/";
-        public static string КореньМодулей => Application.dataPath + "/../../LIB/Assets/";
+        public static string КореньМодулей => Application.dataPath + "/../../Unity_LIB/Assets/";
         public static string КореньСисМира => КореньМодулей + "SYS/";
         public static string КореньПустой(string раздел) => КореньМодулей + раздел + "/EMPTY/";
-        public static string РазделСкриптов => Application.dataPath + "/Resources/LIB/";
+        public static string РазделРесурсов => Application.dataPath + "/Resources/";
+        public static string РазделСкриптов => РазделРесурсов + "LIB/";
         public static string ОбщийМодульМира => РазделСкриптов + "Mono.cs";
         #region раздел
         public static bool Создать(bool noproject,string path, Rect rect) => file.Class.Создать(ОпределитьРаздел(path), path, rect, noproject);
@@ -27,6 +29,7 @@ namespace stModule.path
         public static string КореньКласс => КореньМодулей + "CLASS/";
         public static string КореньСтрукт => КореньМодулей + "STRUCT/";
         public static string КореньФунМира => КореньМодулей + "FUNS/";
+        public static string КореньШейдеров => РазделРесурсов + "SHADERS/";
         public static byte ОпределитьРаздел(string path)
         {
             if (path.IndexOf(КореньМира) != -1) return (byte)Разделы.PROG;
@@ -34,7 +37,21 @@ namespace stModule.path
             if (path.IndexOf(КореньФунМира) != -1) return (byte)Разделы.FUNS;
             if (path.IndexOf(КореньКласс) != -1) return (byte)Разделы.CLASS;
             if (path.IndexOf(КореньСтрукт) != -1) return (byte)Разделы.STRUCT;
+            if (path.IndexOf(КореньШейдеров) != -1) return (byte)Разделы.SHADER;
             return byte.MaxValue;
+        }
+        public static string ОпределитьКореньРаздела(byte x)
+        {
+            switch ((Разделы)x)
+            {
+                case Разделы.PROG:return КореньМира;
+                case Разделы.GO: return КореньОбъектМира;
+                case Разделы.FUNS: return КореньФунМира;
+                case Разделы.CLASS: return КореньКласс;
+                case Разделы.STRUCT: return КореньСтрукт;
+                case Разделы.SHADER: return КореньШейдеров;
+            }
+            return null;
         }
         #endregion
         public static bool ЭтоНеПодключениеБиблиотеки(string line) => line.IndexOf("using ") == -1;
