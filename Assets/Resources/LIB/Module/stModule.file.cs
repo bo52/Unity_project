@@ -227,6 +227,7 @@ namespace stModule.file
             sw.WriteLine("using UnityEditor;");
             sw.WriteLine("using UnityEngine;");
             sw.WriteLine("using System.IO;");
+            sw.WriteLine("using System.Linq;");
         }
         static public void Библиотеки(string ID, string f, System.Action<StreamWriter> fun, string раздел = "cs")
         {

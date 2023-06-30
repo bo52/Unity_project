@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using System.IO;
+using System.Linq;
 //empty
 //empty
 //empty
@@ -15,18 +16,17 @@ namespace LIB.go2306252014
     {
         new IScene СЦЕНА { get; }
     }
+    /// <summary>
+    /// Список Миров
+    /// </summary>
     public class Inspector : go2305081120.Inspector, IInspector
     {
         new public IScene СЦЕНА => объектСЦЕНА as IScene;
-        static T Создать<T>() where T : new()
-        {
-            return new T();
-        }
-        //System.Type [] d=new System.Type { System.TypeOf(cs2306282238.Class)}
         static class Классы
         {
-            public static string ОдинЧанкЗемлиПоУмолчанию = cs2306282238.Class.INFO;
-            public static cs2306282238.IDefault X = st.Class.fun230514161402_СоздатьОбъектПоИмени(ОдинЧанкЗемлиПоУмолчанию) as cs2306282238.IDefault;
+            public static string ОдинЧанкЗемлиПоУмолчанию51 = cs2306282238.Class.INFO;
+            public static string Выбранный = ОдинЧанкЗемлиПоУмолчанию51;
+            public static cs2306301501.IDefault X = st.Class.fun230514161402_СоздатьОбъектПоИмени(ОдинЧанкЗемлиПоУмолчанию51) as cs2306301501.IDefault;
         }
         override public bool Выполнить()
         {
@@ -358,25 +358,27 @@ namespace LIB.cs2306282238
     /// <summary>
     ///
     /// </summary>
-    public interface IDefault
+    public interface IClass: cs2306301501.IClass
     {
-        bool ИнтерфейсПоУмолчанию(GameObject go);
     }
     /// <summary>
     ///
     /// </summary>
-    public interface IClass: IDefault
+    public class Class : cs2306301501.Class, IClass
     {
-        public bool СуществуетМеш { get; }
-        public void ПривязатьМеш(GameObject go);
-        void ПостроитьОдинЧанкЗемлиПоУмолчанию(GameObject go);
-    }
-    /// <summary>
-    ///
-    /// </summary>
-    public class Class : IClass
-    {
-        static public string INFO = "LIB.cs2306282238.Class";
+        static new public string INFO = "LIB.cs2306282238.Class";
+        #region БазовыеПараметры
+        public override IClass.Редактор ТипРедактора => IClass.Редактор.Block;
+        /// <summary>
+        /// Путь файла
+        /// </summary>
+        public override string Path => "default/";
+        /// <summary>
+        /// имя файла
+        /// </summary>
+        public override string NameFile => "chunk." + КодПоУмолчанию + "." + Chunk_R;
+        #endregion
+        #region ПараметрыКласса
         /// <summary>
         /// 
         /// </summary>
@@ -389,124 +391,112 @@ namespace LIB.cs2306282238
         /// код земли
         /// </summary>
         static public byte КодПоУмолчанию = 51;
-        /// <summary>
-        /// 
-        /// </summary>
-        cs2306291207.Class.Struct ПараметрыЧанка = new cs2306291207.Class.Struct("chunk." + КодПоУмолчанию + "." + Chunk_R, "default/");
-        /// <summary>
-        ///
-        /// </summary>
-        public bool СуществуетМеш => st.Class.fun230516161901_СуществуетМеш(ПараметрыЧанка.namefile);
-
-        public void ПривязатьМеш(GameObject go) => st.Class.fun230507204602_ПривязатьМешОтФайлаПоИмени(ПараметрыЧанка.namefile, go, ПараметрыЧанка.path);
-
-        public void ФункцияПостройки(cs2305141202.IClass edit)
-        {
-            Vector3 v;
-            for (var z = 0; z <= Chunk_R; z++)
-                for (var x = 0; x <= Chunk_R; x++)
-                {
-                    v = new Vector3(x, НулеваяВысота, z);
-                    edit.ИзменитьТекущийБлокИПостроить(new cs2306262134.Class(v, КодПоУмолчанию));
-                }
-        }
-        /// <summary>
-        ///
-        /// </summary>
-        public virtual void ПостроитьОдинЧанкЗемлиПоУмолчанию(GameObject go) => ПараметрыЧанка.ПостроитьМеш(ФункцияПостройки, go);
+        #endregion
+        #region Показать
         /// <summary>
         /// 
         /// </summary>
         /// <param name="go"></param>
         /// <returns></returns>
-        public bool ИнтерфейсПоУмолчанию(GameObject go)
+        public override bool ИнтерфейсПоУмолчанию(GameObject go, string name)
         {
-            return st.Class.fun230516115102_btn_name("ОдинЧанкМираПоУмолчанию", () => ПостроитьОдинЧанкЗемлиПоУмолчанию(go));
+            return base.ИнтерфейсПоУмолчанию(go, "ОдинЧанкМираПоУмолчанию");
         }
+        #endregion
+        #region Постройка
+        public override void ФункцияПостройки(cs2305141215.IClass edit)
+        {
+            Vector3 v;
+            cs2306262134.Class b;
+            for (var z = 0; z <= Chunk_R; z++)
+                for (var x = 0; x <= Chunk_R; x++)
+                {
+                    v = new Vector3(x, НулеваяВысота, z);
+                    b = new cs2306262134.Class(v, КодПоУмолчанию);
+                    edit.ДОБАВИТЬ(b);
+                }
+        }
+        #endregion
     }
 }
 //empty
 //empty
 //empty
-namespace LIB.cs2306291207
+namespace LIB.cs2306301501
 {
     /// <summary>
     ///
     /// </summary>
-    public interface IClass: cs2305141202.IClass
+    public interface IDefault
     {
+        bool ИнтерфейсПоУмолчанию(GameObject go, string name = "Построить");
     }
     /// <summary>
-    /// Только Сохранить
+    ///
     /// </summary>
-    public class Class : cs2305141202.Class, IClass
+    public interface IClass : IDefault
+    {
+        public enum Редактор { empty, Block, square, triangle };
+        Редактор ТипРедактора { get; }
+        cs2306301504.Class ПараметрыЧанка { get; }
+        string NameFile { get; }
+        string Path { get; }
+        void ФункцияПостройки(cs2305141215.IClass edit);
+        public void Построить(GameObject go);
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    public abstract class Class : IClass
     {
         static public string INFO = "INFO";
-        public struct Struct
+        public virtual IClass.Редактор ТипРедактора => IClass.Редактор.Block;
+        public virtual string Path => "default/";
+        public virtual string NameFile => "chunk";
+        protected cs2306301504.Class _param_chunk; public cs2306301504.Class ПараметрыЧанка => _param_chunk;
+        public Class()
         {
-            public string path;
-            public string namefile;
-            public Struct(string ИмяМеша, string ПатчМеша="")
-            {
-                this.path = ПатчМеша;
-                this.namefile = ИмяМеша;
-            }
-            public void Сохранить(Mesh M) => st.Class.fun230516171604_СохранитьМешПоИмени(M, namefile, path);
-            public void ПостроитьМеш(System.Action<cs2305141202.IClass> ФункцияПостройки, GameObject go = null)
-            {
-                cs2305141202.IClass edit = go == null ? new cs2306291207.Class(this, ФункцияПостройки)/*Save*/ : new cs2306291245.Class(this, go, ФункцияПостройки)/*Save+go*/;
-                edit.Закрыть();
-            }
+            _param_chunk = new cs2306301504.Class(NameFile, Path);
         }
-        Struct Параметры;
-        public Class(Struct Параметры, System.Action<cs2305141202.IClass> ФункцияПостройки) :base(ФункцияПостройки)
+        public virtual void Построить(GameObject go) => ПараметрыЧанка.ПостроитьМеш(new cs2305141208.Class.ПараметрыПостройки(ФункцияПостройки, (byte)ТипРедактора), go);
+        public abstract void ФункцияПостройки(cs2305141215.IClass edit);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="go"></param>
+        /// <returns></returns>
+        public virtual bool ИнтерфейсПоУмолчанию(GameObject go, string name = "Построить")
         {
-            this.Параметры = Параметры;
-        }
-        public override Mesh Закрыть()
-        {
-            var M = base.Закрыть();
-            Параметры.Сохранить(M);
-            return M;
+            return st.Class.fun230516115102_btn_name(name, () => Построить(go));
         }
     }
 }
 //empty
 //empty
-//построить куб
-namespace LIB.cs2305141202
+//empty
+namespace LIB.cs2306301504
 {
     /// <summary>
-    /// interface постройки блока
+    ///
     /// </summary>
-    public interface IClass : cs2305141208.IClass
+    public struct Class
     {
-        void СобратьВертекс(byte КодБлока);
-        void ИзменитьТекущийБлокИПостроить(cs2306262134.Class b);
-    }
-    public class Class : cs2305141208.Class, IClass
-    {
-        public Class(System.Action<IClass> ФункцияПостройки) : base(ФункцияПостройки)
+        static public string INFO = "INFO";
+        public string path;
+        public string namefile;
+        public Class(string ИмяМеша, string ПатчМеша = "")
         {
-
+            this.path = ПатчМеша;
+            this.namefile = ИмяМеша;
         }
-        /// <summary>
-        /// Одинаковые методы класса и интерфейса зацикливают выполнение метода класса
-        /// при вызове интерфейсного метода в методе класса
-        /// </summary>
-        /// <param name="КодБлока"></param>
-        public virtual void СобратьВертекс(byte КодБлока) {
-            ИзменитьТекущийБлокИПостроить(new cs2306262134.Class(this.ТекущийБлок.Центр, КодБлока));
-            Закрыть();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="b"></param>
-        public void ИзменитьТекущийБлокИПостроить(cs2306262134.Class b)
+        public bool СуществуетМеш => st.Class.fun230516161901_СуществуетМеш(namefile);
+        public void ПривязатьМеш(GameObject go) => st.Class.fun230507204602_ПривязатьМешОтФайлаПоИмени(namefile, go, path);
+        public void Сохранить(Mesh M) => st.Class.fun230516171604_СохранитьМешПоИмени(M, namefile, path);
+        public void ПостроитьМеш(cs2305141208.Class.ПараметрыПостройки param_build, GameObject go = null)
         {
-            this.ТекущийБлок = b;
-            st.Class.fun230520204100_СобратьБлок(this);
+            //var param_build = new cs2305141208.Class.ПараметрыПостройки(ФункцияПостройки, НомерРедактора);
+            cs2305141208.IClass edit = go == null ? new cs2306291207.Class(this, param_build)/*Save*/ : new cs2306291245.Class(this, go, param_build)/*Save+go*/;
+            edit.Закрыть();
         }
     }
 }
@@ -518,30 +508,51 @@ namespace LIB.cs2305141208
     /// <summary>
     /// stMesh.build.vertices.close.cs2305141208
     /// </summary>
-    public interface IClass : cs2305141215.IClass
+    public interface IClass
     {
-        System.Action<cs2305141202.IClass> ФункцияПостройки { get; }
+        cs2305141215.IClass Editor { get; }
         Mesh ПолучитьМеш();
         Mesh Закрыть();
     }
-    public class Class : cs2305141215.Class, IClass
+    public class Class : IClass
     {
-        private System.Action<cs2305141202.IClass> _fun_build; public System.Action<cs2305141202.IClass> ФункцияПостройки => _fun_build;
-        public Class(System.Action<cs2305141202.IClass> ФункцияПостройки)
+        public class ПараметрыПостройки
         {
-            this._fun_build = ФункцияПостройки;
+            public System.Action<cs2305141215.IClass> ФункцияПостройки;
+            public byte НомерРедактора;
+            public ПараметрыПостройки(System.Action<cs2305141215.IClass> ФункцияПостройки,byte НомерРедактора)
+            {
+                this.ФункцияПостройки = ФункцияПостройки;
+                this.НомерРедактора = НомерРедактора;
+            }
+        }
+        private cs2305141215.IClass _editor; public cs2305141215.IClass Editor => _editor;
+        public Class(ПараметрыПостройки Параметры)
+        {
+            switch (Параметры.НомерРедактора)
+            {
+                case 1:
+                    _editor = new cs2306291643.Class(Параметры);
+                    break;
+                case 2:
+                    _editor = new cs2306301310.Class(Параметры);
+                    break;
+                case 3:
+                    _editor = new cs2305141209.Class(Параметры);
+                    break;
+            }
         }
         public virtual Mesh Закрыть()
         {
-            ФункцияПостройки(this as cs2305141202.IClass);
+            _editor.ФункцияПостройки();
             return ПолучитьМеш();
         }
         public Mesh ПолучитьМеш()
         {
             var M = new Mesh();
-            M.vertices = vs.ToArray();
+            M.vertices = _editor.vs.ToArray();
 
-            var uvs = (this as cs2305141222.IClass);
+            var uvs = (_editor as cs2305141222.IClass);
             M.uv = uvs.Развёртка[0].ToArray();
             M.uv2 = uvs.Развёртка[1].ToArray();
             M.uv3 = uvs.Развёртка[2].ToArray();
@@ -551,11 +562,11 @@ namespace LIB.cs2305141208
             M.uv7 = uvs.Развёртка[6].ToArray();
             M.uv8 = uvs.Развёртка[7].ToArray();
 
-            M.triangles = ts.ToArray();
-            M.normals = ns.ToArray();
+            M.triangles = _editor.ts.ToArray();
+            M.normals = _editor.ns.ToArray();
             M.RecalculateNormals();
             M.RecalculateBounds();
-            Очистить();
+            _editor.Очистить();
             return M;
         }
     }
@@ -571,39 +582,25 @@ namespace LIB.cs2305141215
     /// </summary>
     public interface IClass : cs2305141222.IClass
     {
-        /// <summary>
-        /// блок
-        /// </summary>
-        cs2306262134.Class ТекущийБлок { get; set; }
+        void ДОБАВИТЬ(object arg);
+        void ДОБАВИТЬ(object[] args);
         /// <summary>
         /// набор вершин
         /// </summary>
-        List<Vector3> vs{get;}
+        List<Vector3> vs { get; }
         /// <summary>
         /// нумерация вершин
         /// </summary>
-        List<int> ts{get;}
+        List<int> ts { get; }
         /// <summary>
         /// нормали
         /// </summary>
-        List<Vector3> ns{get;}
-        public virtual Vector3 ВычислениеВектора(Vector3 dv)=> ТекущийБлок.Центр + dv;
+        List<Vector3> ns { get; }
         /// <summary>
-        /// Добавить вершину для постройки куба
+        /// 
         /// </summary>
-        /// <param name="dv"></param>
-        /// <param name="ФункцияВерстки"></param>
-        public void ДобавитьВершинуДляБлока(Vector3 dv)
-        {
-            var v = ВычислениеВектора(dv);
-            //новый вертекс
-            vs.Add(v);
-            //индексы вертексов
-            ts.Add(vs.Count - 1);
-            //нормали
-            ns.Add(v.normalized);
-            Треугольник(this);
-        }
+        /// <param name="v"></param>
+        public void ДобавитьВершину(Vector3 v);
         public new void Очистить()
         {
             vs.Clear();
@@ -611,13 +608,20 @@ namespace LIB.cs2305141215
             ns.Clear();
             (this as cs2305141222.IClass).Очистить();
         }
+        void ФункцияПостройки();
+        cs2305141208.Class.ПараметрыПостройки ПараметрыПостройки { get; }
     }
     /// <summary>
     /// 
     /// </summary>
-    public class Class : cs2305141222.Class, IClass
+    public abstract class Class : cs2305141222.Class, IClass
     {
-        private cs2306262134.Class _b; public cs2306262134.Class ТекущийБлок { get => _b; set => _b=value; }
+        private cs2305141208.Class.ПараметрыПостройки _param; public cs2305141208.Class.ПараметрыПостройки ПараметрыПостройки => _param;
+        public void ФункцияПостройки() => _param.ФункцияПостройки(this);
+        public Class(cs2305141208.Class.ПараметрыПостройки param)
+        {
+            _param = param;
+        }
         /// <summary>
         /// вертексы
         /// </summary>
@@ -629,8 +633,28 @@ namespace LIB.cs2305141215
         /// <summary>
         /// нормали
         /// </summary>
-        private List<Vector3> _ns = new List<Vector3>(); 
-        public List<Vector3> ns => _ns;
+        private List<Vector3> _ns = new List<Vector3>(); public List<Vector3> ns => _ns;
+        /// <summary>
+        /// Добавить вершину для постройки куба
+        /// </summary>
+        /// <param name="dv"></param>
+        /// <param name="ФункцияВерстки"></param>
+        public void ДобавитьВершину(Vector3 v)
+        {
+            //новый вертекс
+            vs.Add(v);
+            //индексы вертексов
+            ts.Add(vs.Count - 1);
+            //нормали
+            ns.Add(v.normalized);
+            ТреугольникВерстки(this);
+        }
+        public void ДОБАВИТЬ(object[] args)
+        {
+            System.Reflection.MethodBase ci = this.GetType().GetMethod("ADD", (from x in args select x.GetType()).ToArray());
+            ci.Invoke(this, args);
+        }
+        public void ДОБАВИТЬ(object arg) => ДОБАВИТЬ(new object[] { arg });
     }
 }
 //empty
@@ -645,7 +669,7 @@ namespace LIB.cs2305141222
     {
         System.Func<cs2305141215.IClass, Vector2[]> ФункцияВерстки { get; set; }
         List<Vector2>[] Развёртка { get; }
-        void Треугольник(cs2305141215.IClass Редактор);
+        void ТреугольникВерстки(cs2305141215.IClass Редактор);
         void Очистить();
     }
     public class Class
@@ -670,9 +694,21 @@ namespace LIB.cs2305141222
         /// 
         /// </summary>
         /// <param name="Редактор"></param>
-        public virtual void Треугольник(cs2305141215.IClass Редактор)
+        public virtual void ТреугольникВерстки(cs2305141215.IClass Редактор)
         {
-            var arr = ФункцияВерстки == null ? st.Class.fun230626171800_ВерсткаБлока(Редактор) : ФункцияВерстки(Редактор);
+            Vector2[]arr;
+            if (ФункцияВерстки != null) arr = ФункцияВерстки(Редактор); else
+            {
+                switch (Редактор.ПараметрыПостройки.НомерРедактора)
+                {
+                    case 1:
+                        arr = st.Class.fun230626171800_ВерсткаБлока(Редактор as cs2306291643.Class);
+                        break;
+                    default:
+                        arr=new Vector2[8] { Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero };
+                        break;
+                }
+            }
             for (int i = 0; i < arr.Length; i++)
                 Развёртка[i].Add(arr[i]);
         }
@@ -683,6 +719,79 @@ namespace LIB.cs2305141222
         {
             for (var i = 0; i < Развёртка.Length; i++)
                 Развёртка[i].Clear();
+        }
+    }
+}
+//empty
+//empty
+//empty
+namespace LIB.cs2306291643
+{
+    /// <summary>
+    /// Форма блока
+    /// </summary>
+    public interface IClass
+    {
+        /// <summary>
+        /// форма блок для меша
+        /// </summary>
+        cs2306262134.Class ТекущийБлок { get; set; }
+        void ADD(cs2306262134.Class b);
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    public class Class : cs2305141209.Class, IClass
+    {
+        static public string INFO = "INFO";
+        public Class(cs2305141208.Class.ПараметрыПостройки param) : base(param)
+        {
+
+        }
+        private cs2306262134.Class _b;
+        public cs2306262134.Class ТекущийБлок { get => _b; set => _b = value; }
+        public virtual Vector3 ВычислениеВектора(Vector3 dv) => ТекущийБлок.Центр + dv;
+        public virtual Vector3 ВычислениеВектора(ushort ИндексУникальногоТреугольника, byte i) => ВычислениеВектора(ТочкаУникальногоТреугольника(ИндексУникальногоТреугольника, i));
+        /// <summary>
+        /// ВершинаГраниБлокаОси
+        /// </summary>
+        /// <param name="ИндексВершины"></param>
+        /// <param name="НомерОсиБлока"></param>
+        /// <returns></returns>
+        static public Vector3 ВычислениеВектора(byte ИндексВершины, byte НомерОсиБлока)
+        {
+            var v = st.Class.fun230515154302_ВекторВершиныПоЦентруКуба(ИндексВершины);
+            if (НомерОсиБлока != byte.MaxValue)
+                v += 0.5f * st.Class.field230514115900_ВекторПоТремОсям[НомерОсиБлока];
+            return v;
+        }
+        /// <summary>
+        /// ВекторТреугольника
+        /// </summary>
+        /// <param name="ИндексУникальногоТреугольника"></param>
+        /// <param name="НомерОсиУникальногоТреугольника"></param>
+        /// <returns></returns>
+        static public Vector3 ТочкаУникальногоТреугольника(ushort ИндексУникальногоТреугольника, byte НомерОси)
+        {
+            var НомерГрани = st.Class.fun230514115300_НомерГраниКуба(ИндексУникальногоТреугольника, НомерОси);
+            return ВычислениеВектора(st.Class.field230514115901_НомерВершиныКубаПоНомеруГрани[НомерГрани, 0], st.Class.field230514115901_НомерВершиныКубаПоНомеруГрани[НомерГрани, 1]);
+        }
+        /// <summary>
+        ///собрать куб в списки vs,ns,uvs
+        /// </summary>
+        public void ADD(cs2306262134.Class b)
+        {
+            if (b.Код == 0) return;
+            ТекущийБлок = b;
+            //треугольники
+            Vector3 v1, v2, v3;
+            foreach (var ИндексУникальногоТреугольника in st.Class.field230514131500_БлокИзТреугольников[ТекущийБлок.Код])
+            {
+                v1 = ВычислениеВектора(ИндексУникальногоТреугольника, 0);
+                v2 = ВычислениеВектора(ИндексУникальногоТреугольника, 1);
+                v3 = ВычислениеВектора(ИндексУникальногоТреугольника, 2);
+                ADD(new cs2306301359.Class(v1, v2, v3));
+            }
         }
     }
 }
@@ -708,6 +817,206 @@ namespace LIB.cs2306262134
 }
 //empty
 //empty
+//Vertices (stMesh.build.vertices)
+namespace LIB.cs2305141209
+{
+    /// <summary>
+    /// stMesh.build.vertices.cs2305141209
+    /// </summary>
+    public interface IClass : cs2305141215.IClass
+    {
+        void ADD(cs2306301359.Class Triangle);
+    }
+    public class Class : cs2305141215.Class, IClass
+    {
+        cs2305141202.IClass ВершиныТреугольника;
+        public Class(cs2305141208.Class.ПараметрыПостройки param) : base(param)
+        {
+            ВершиныТреугольника = new cs2305141202.Class(this);
+        }
+        public void ADD(cs2306301359.Class Triangle)
+        {
+            ВершиныТреугольника.v1 = Triangle.v1;
+            ВершиныТреугольника.v2 = Triangle.v2;
+            ВершиныТреугольника.v3 = Triangle.v3;
+            ВершиныТреугольника.ДобавитьТреугольник();
+        }
+    }
+}
+//empty
+//empty
+//empty
+namespace LIB.cs2306301359
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public struct Class
+    {
+        static public string INFO = "INFO";
+        public Vector3 v1;
+        public Vector3 v2;
+        public Vector3 v3;
+        public Class(Vector3 v1, Vector3 v2, Vector3 v3)
+        {
+            this.v1 = v1;
+            this.v2 = v2;
+            this.v3 = v3;
+        }
+    }
+}
+//empty
+//empty
+//построить куб
+namespace LIB.cs2305141202
+{
+    /// <summary>
+    /// interface Закрыть МЕШ
+    /// </summary>
+    public interface IClass
+    {
+        cs2305141215.IClass Редактор { get; }
+        Vector3 v1 { get; set; }
+        Vector3 v2 { get; set; }
+        Vector3 v3 { get; set; }
+        void ДобавитьТреугольник();
+    }
+    /// <summary>
+    /// ВершиныТреугольника
+    /// </summary>
+    public class Class : IClass
+    {
+        private cs2305141215.IClass _edit; public cs2305141215.IClass Редактор => _edit;
+        private Vector3 _v1 = Vector3.zero; public Vector3 v1 { get => _v1; set => _v1 = value; }
+        private Vector3 _v2 = Vector3.right; public Vector3 v2 { get => _v2; set => _v2 = value; }
+        private Vector3 _v3 = Vector3.forward; public Vector3 v3 { get => _v3; set => _v3 = value; }
+        public Class(cs2305141215.IClass edit)
+        {
+            this._edit = edit;
+        }
+        public Class(cs2305141215.IClass edit, cs2306301359.Class ВершиныТреугольника)
+        {
+            this._edit = edit;
+            this.v1 = ВершиныТреугольника.v1;
+            this.v2 = ВершиныТреугольника.v2;
+            this.v3 = ВершиныТреугольника.v3;
+        }
+        public void ДобавитьТреугольник()
+        {
+            Редактор.ДобавитьВершину(v1);
+            Редактор.ДобавитьВершину(v2);
+            Редактор.ДобавитьВершину(v3);
+        }
+    }
+}
+//empty
+//empty
+//empty
+namespace LIB.cs2306301310
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public interface IClass: cs2305141215.IClass
+    {
+        public void ADD(cs2306301359.Class Triangle, Vector3 v4);
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    public class Class : cs2305141215.Class, IClass
+    {
+        static public string INFO = "INFO";
+        private cs2305181555.IClass ВершиныКвадрата;
+        public Class(cs2305141208.Class.ПараметрыПостройки param) : base(param)
+        {
+            ВершиныКвадрата = new cs2305181555.Class(this);
+        }
+        public void ADD(cs2306301359.Class Triangle,Vector3 v4)
+        {
+            ВершиныКвадрата.v1 = Triangle.v1;
+            ВершиныКвадрата.v2 = Triangle.v2;
+            ВершиныКвадрата.v3 = Triangle.v3;
+            ВершиныКвадрата.v4 = v4;
+            ВершиныКвадрата.ДобавитьКвадрат();
+        }
+        public void Интерфейс()
+        {
+            //st.Class.fun230514135401_Вектор(ref )
+        }
+    }
+}
+//empty
+//empty
+//empty
+namespace LIB.cs2305181555
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public interface IClass: cs2305141202.IClass
+    {
+        Vector3 v4 { get; set; }
+        void ДобавитьКвадрат();
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    public class Class : cs2305141202.Class, IClass
+    {
+        private Vector3 _v4 = Vector3.forward; public Vector3 v4 { get => _v4; set => _v4 = value; }
+        public Class(cs2305141215.IClass edit) : base(edit)
+        {
+        }
+        public Class(cs2305141215.IClass edit, cs2306301359.Class Triangle, Vector3 v4) : base(edit, Triangle)
+        {
+            _v4 = v4;
+        }
+        public void ДобавитьОбратныйТреугольник()
+        {
+            Редактор.ДобавитьВершину(v2);
+            Редактор.ДобавитьВершину(v4);
+            Редактор.ДобавитьВершину(v3);
+        }
+        public void ДобавитьКвадрат()
+        {
+            ДобавитьТреугольник();
+            ДобавитьОбратныйТреугольник();
+        }
+    }
+}
+//empty
+//empty
+//empty
+namespace LIB.cs2306291207
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public interface IClass : cs2305141208.IClass
+    {
+    }
+    /// <summary>
+    /// Только Сохранить
+    /// </summary>
+    public class Class : cs2305141208.Class, IClass
+    {
+        static public string INFO = "INFO";
+        cs2306301504.Class Параметры;
+        public Class(cs2306301504.Class Параметры, cs2305141208.Class.ПараметрыПостройки param_build) : base(param_build)
+        {
+            this.Параметры = Параметры;
+        }
+        public override Mesh Закрыть()
+        {
+            var M = base.Закрыть();
+            Параметры.Сохранить(M);
+            return M;
+        }
+    }
+}
+//empty
+//empty
 //empty
 namespace LIB.cs2306291245
 {
@@ -723,8 +1032,8 @@ namespace LIB.cs2306291245
     public class Class : cs2306291123.Class, IClass
     {
         static new public string INFO = "INFO";
-        cs2306291207.Class.Struct Параметры;
-        public Class(cs2306291207.Class.Struct Параметры, GameObject go, System.Action<cs2305141202.IClass> ФункцияПостройки) : base(go, ФункцияПостройки)
+        cs2306301504.Class Параметры;
+        public Class(cs2306301504.Class Параметры, GameObject go, cs2305141208.Class.ПараметрыПостройки param_build) : base(go, param_build)
         {
             this.Параметры = Параметры;
         }
@@ -742,20 +1051,20 @@ namespace LIB.cs2306291245
 namespace LIB.cs2306291123
 {
     /// <summary>
-    ///
+    /// MESH с GO
     /// </summary>
-    public interface IClass : cs2305141202.IClass
+    public interface IClass : cs2305141208.IClass
     {
         GameObject GO { get; }
     }
     /// <summary>
     ///
     /// </summary>
-    public class Class : cs2305141202.Class, IClass
+    public class Class: cs2305141208.Class,IClass
     {
         static public string INFO = "INFO";
         private GameObject _go; public GameObject GO => _go;
-        public Class(GameObject go,System.Action<cs2305141202.IClass> ФункцияПостройки) :base(ФункцияПостройки) => this._go = go;
+        public Class(GameObject go, cs2305141208.Class.ПараметрыПостройки param_build) :base(param_build) => this._go = go;
         public override Mesh Закрыть()
         {
             var M = base.Закрыть();
@@ -827,9 +1136,124 @@ static public class Class
             return obj;
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="namefile"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        static public bool fun230516161901_СуществуетМеш(string namefile, string path = "default/") => File.Exists(Application.dataPath + "/" + field230516161900_РазделМешей + path + namefile + ".asset");
+        /// <summary>
+        /// PATH_mesh
+        /// </summary>
+        static public string field230516161900_РазделМешей => "Assets/Resources/MESHES/";
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="NameFile"></param>
+        /// <param name="go"></param>
+        /// <returns></returns>
+        static public Mesh fun230507204602_ПривязатьМешОтФайлаПоИмени(string NameFile, GameObject go, string path)
+        {
+            var m = st.Class.fun230628232401_ЗагрузитьМешПоИмени(NameFile, path);
+            fun230507204600_ПривязатьМешКОбъекту(m, go);
+            return m;
+        }
+        /// <summary>
+        /// ФАЙЛ_МЕША
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        static public Mesh fun230628232401_ЗагрузитьМешПоИмени(string NameFile, string path)
+        {
+            var asset = st.Class.fun230518153801_ПолучитьФайлМешаПоИмени(NameFile, path);
+            var Сохранен = st.Class.fun230516161800_СуществуетЛиФайл(asset);
+
+            return fun230628232400_ЗагрузитьМеш(asset, Сохранен);
+        }
+        /// <summary>
+        /// mesh_path_asset
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        static public string fun230518153801_ПолучитьФайлМешаПоИмени(this string id, string path = "") => st.Class.fun230516161700_ПолучитьФайлПоАргументам(st.Class.field230516161900_РазделМешей + path, id, "asset");
+        /// <summary>
+        /// PATH_id_exe
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="id"></param>
+        /// <param name="exe"></param>
+        /// <returns></returns>
+        static public string fun230516161700_ПолучитьФайлПоАргументам(string path, string id, string exe) => path + id + "." + exe;
+        /// <summary>
+        /// Сохранён
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <returns></returns>
+        static public bool fun230516161800_СуществуетЛиФайл(string asset) => (asset != "" && System.IO.File.Exists(asset) == true);
+        /// <summary>
+        /// ФайлМеша
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <param name="Сохранен"></param>
+        /// <returns></returns>
+        static public Mesh fun230628232400_ЗагрузитьМеш(string asset, bool Сохранен) => Сохранен ? (Mesh)AssetDatabase.LoadAssetAtPath(asset, typeof(Mesh)) : null;
+        /// <summary>
+        /// НастроитьИгровойОбъект
+        /// </summary>
+        /// <param name="m"></param>
+        /// <param name="go"></param>
+        static public void fun230507204600_ПривязатьМешКОбъекту(this Mesh m, GameObject go)
+        {
+            //GameObject
+            if (go == null) return;
+            //{
+            //go = new GameObject();
+            //go.transform.SetParent(GameObject.Find("contnent").transform);
+            //}
+
+            //MeshFilter
+            var filter = go.GetComponent<MeshFilter>();
+            if (filter == null)
+                filter = go.AddComponent<MeshFilter>();
+            //MeshCollider
+            var col = go.GetComponent<MeshCollider>();
+            if (col == null)
+                col = go.AddComponent<MeshCollider>();
+            //MeshRenderer
+            var ren = go.GetComponent<MeshRenderer>();
+            if (ren == null)
+                ren = go.AddComponent<MeshRenderer>();
+            //sharedMaterial
+            if (ren.sharedMaterial == null)
+                ren.sharedMaterial = Resources.Load("MATERIALS/default", typeof(Material)) as Material;
+
+            filter.sharedMesh = m;
+            col.sharedMesh = m;
+        }
+        /// <summary>
+        /// СохранитьМешПоИмени
+        /// </summary>
+        /// <param name="M"></param>
+        /// <param name="id"></param>
+        /// <param name="path"></param>
+        static public void fun230516171604_СохранитьМешПоИмени(Mesh M, string namefile, string path="")
+        {
+            M.fun230516171600_СохранитьМеш(st.Class.fun230518153801_ПолучитьФайлМешаПоИмени(namefile, path));
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        static public void fun230516171600_СохранитьМеш(this Mesh M,string asset)
+        {
+            if (System.IO.File.Exists(asset))
+                AssetDatabase.SaveAssets();
+            else
+                AssetDatabase.CreateAsset(M, asset);
+        }
+        /// <summary>
         ///
         /// </summary>
-        static public Vector2[] fun230626171800_ВерсткаБлока(this cs2305141215.IClass Редактор)
+        static public Vector2[] fun230626171800_ВерсткаБлока(this cs2306291643.IClass Редактор)
         {
             return new Vector2[8]
             {
@@ -846,294 +1270,39 @@ static public class Class
             };
         }
         /// <summary>
-        ///собрать куб в списки vs,ns,uvs
+        /// ВекторПоЦентруКуба
         /// </summary>
-        static public void fun230520204100_СобратьБлок(this cs2305141202.IClass Редактор)
+        /// <param name="ИндексВершины"></param>
+        /// <returns></returns>
+        static public Vector3 fun230515154302_ВекторВершиныПоЦентруКуба(byte ИндексВершины)
         {
-            if (Редактор.ТекущийБлок.Код == 0) return;
-            //треугольники
-            foreach (var ИндексУникальногоТреугольника in st.Class.field230514131500_БлокИзТреугольников[Редактор.ТекущийБлок.Код])
-            {
-                //треугольник
-                for (byte i = 0; i < 3; i++)
-                {
-                    Редактор.ДобавитьВершинуДляБлока(st.Class.fun230514115903_ТочкаУникальногоТреугольника(ИндексУникальногоТреугольника, i));
-                }
-            }
+            return field230515154300_ВекторОтЦентраКубаПоНомеруВершины[ИндексВершины] - 0.5f * Vector3.one;
         }
         /// <summary>
-        /// УникальныеТриангуляционныеБлоки
+        /// ВершиныОтносительноКоординатыБлока
+        /// 8 вершин как куб. Vector3.zero = new Vector3(-1,-1,-1)
         /// </summary>
-        static public readonly ushort[][] field230514131500_БлокИзТреугольников = new ushort[][]
+        static public readonly Vector3[] field230515154300_ВекторОтЦентраКубаПоНомеруВершины = new Vector3[]
         {
-        new ushort[] {},//0 = 0
-        new ushort[] {0,},
-        new ushort[] {1,},
-        new ushort[] {2,3,},
-        new ushort[] {4,},
-        new ushort[] {5,6,},
-        new ushort[] {4,1,},
-        new ushort[] {7,8,9,},
-        new ushort[] {10,},
-        new ushort[] {0,10,},
-        new ushort[] {11,12,},
-        new ushort[] {13,14,15,},
-        new ushort[] {16,17,},
-        new ushort[] {18,19,17,},
-        new ushort[] {20,21,22,},
-        new ushort[] {23,14,},
-        new ushort[] {24,},
-        new ushort[] {25,26,},
-        new ushort[] {1,24,},
-        new ushort[] {27,28,29,},
-        new ushort[] {4,24,},
-        new ushort[] {30,31,32,},
-        new ushort[] {1,4,24,},
-        new ushort[] {33,34,35,36,},
-        new ushort[] {10,24,},
-        new ushort[] {25,26,10,},
-        new ushort[] {37,38,24,},
-        new ushort[] {29,39,40,13,},
-        new ushort[] {21,41,24,},
-        new ushort[] {17,42,43,26,},
-        new ushort[] {24,12,44,45,},
-        new ushort[] {46,47,48,},
-        new ushort[] {49,},
-        new ushort[] {0,49,},
-        new ushort[] {50,51,},
-        new ushort[] {2,52,51,},
-        new ushort[] {4,49,},
-        new ushort[] {5,6,49,},
-        new ushort[] {4,50,51,},
-        new ushort[] {6,53,54,51,},
-        new ushort[] {10,49,},
-        new ushort[] {0,10,49,},
-        new ushort[] {55,56,57,},
-        new ushort[] {58,59,60,61,},
-        new ushort[] {16,17,49,},
-        new ushort[] {62,45,63,49,},
-        new ushort[] {64,21,65,66,},
-        new ushort[] {67,68,69,},
-        new ushort[] {70,71,},
-        new ushort[] {25,72,73,},
-        new ushort[] {74,75,76,},
-        new ushort[] {77,78,},//51
-        new ushort[] {4,79,80,},//52
-        new ushort[] {81,82,83,84,},//53
-        new ushort[] {4,74,75,76},//54
-        new ushort[] {31,85,86,},//55
-        new ushort[] {10,80,79,},//56
-        new ushort[] {25,87,71,10,},//57
-        new ushort[] {74,72,11,65,},//58
-        new ushort[] {88,89,90,},//59
-        new ushort[] {16,17,70,71,},//60
-        new ushort[] {48,90,91,276,277},//61
-        new ushort[] {45,65,92,79,44,},//62
-        new ushort[] {48,90,},//63
-        new ushort[] {93,},//64
-        new ushort[] {0,93,},//65
-        new ushort[] {1,93,},//66
-        new ushort[] {2,9,93,},//67
-        new ushort[] {94,95,},//68
-        new ushort[] {96,97,98,},//69
-        new ushort[] {1,94,95,},//70
-        new ushort[] {3,99,100,96,},//71
-        new ushort[] {93,10,},//72
-        new ushort[] {0,93,10,},//73
-        new ushort[] {93,12,11,},//74
-        new ushort[] {93,101,102,38,},//75
-        new ushort[] {103,104,105,},//76
-        new ushort[] {106,107,63,108,},//77
-        new ushort[] {109,110,111,107,},//78
-        new ushort[] {112,107,111,},//79
-        new ushort[] {113,114,},//80
-        new ushort[] {115,116,117,},//81
-        new ushort[] {1,113,114,},//82
-        new ushort[] {118,119,117,120,},//83
-        new ushort[] {121,122,123,},//84
-        new ushort[] {124,125,},//85
-        new ushort[] {278,279,1,123,},//86
-        new ushort[] {34,123,33,},//87
-        new ushort[] {10,113,114,},//88
-        new ushort[] {10,127,119,117,},//89
-        new ushort[] {12,11,113,114,},//90
-        new ushort[] {128,46,129,280,281},//91
-        new ushort[] {130,131,113,41,},//92
-        new ushort[] {132,125,63,},//93
-        new ushort[] {126,133,134,282,283},//94
-        new ushort[] {46,129,},//95
-        new ushort[] {49,93,},//96
-        new ushort[] {0,49,93,},//97
-        new ushort[] {93,50,51,},//98
-        new ushort[] {93,52,51,2,},//99
-        new ushort[] {49,135,96,},//100
-        new ushort[] {49,5,136,137,},//101
-        new ushort[] {135,96,50,51,},//102
-        new ushort[] {138,139,140,272,273,},//103
-        new ushort[] {93,10,49,},//104
-        new ushort[] {0,93,10,49,},//105
-        new ushort[] {69, 55,291,290,},//106
-        new ushort[] {128,140,141,272,273,284, 285,280,281,},//107
-        new ushort[] {105,103,49,104,},//108
-        new ushort[] {91,140,141, 272,273,274,275,276,288, },//109
-        new ushort[] {141,109,147,293,294,},//110
-        new ushort[] {140,141,293,294,},//111
-        new ushort[] {114,148,80,},//112
-        new ushort[] {149,150,151,73,},//113
-        new ushort[] {152,153,154,151,},//114
-        new ushort[] {155,154,151,},//115
-        new ushort[] {80,156,157,121,},//116
-        new ushort[] {156,158,159,},//117
-        new ushort[] {139,138,126,295,296,},//118
-        new ushort[] {139,138,},//119
-        new ushort[] {10,160,161,162,},//120
-        new ushort[] {141,128,91,270,271,280,281,295, 296,},//121
-        new ushort[] {163,164,141,280,281,},//122
-        new ushort[] {128,141,280,281,},//123
-        new ushort[] {165,166,141,270,271,},//124
-        new ushort[] {91,141,270,271,},//125
-        new ushort[] {126,141,},//126
-        new ushort[] {141,},//127
-        new ushort[] {167,},//128
-        new ushort[] {0,167,},//129
-        new ushort[] {1,167,},//130
-        new ushort[] {120,168,167,},//131
-        new ushort[] {4,167,},//132
-        new ushort[] {5,6,167,},//133
-        new ushort[] {1,4,167,},//134
-        new ushort[] {6,3,99,167,},//135
-        new ushort[] {169,170,},//136
-        new ushort[] {0,169,170,},//137
-        new ushort[] {171,37,172,},//138
-        new ushort[] {173,174,175,168,},//139
-        new ushort[] {16,176,170,},//140
-        new ushort[] {62,177,178,179,},//141
-        new ushort[] {180,181,182,179,},//142
-        new ushort[] {183,184,175,},//143
-        new ushort[] {24,167,},//144
-        new ushort[] {25,26,167,},//145
-        new ushort[] {1,24,167,},//146
-        new ushort[] {167,185,297,298,},//147
-        new ushort[] {189,24,167,},//148
-        new ushort[] {26,98,31,167,},//149
-        new ushort[] {1,4,24,167, },//150
-        new ushort[] {31,167,297,298,299},//151
-        new ushort[] {169,170,24,},//152
-        new ushort[] {169,170,25,26,},//153
-        new ushort[] {272,273,274,275,163,192,188,195,},//154
-        new ushort[] {88,192,188,272,273,},//155
-        new ushort[] {16,176,170,24,},//156
-        new ushort[] {193,194,190,272,273,},//157
-        new ushort[] {126,190,196,272,273,274,275,284, 285,},//158
-        new ushort[] {190,188,272,273},//159
-        new ushort[] {197,198,},//160
-        new ushort[] {0,197,198,},//161
-        new ushort[] {187,50,199,},//162
-        new ushort[] {27,200,201,198,},//163
-        new ushort[] {4,197,198,},//164
-        new ushort[] {5,6,197,198,},//165
-        new ushort[] {4,198,202,203,},//166
-        new ushort[] {191,67,204,280,281,},//167
-        new ushort[] {205,206,207,},//168
-        new ushort[] {0,205,206,207,},//169
-        new ushort[] {208,209,},//170
-        new ushort[] {210,211,101,},//171
-        new ushort[] {16,176,199,146,},//172
-        new ushort[] {91,210,212,274,275, },//173
-        new ushort[] {44,213,204,},//174
-        new ushort[] {210,212,},//175
-        new ushort[] {70,214,215,},//176
-        new ushort[] {216,25,87,214,},//177
-        new ushort[] {74,75,217,215,},//178
-        new ushort[] {185,217,215,},//179
-        new ushort[] {4,70,214,215,},//180
-        new ushort[] {81,190,218,280,281,},//181
-        new ushort[] {191,126,190,280,281,295,284,285,296},//182
-        new ushort[] {190,191,280,281,},//183
-        new ushort[] {70,207,219,174,},//184
-        new ushort[] {91,88,192,295,296,},//185
-        new ushort[] {74,220,192,},//186
-        new ushort[] {88,192,},//187
-        new ushort[] {190,221,222,284,285, },//188
-        new ushort[] {91,190,},//189
-        new ushort[] {126,190,284,285,},//190
-        new ushort[] {190,},//191
-        new ushort[] {223,224,},//192
-        new ushort[] {0,225,226,},//193
-        new ushort[] {1,225,226,},//194
-        new ushort[] {120,168,225,226},//195
-        new ushort[] {135,229,230,},//196
-        new ushort[] {230,229,5,100,},//197
-        new ushort[] {1, 230, 231, 269,},//198
-        new ushort[] {270,271, 191, 112,228,},//199
-        new ushort[] {232,143,233,},//200
-        new ushort[] {0,143,232,233,225,},//201
-        new ushort[] {143,220,234,180,},//202
-        new ushort[] {128,112,228,284,285,},//203
-        new ushort[] {103,233,},//204
-        new ushort[] {235,236,237,},//205
-        new ushort[] {109,110,228,},//206
-        new ushort[] {237,238,},//207
-        new ushort[] {239,240,241,},//208
-        new ushort[] {127,242,240,241,},//209
-        new ushort[] {188,243,244,227,276,277,274,275,},//210
-        new ushort[] {188,245,246,270,271,},//211
-        new ushort[] {121,122,247,241,},//212
-        new ushort[] {248,249,241,},//213
-        new ushort[] {126,188,191,286,287,276,288,289,283,},//214
-        new ushort[] {188,191,276,277,},//215
-        new ushort[] {164,122,250,251,},//216
-        new ushort[] {128,193,194,286,287, },//217
-        new ushort[] {163,164,188,289,283,},//218
-        new ushort[] {128,188,},//219
-        new ushort[] {165,252,194,},//220
-        new ushort[] {193,194,},//221
-        new ushort[] {126,188,289,275,},//222
-        new ushort[] {188,},//223
-        new ushort[] {253,254,255,},//224
-        new ushort[] {0,223,214,256,},//225
-        new ushort[] {50,240,201,255,},//226
-        new ushort[] {140,245,246,284,285, },//227
-        new ushort[] {206,218,142,135,},//228
-        new ushort[] {5,197,257,100,258,},//229
-        new ushort[] {259,144,191,286,287,},//230
-        new ushort[] {191,140,},//231
-        new ushort[] {207,206,143,142,},//232
-        new ushort[] {91,128,140,284,285,286,287,289,275,},//233
-        new ushort[] {147,220,143,},//234
-        new ushort[] {128,140,284,285, },//235
-        new ushort[] {103,260,146,},//236
-        new ushort[] {91,140,289,275,},//237
-        new ushort[] {109,147,},//238
-        new ushort[] {140,},//239
-        new ushort[] {261,262,},//240
-        new ushort[] {245,263,264,},//241
-        new ushort[] {261,265,243,},//242
-        new ushort[] {245,246,},//243
-        new ushort[] {121,266,262,},//244
-        new ushort[] {248,264,},//245
-        new ushort[] {126,191,286,287,},//246
-        new ushort[] {191,},//247
-        new ushort[] {164,267,207,},//248
-        new ushort[] {128,91,286,287,},//249
-        new ushort[] {268,152,},//250
-        new ushort[] {128,},//251
-        new ushort[] {165,166,},//252
-        new ushort[] {91,},//253
-        new ushort[] {126,},//254
-        new ushort[] {},//255 = 2^0 + 2^1 + 2^2 + 2^3 + 2^4 + 2^5 + 2^6+ 2^7
+            Vector3.zero,//0
+            Vector3.right,//1
+            Vector3.up,//2
+            Vector3.right+Vector3.up,//3
+            Vector3.forward,//4
+            Vector3.right+Vector3.forward,//5
+            Vector3.up+Vector3.forward,//6
+            Vector3.right+Vector3.up+Vector3.forward,//7
         };
         /// <summary>
-        /// ВекторТреугольника
+        /// ТриОси
+        /// три направленные оси точки (для определения граневая точка куба)
         /// </summary>
-        /// <param name="ИндексУникальногоТреугольника"></param>
-        /// <param name="НомерОсиУникальногоТреугольника"></param>
-        /// <returns></returns>
-        static public Vector3 fun230514115903_ТочкаУникальногоТреугольника(ushort ИндексУникальногоТреугольника, byte НомерОси)
+        static public readonly Vector3[] field230514115900_ВекторПоТремОсям = new Vector3[3]
         {
-            var НомерГрани = st.Class.fun230514115300_НомерГраниКуба(ИндексУникальногоТреугольника, НомерОси);
-            return fun230514115902(field230514115901_НомерВершиныКубаПоНомеруГрани[НомерГрани, 0], field230514115901_НомерВершиныКубаПоНомеруГрани[НомерГрани, 1]);
-        }
+            Vector3.right,
+            Vector3.up,
+            Vector3.forward
+        };
         /// <summary>
         /// ТочкаТреугольника
         /// </summary>
@@ -1450,53 +1619,6 @@ static public class Class
         {1,10,3},//299
         };
         /// <summary>
-        /// ВершинаГраниБлокаОси
-        /// </summary>
-        /// <param name="ИндексВершины"></param>
-        /// <param name="НомерОсиБлока"></param>
-        /// <returns></returns>
-        static public Vector3 fun230514115902(byte ИндексВершины, byte НомерОсиБлока)
-        {
-            var v = st.Class.fun230515154302_ВекторВершиныПоЦентруКуба(ИндексВершины);
-            if (НомерОсиБлока != byte.MaxValue)
-                v += 0.5f * field230514115900_ВекторПоТремОсям[НомерОсиБлока];
-            return v;
-        }
-        /// <summary>
-        /// ВекторПоЦентруКуба
-        /// </summary>
-        /// <param name="ИндексВершины"></param>
-        /// <returns></returns>
-        static public Vector3 fun230515154302_ВекторВершиныПоЦентруКуба(byte ИндексВершины)
-        {
-            return field230515154300_ВекторОтЦентраКубаПоНомеруВершины[ИндексВершины] - 0.5f * Vector3.one;
-        }
-        /// <summary>
-        /// ВершиныОтносительноКоординатыБлока
-        /// 8 вершин как куб. Vector3.zero = new Vector3(-1,-1,-1)
-        /// </summary>
-        static public readonly Vector3[] field230515154300_ВекторОтЦентраКубаПоНомеруВершины = new Vector3[]
-        {
-            Vector3.zero,//0
-            Vector3.right,//1
-            Vector3.up,//2
-            Vector3.right+Vector3.up,//3
-            Vector3.forward,//4
-            Vector3.right+Vector3.forward,//5
-            Vector3.up+Vector3.forward,//6
-            Vector3.right+Vector3.up+Vector3.forward,//7
-        };
-        /// <summary>
-        /// ТриОси
-        /// три направленные оси точки (для определения граневая точка куба)
-        /// </summary>
-        static public readonly Vector3[] field230514115900_ВекторПоТремОсям = new Vector3[3]
-        {
-            Vector3.right,
-            Vector3.up,
-            Vector3.forward
-        };
-        /// <summary>
         /// ИндексВершиныИНомерОси
         /// строка - ребро куба или линия
         /// x - по номеру грани определить связанную ОтносительнуюВершинуКуба или точку
@@ -1518,120 +1640,368 @@ static public class Class
             { 5, 1 },
         };
         /// <summary>
-        /// СохранитьМешПоИмени
+        /// УникальныеТриангуляционныеБлоки
         /// </summary>
-        /// <param name="M"></param>
-        /// <param name="id"></param>
-        /// <param name="path"></param>
-        static public void fun230516171604_СохранитьМешПоИмени(Mesh M, string namefile, string path="")
+        static public readonly ushort[][] field230514131500_БлокИзТреугольников = new ushort[][]
         {
-            M.fun230516171600_СохранитьМеш(st.Class.fun230518153801_ПолучитьФайлМешаПоИмени(namefile, path));
+        new ushort[] {},//0 = 0
+        new ushort[] {0,},
+        new ushort[] {1,},
+        new ushort[] {2,3,},
+        new ushort[] {4,},
+        new ushort[] {5,6,},
+        new ushort[] {4,1,},
+        new ushort[] {7,8,9,},
+        new ushort[] {10,},
+        new ushort[] {0,10,},
+        new ushort[] {11,12,},
+        new ushort[] {13,14,15,},
+        new ushort[] {16,17,},
+        new ushort[] {18,19,17,},
+        new ushort[] {20,21,22,},
+        new ushort[] {23,14,},
+        new ushort[] {24,},
+        new ushort[] {25,26,},
+        new ushort[] {1,24,},
+        new ushort[] {27,28,29,},
+        new ushort[] {4,24,},
+        new ushort[] {30,31,32,},
+        new ushort[] {1,4,24,},
+        new ushort[] {33,34,35,36,},
+        new ushort[] {10,24,},
+        new ushort[] {25,26,10,},
+        new ushort[] {37,38,24,},
+        new ushort[] {29,39,40,13,},
+        new ushort[] {21,41,24,},
+        new ushort[] {17,42,43,26,},
+        new ushort[] {24,12,44,45,},
+        new ushort[] {46,47,48,},
+        new ushort[] {49,},
+        new ushort[] {0,49,},
+        new ushort[] {50,51,},
+        new ushort[] {2,52,51,},
+        new ushort[] {4,49,},
+        new ushort[] {5,6,49,},
+        new ushort[] {4,50,51,},
+        new ushort[] {6,53,54,51,},
+        new ushort[] {10,49,},
+        new ushort[] {0,10,49,},
+        new ushort[] {55,56,57,},
+        new ushort[] {58,59,60,61,},
+        new ushort[] {16,17,49,},
+        new ushort[] {62,45,63,49,},
+        new ushort[] {64,21,65,66,},
+        new ushort[] {67,68,69,},
+        new ushort[] {70,71,},
+        new ushort[] {25,72,73,},
+        new ushort[] {74,75,76,},
+        new ushort[] {77,78,},//51
+        new ushort[] {4,79,80,},//52
+        new ushort[] {81,82,83,84,},//53
+        new ushort[] {4,74,75,76},//54
+        new ushort[] {31,85,86,},//55
+        new ushort[] {10,80,79,},//56
+        new ushort[] {25,87,71,10,},//57
+        new ushort[] {74,72,11,65,},//58
+        new ushort[] {88,89,90,},//59
+        new ushort[] {16,17,70,71,},//60
+        new ushort[] {48,90,91,276,277},//61
+        new ushort[] {45,65,92,79,44,},//62
+        new ushort[] {48,90,},//63
+        new ushort[] {93,},//64
+        new ushort[] {0,93,},//65
+        new ushort[] {1,93,},//66
+        new ushort[] {2,9,93,},//67
+        new ushort[] {94,95,},//68
+        new ushort[] {96,97,98,},//69
+        new ushort[] {1,94,95,},//70
+        new ushort[] {3,99,100,96,},//71
+        new ushort[] {93,10,},//72
+        new ushort[] {0,93,10,},//73
+        new ushort[] {93,12,11,},//74
+        new ushort[] {93,101,102,38,},//75
+        new ushort[] {103,104,105,},//76
+        new ushort[] {106,107,63,108,},//77
+        new ushort[] {109,110,111,107,},//78
+        new ushort[] {112,107,111,},//79
+        new ushort[] {113,114,},//80
+        new ushort[] {115,116,117,},//81
+        new ushort[] {1,113,114,},//82
+        new ushort[] {118,119,117,120,},//83
+        new ushort[] {121,122,123,},//84
+        new ushort[] {124,125,},//85
+        new ushort[] {278,279,1,123,},//86
+        new ushort[] {34,123,33,},//87
+        new ushort[] {10,113,114,},//88
+        new ushort[] {10,127,119,117,},//89
+        new ushort[] {12,11,113,114,},//90
+        new ushort[] {128,46,129,280,281},//91
+        new ushort[] {130,131,113,41,},//92
+        new ushort[] {132,125,63,},//93
+        new ushort[] {126,133,134,282,283},//94
+        new ushort[] {46,129,},//95
+        new ushort[] {49,93,},//96
+        new ushort[] {0,49,93,},//97
+        new ushort[] {93,50,51,},//98
+        new ushort[] {93,52,51,2,},//99
+        new ushort[] {49,135,96,},//100
+        new ushort[] {49,5,136,137,},//101
+        new ushort[] {135,96,50,51,},//102
+        new ushort[] {138,139,140,272,273,},//103
+        new ushort[] {93,10,49,},//104
+        new ushort[] {0,93,10,49,},//105
+        new ushort[] {69, 55,291,290,},//106
+        new ushort[] {128,140,141,272,273,284, 285,280,281,},//107
+        new ushort[] {105,103,49,104,},//108
+        new ushort[] {91,140,141, 272,273,274,275,276,288, },//109
+        new ushort[] {141,109,147,293,294,},//110
+        new ushort[] {140,141,293,294,},//111
+        new ushort[] {114,148,80,},//112
+        new ushort[] {149,150,151,73,},//113
+        new ushort[] {152,153,154,151,},//114
+        new ushort[] {155,154,151,},//115
+        new ushort[] {80,156,157,121,},//116
+        new ushort[] {156,158,159,},//117
+        new ushort[] {139,138,126,295,296,},//118
+        new ushort[] {139,138,},//119
+        new ushort[] {10,160,161,162,},//120
+        new ushort[] {141,128,91,270,271,280,281,295, 296,},//121
+        new ushort[] {163,164,141,280,281,},//122
+        new ushort[] {128,141,280,281,},//123
+        new ushort[] {165,166,141,270,271,},//124
+        new ushort[] {91,141,270,271,},//125
+        new ushort[] {126,141,},//126
+        new ushort[] {141,},//127
+        new ushort[] {167,},//128
+        new ushort[] {0,167,},//129
+        new ushort[] {1,167,},//130
+        new ushort[] {120,168,167,},//131
+        new ushort[] {4,167,},//132
+        new ushort[] {5,6,167,},//133
+        new ushort[] {1,4,167,},//134
+        new ushort[] {6,3,99,167,},//135
+        new ushort[] {169,170,},//136
+        new ushort[] {0,169,170,},//137
+        new ushort[] {171,37,172,},//138
+        new ushort[] {173,174,175,168,},//139
+        new ushort[] {16,176,170,},//140
+        new ushort[] {62,177,178,179,},//141
+        new ushort[] {180,181,182,179,},//142
+        new ushort[] {183,184,175,},//143
+        new ushort[] {24,167,},//144
+        new ushort[] {25,26,167,},//145
+        new ushort[] {1,24,167,},//146
+        new ushort[] {167,185,297,298,},//147
+        new ushort[] {189,24,167,},//148
+        new ushort[] {26,98,31,167,},//149
+        new ushort[] {1,4,24,167, },//150
+        new ushort[] {31,167,297,298,299},//151
+        new ushort[] {169,170,24,},//152
+        new ushort[] {169,170,25,26,},//153
+        new ushort[] {272,273,274,275,163,192,188,195,},//154
+        new ushort[] {88,192,188,272,273,},//155
+        new ushort[] {16,176,170,24,},//156
+        new ushort[] {193,194,190,272,273,},//157
+        new ushort[] {126,190,196,272,273,274,275,284, 285,},//158
+        new ushort[] {190,188,272,273},//159
+        new ushort[] {197,198,},//160
+        new ushort[] {0,197,198,},//161
+        new ushort[] {187,50,199,},//162
+        new ushort[] {27,200,201,198,},//163
+        new ushort[] {4,197,198,},//164
+        new ushort[] {5,6,197,198,},//165
+        new ushort[] {4,198,202,203,},//166
+        new ushort[] {191,67,204,280,281,},//167
+        new ushort[] {205,206,207,},//168
+        new ushort[] {0,205,206,207,},//169
+        new ushort[] {208,209,},//170
+        new ushort[] {210,211,101,},//171
+        new ushort[] {16,176,199,146,},//172
+        new ushort[] {91,210,212,274,275, },//173
+        new ushort[] {44,213,204,},//174
+        new ushort[] {210,212,},//175
+        new ushort[] {70,214,215,},//176
+        new ushort[] {216,25,87,214,},//177
+        new ushort[] {74,75,217,215,},//178
+        new ushort[] {185,217,215,},//179
+        new ushort[] {4,70,214,215,},//180
+        new ushort[] {81,190,218,280,281,},//181
+        new ushort[] {191,126,190,280,281,295,284,285,296},//182
+        new ushort[] {190,191,280,281,},//183
+        new ushort[] {70,207,219,174,},//184
+        new ushort[] {91,88,192,295,296,},//185
+        new ushort[] {74,220,192,},//186
+        new ushort[] {88,192,},//187
+        new ushort[] {190,221,222,284,285, },//188
+        new ushort[] {91,190,},//189
+        new ushort[] {126,190,284,285,},//190
+        new ushort[] {190,},//191
+        new ushort[] {223,224,},//192
+        new ushort[] {0,225,226,},//193
+        new ushort[] {1,225,226,},//194
+        new ushort[] {120,168,225,226},//195
+        new ushort[] {135,229,230,},//196
+        new ushort[] {230,229,5,100,},//197
+        new ushort[] {1, 230, 231, 269,},//198
+        new ushort[] {270,271, 191, 112,228,},//199
+        new ushort[] {232,143,233,},//200
+        new ushort[] {0,143,232,233,225,},//201
+        new ushort[] {143,220,234,180,},//202
+        new ushort[] {128,112,228,284,285,},//203
+        new ushort[] {103,233,},//204
+        new ushort[] {235,236,237,},//205
+        new ushort[] {109,110,228,},//206
+        new ushort[] {237,238,},//207
+        new ushort[] {239,240,241,},//208
+        new ushort[] {127,242,240,241,},//209
+        new ushort[] {188,243,244,227,276,277,274,275,},//210
+        new ushort[] {188,245,246,270,271,},//211
+        new ushort[] {121,122,247,241,},//212
+        new ushort[] {248,249,241,},//213
+        new ushort[] {126,188,191,286,287,276,288,289,283,},//214
+        new ushort[] {188,191,276,277,},//215
+        new ushort[] {164,122,250,251,},//216
+        new ushort[] {128,193,194,286,287, },//217
+        new ushort[] {163,164,188,289,283,},//218
+        new ushort[] {128,188,},//219
+        new ushort[] {165,252,194,},//220
+        new ushort[] {193,194,},//221
+        new ushort[] {126,188,289,275,},//222
+        new ushort[] {188,},//223
+        new ushort[] {253,254,255,},//224
+        new ushort[] {0,223,214,256,},//225
+        new ushort[] {50,240,201,255,},//226
+        new ushort[] {140,245,246,284,285, },//227
+        new ushort[] {206,218,142,135,},//228
+        new ushort[] {5,197,257,100,258,},//229
+        new ushort[] {259,144,191,286,287,},//230
+        new ushort[] {191,140,},//231
+        new ushort[] {207,206,143,142,},//232
+        new ushort[] {91,128,140,284,285,286,287,289,275,},//233
+        new ushort[] {147,220,143,},//234
+        new ushort[] {128,140,284,285, },//235
+        new ushort[] {103,260,146,},//236
+        new ushort[] {91,140,289,275,},//237
+        new ushort[] {109,147,},//238
+        new ushort[] {140,},//239
+        new ushort[] {261,262,},//240
+        new ushort[] {245,263,264,},//241
+        new ushort[] {261,265,243,},//242
+        new ushort[] {245,246,},//243
+        new ushort[] {121,266,262,},//244
+        new ushort[] {248,264,},//245
+        new ushort[] {126,191,286,287,},//246
+        new ushort[] {191,},//247
+        new ushort[] {164,267,207,},//248
+        new ushort[] {128,91,286,287,},//249
+        new ushort[] {268,152,},//250
+        new ushort[] {128,},//251
+        new ushort[] {165,166,},//252
+        new ushort[] {91,},//253
+        new ushort[] {126,},//254
+        new ushort[] {},//255 = 2^0 + 2^1 + 2^2 + 2^3 + 2^4 + 2^5 + 2^6+ 2^7
+        };
+        /// <summary>
+        /// ПолзунокВектор
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="B"></param>
+        /// <param name="name"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <param name="fun"></param>
+        /// <returns></returns>
+        static public bool fun230514135401_Вектор(this ref Vector3 i, ref bool B, string header = "Вектор", int min = 1, int max = 5, System.Action<Vector3> fun = null, string name = "default")
+        {
+            var b = false;
+            var v = i;
+            st.Class.fun230516124600(() =>
+            {
+                var x = (int)v.x;
+                var y = (int)v.y;
+                var z = (int)v.z;
+                GUILayout.BeginVertical();
+                st.Class.fun230508154400_lab(name);
+                var X = fun230514135400_slider_int(ref x, "x", min, max);
+                var Y = fun230514135400_slider_int(ref y, "y", min, max);
+                var Z = fun230514135400_slider_int(ref z, "z", min, max);
+                GUILayout.EndVertical();
+                if (X || Y || Z)
+                {
+                    v = new Vector3(x, y, z);
+                    b = true;
+                    return;
+                }
+                b = false;
+            }, header, ref B);
+            if (b)
+            {
+                i = v;
+                fun?.Invoke(v);
+            }
+            return b;
         }
         /// <summary>
-        /// 
+        /// Foldout
         /// </summary>
-        static public void fun230516171600_СохранитьМеш(this Mesh M,string asset)
-        {
-            if (System.IO.File.Exists(asset))
-                AssetDatabase.SaveAssets();
-            else
-                AssetDatabase.CreateAsset(M, asset);
-        }
-        /// <summary>
-        /// mesh_path_asset
-        /// </summary>
-        /// <param name="id"></param>
+        /// <param name="выполнить"></param>
+        /// <param name="Заголовок"></param>
+        /// <param name="but"></param>
         /// <returns></returns>
-        static public string fun230518153801_ПолучитьФайлМешаПоИмени(this string id, string path = "") => st.Class.fun230516161700_ПолучитьФайлПоАргументам(st.Class.field230516161900_РазделМешей + path, id, "asset");
-        /// <summary>
-        /// PATH_id_exe
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="id"></param>
-        /// <param name="exe"></param>
-        /// <returns></returns>
-        static public string fun230516161700_ПолучитьФайлПоАргументам(string path, string id, string exe) => path + id + "." + exe;
-        /// <summary>
-        /// PATH_mesh
-        /// </summary>
-        static public string field230516161900_РазделМешей => "Assets/Resources/MESHES/";
-        /// <summary>
-        /// НастроитьИгровойОбъект
-        /// </summary>
-        /// <param name="m"></param>
-        /// <param name="go"></param>
-        static public void fun230507204600_ПривязатьМешКОбъекту(this Mesh m, GameObject go)
+        static public bool fun230516124600(System.Action выполнить, string Заголовок, ref bool but)
         {
-            //GameObject
-            if (go == null) return;
-            //{
-            //go = new GameObject();
-            //go.transform.SetParent(GameObject.Find("contnent").transform);
-            //}
+            var b = EditorGUILayout.Foldout(but, Заголовок) != but;
+            if (b)
+            {
+                but = !but;
+            }
 
-            //MeshFilter
-            var filter = go.GetComponent<MeshFilter>();
-            if (filter == null)
-                filter = go.AddComponent<MeshFilter>();
-            //MeshCollider
-            var col = go.GetComponent<MeshCollider>();
-            if (col == null)
-                col = go.AddComponent<MeshCollider>();
-            //MeshRenderer
-            var ren = go.GetComponent<MeshRenderer>();
-            if (ren == null)
-                ren = go.AddComponent<MeshRenderer>();
-            //sharedMaterial
-            if (ren.sharedMaterial == null)
-                ren.sharedMaterial = Resources.Load("MATERIALS/default", typeof(Material)) as Material;
 
-            filter.sharedMesh = m;
-            col.sharedMesh = m;
+            if (but)
+                if (Selection.activeTransform)
+                    выполнить();
+            if (!Selection.activeTransform)
+                but = false;
+            return b;
         }
         /// <summary>
-        /// 
+        /// lab
         /// </summary>
-        /// <param name="namefile"></param>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        static public bool fun230516161901_СуществуетМеш(string namefile, string path = "default/") => File.Exists(Application.dataPath + "/" + field230516161900_РазделМешей + path + namefile + ".asset");
+        /// <param name="text"></param>
+        static public void fun230508154400_lab(string text = "lab") => GUILayout.Label(text);
         /// <summary>
-        /// 
+        /// ползунок
         /// </summary>
-        /// <param name="NameFile"></param>
-        /// <param name="go"></param>
+        /// <param name="i"></param>
+        /// <param name="name"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
         /// <returns></returns>
-        static public Mesh fun230507204602_ПривязатьМешОтФайлаПоИмени(string NameFile, GameObject go, string path)
+        static public bool fun230514135400_slider_int(ref int i, string name = "default", int min = 1, int max = 5)
         {
-            var m = st.Class.fun230628232401_ЗагрузитьМешПоИмени(NameFile, path);
-            fun230507204600_ПривязатьМешКОбъекту(m, go);
-            return m;
+            GUILayout.BeginHorizontal();
+            st.Class.fun230508154400_lab(name);
+            var b = st.Class.fun230514135805(ref i, min, max);
+            GUILayout.EndHorizontal();
+            return b;
         }
         /// <summary>
-        /// ФАЙЛ_МЕША
+        /// ползунок
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="i"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
         /// <returns></returns>
-        static public Mesh fun230628232401_ЗагрузитьМешПоИмени(string NameFile, string path)
+        static public bool fun230514135805(this ref int i, int min = 1, int max = 5)
         {
-            var asset = st.Class.fun230518153801_ПолучитьФайлМешаПоИмени(NameFile, path);
-            var Сохранен = st.Class.fun230516161800_СуществуетЛиФайл(asset);
-
-            return fun230628232400_ЗагрузитьМеш(asset, Сохранен);
+            int new_lv = EditorGUILayout.IntSlider(i, min, max);
+            if (new_lv != i)
+            {
+                i = new_lv;
+                return true;
+            }
+            return false;
         }
-        /// <summary>
-        /// Сохранён
-        /// </summary>
-        /// <param name="asset"></param>
-        /// <returns></returns>
-        static public bool fun230516161800_СуществуетЛиФайл(string asset) => (asset != "" && System.IO.File.Exists(asset) == true);
-        /// <summary>
-        /// ФайлМеша
-        /// </summary>
-        /// <param name="asset"></param>
-        /// <param name="Сохранен"></param>
-        /// <returns></returns>
-        static public Mesh fun230628232400_ЗагрузитьМеш(string asset, bool Сохранен) => Сохранен ? (Mesh)AssetDatabase.LoadAssetAtPath(asset, typeof(Mesh)) : null;
         /// <summary>
         /// btn
         /// </summary>
