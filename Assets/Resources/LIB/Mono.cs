@@ -10,6 +10,7 @@ using System.Linq;
 //empty
 //empty
 //empty
+
 namespace LIB.go2306252014
 {
     public interface IInspector : go2305081120.IInspector
@@ -22,13 +23,16 @@ namespace LIB.go2306252014
     public class Inspector : go2305081120.Inspector, IInspector
     {
         new public IScene СЦЕНА => объектСЦЕНА as IScene;
-        static class Классы
-        {
-            public static cs2305071643_Default.IClass X = new cs2306301442.Class() as cs2305071643_Default.IClass;
+        private cs2307031414_Default.IClass _X; public cs2307031414_Default.IClass X {
+            get
+            {
+                if (_X==null) _X = new cs2306221522.Class(Моно.gameObject);
+                return _X;
+            } 
         }
         override public bool Выполнить()
         {
-            Классы.X.ИнтерфейсПоУмолчанию(Моно.gameObject);
+            X.ИнтерфейсПоУмолчанию();
             return base.Выполнить();
         }
     }
@@ -74,34 +78,34 @@ namespace LIB.go2305081120
 /// </summary>
 namespace LIB.go2305081120
 {
-/// <summary>
-/// 
-/// </summary>
-public interface IInspector : go2305082132.IInspector
-{
-    IScene СЦЕНА { get; }
-}
-/// <summary>
-/// 
-/// </summary>
-public class Inspector : go2305082132.Inspector, IInspector
-{
-    public IScene СЦЕНА => объектСЦЕНА as IScene;
-    private object Scene;
-    public object объектСЦЕНА
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IInspector : go2305082132.IInspector
     {
-        get
+        IScene СЦЕНА { get; }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    public class Inspector : go2305082132.Inspector, IInspector
+    {
+        public IScene СЦЕНА => объектСЦЕНА as IScene;
+        private object Scene;
+        public object объектСЦЕНА
         {
-            if (Scene == null) Scene = st.Class.fun230514161403(this,"Scene");
-            return Scene;
+            get
+            {
+                if (Scene == null) Scene = st.Class.fun230514161403(this, "Scene");
+                return Scene;
+            }
+        }
+        public override bool Выполнить()
+        {
+            GUILayout.Label("КлассМира=" + this.GetType().ToString());
+            return base.Выполнить();
         }
     }
-    public override bool Выполнить()
-    {
-        GUILayout.Label("КлассМира=" + this.GetType().ToString());
-        return base.Выполнить();
-    }
-}
 }
 //empty
 //empty
@@ -350,162 +354,141 @@ namespace LIB.go2305081120
 }
 //empty
 //empty
+//empty
+namespace LIB.cs2307031414_Default
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public interface IClass
+    {
+        public string ИмяКнопки { get; }
+        public GameObject ИгровойОбъект { get; }
+        public void Выполнить() { }
+        bool ИнтерфейсПоУмолчанию();
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    public class Class : IClass
+    {
+        static public string INFO = "INFO";
+        private GameObject _go; public GameObject ИгровойОбъект => _go;
+        public virtual string ИмяКнопки => "Выполнить";
+        public Class(GameObject go)
+        {
+            _go = go;
+        }
+        public virtual void Выполнить() { }
+        public virtual bool ИнтерфейсПоУмолчанию()
+        {
+            return st.Class.fun230516115102_btn_name(ИмяКнопки, Выполнить);
+        }
+    }
+}
+//empty
+//empty
+//empty
+namespace LIB.cs2306221522
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public interface IClass : cs2305071643_Chunk_default.IClass
+    {
+    }
+    /// <summary>
+    /// рекурсивный куб с координатой
+    /// </summary>
+    public class Class : cs2305071643_Chunk_default.Class, IClass
+    {
+        static new public string INFO = "INFO";
+        #region ПараметрыКласса
+        Vector3 hlw = Vector3.one;
+        bool hlw_btn = false;
+        Vector3 v0 = Vector3.zero;
+        bool v0_btn = false;
+        private byte R => IClass.Chunk_R;
+        private Dictionary<string, System.Action> ИзменитьНастройки = new Dictionary<string, System.Action>();
+        public Class(GameObject go):base(go)
+        {
+            ИзменитьНастройки.Add("ПоУмолчанию", () => { v0 = Vector3.zero; hlw.x = R; hlw.y = 1; hlw.z = R; });
+            ИзменитьНастройки.Add("left", () => { v0 = Vector3.zero; hlw.x = 0.5f * R; hlw.y = R; hlw.z = R; });
+            ИзменитьНастройки.Add("right", () => { v0 = 0.5f * R * Vector3.right; hlw.x = 0.5f * R; hlw.y = R; hlw.z = R; });
+            ИзменитьНастройки.Add("up", () => { v0 = 0.5f * R * Vector3.up; hlw.x = R; hlw.y = 0.5f * R; hlw.z = R; });
+            ИзменитьНастройки.Add("center", () => { v0 = 0.25f * R * Vector3.one; hlw.x = 0.5f * R; hlw.y = 0.5f * R; hlw.z = 0.5f * R; });
+            ИзменитьНастройки.Add("down", () => { v0 = Vector3.zero; hlw.x = R; hlw.y = 0.5f * R; hlw.z = R; });
+            ИзменитьНастройки.Add("back", () => { v0 = Vector3.zero; hlw.x = R; hlw.y = R; hlw.z = 0.5f * R; });
+            ИзменитьНастройки.Add("forward", () => { v0 = 0.5f * R * Vector3.forward; hlw.x = R; hlw.y = R; hlw.z = 0.5f * R; });
+        }
+        public void ПоказатьИзменитьНастройки()
+        {
+            GUILayout.BeginHorizontal();
+            foreach (var val in ИзменитьНастройки)
+                st.Class.fun230516115102_btn_name(val.Key, () =>
+                {
+                    val.Value();
+                    Построить(ИгровойОбъект);
+                });
+            GUILayout.EndHorizontal();
+        }
+        private cs2306271146.Class СобранныеПараметры => new cs2306271146.Class(R, new cs2306271320.Class(this.hlw), this.v0);
+        #endregion
+        public override bool ИнтерфейсПоУмолчанию()
+        {
+            ПоказатьИзменитьНастройки();
+            GUILayout.BeginVertical();
+            var b_hlw = st.Class.fun230514135401_Вектор(ref hlw, ref hlw_btn, "hlw", 0, R);
+            var b_v0 = st.Class.fun230514135401_Вектор(ref v0, ref v0_btn, "v0", 0, R);
+            GUILayout.EndVertical();
+
+            if (b_hlw || b_v0) Построить(ИгровойОбъект);
+            return false;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="edit"></param>
+        public override void ФункцияПостройки(cs2305141215.IClass edit) => СобранныеПараметры.СобратьЧанк(edit);
+    }
+}
+//empty
+//empty
 //универсальный класс по получению информации
 /// <summary>
 /// CLASS
 /// </summary>
-namespace LIB.cs2305071643_Default
+namespace LIB.cs2305071643_Chunk_default
 {
-    public interface IClass
+    public interface IClass : cs2307031414_Default.IClass
     {
-        bool ИнтерфейсПоУмолчанию(GameObject go, string name = "Построить");
-        abstract void Построить(GameObject go);
+        /// <summary>
+        /// РадиусЧанка
+        /// </summary>
+        static public byte Chunk_R = 32;
+        cs2305141208.IClass.Редактор ТипРедактора { get; }
+        void Построить(GameObject go);
+        void ФункцияПостройки(cs2305141215.IClass edit);
     }
     /// <summary>
     /// универсальный класс по получению информации
     /// </summary>
-    public abstract class Class: IClass
-    {
-        static public string INFO = "INFO";
-        public abstract void Построить(GameObject go);
-        public virtual bool ИнтерфейсПоУмолчанию(GameObject go, string name = "Построить")
-        {
-            return st.Class.fun230516115102_btn_name(name, () => Построить(go));
-        }
-    }
-}
-//empty
-//empty
-//empty
-namespace LIB.cs2306301442
-{
-    /// <summary>
-    ///
-    /// </summary>
-    public interface IClass: cs2306301501.IClass
-    {
-    }
-    /// <summary>
-    ///
-    /// </summary>
-    public class Class : cs2306301501.Class,IClass
+    public abstract class Class : cs2307031414_Default.Class, IClass
     {
         static new public string INFO = "INFO";
-        #region БазовыеПараметры
-        public override IClass.Редактор ТипРедактора => IClass.Редактор.Block;
-        /// <summary>
-        /// Путь файла
-        /// </summary>
-        public override string Path => "default/";
-        /// <summary>
-        /// имя файла
-        /// </summary>
-        public override string NameFile => "chunk.world.zero";
-        #endregion
-        #region ПараметрыКласса
-        cs2307011306_ТекстураЗемли.IClass ТекстураЗемли;
-        public Class()
+        public override string ИмяКнопки => "ПостроитьБезСохранения";
+        public Class(GameObject go) : base(go)
         {
-            ТекстураЗемли = new cs2307011306_ТекстураЗемли.Class();
         }
-        #endregion
-        #region Показать
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="go"></param>
-        /// <returns></returns>
-        public override bool ИнтерфейсПоУмолчанию(GameObject go, string name)
+        public virtual cs2305141208.IClass.Редактор ТипРедактора => cs2305141208.IClass.Редактор.Block;
+        private cs2307031203_ПараметрыПостройки.Class _param_build => new cs2307031203_ПараметрыПостройки.Class(ФункцияПостройки, ТипРедактора);
+        public virtual void Построить(GameObject go)
         {
-            return base.ИнтерфейсПоУмолчанию(go, "ПостроитьТекстуруЗемли");
-        }
-        #endregion
-        #region Постройка
-        private byte ВычислениеКода(Vector3 v)
-        {
-            return 51;
-        }
-        public override void ФункцияПостройки(cs2305141215.IClass edit)
-        {
-            var r = cs2307011306_ТекстураЗемли.IClass.РадиусВидимости;
-            var tex = ТекстураЗемли.ТЕКСТУРА;
-
-            Vector3 v;
-            float y;
-            for (var z= -r; z<= r;z++)
-                for (var x = -r; x <= r; x++)
-                {
-                    y = tex.GetPixel(ТекстураЗемли.ОтЦентра(x), ТекстураЗемли.ОтЦентра(z)).a*255;
-                    v = r*new Vector3(x, y, z);
-
-                    edit.ДОБАВИТЬ(new cs2306262134.Class(v, ВычислениеКода(v)));
-                }
-        }
-        #endregion
-    }
-}
-//empty
-//empty
-//empty
-namespace LIB.cs2306301501
-{
-    /// <summary>
-    ///
-    /// </summary>
-    public interface IClass : cs2305071643_Default.IClass
-    {
-        public enum Редактор { empty, Block, square, triangle };
-        Редактор ТипРедактора { get; }
-        cs2306301504.Class ПараметрыЧанка { get; }
-        string NameFile { get; }
-        string Path { get; }
-        void ФункцияПостройки(cs2305141215.IClass edit);
-    }
-    /// <summary>
-    ///
-    /// </summary>
-    public abstract class Class : cs2305071643_Default.Class, IClass
-    {
-        static new public string INFO = "INFO";
-        public virtual IClass.Редактор ТипРедактора => IClass.Редактор.Block;
-        public virtual string Path => "default/";
-        public virtual string NameFile => "chunk";
-        protected cs2306301504.Class _param_chunk; public cs2306301504.Class ПараметрыЧанка => _param_chunk;
-        public Class()
-        {
-            _param_chunk = new cs2306301504.Class(NameFile, Path);
-        }
-        public override void Построить(GameObject go) => ПараметрыЧанка.ПостроитьМеш(new cs2305141208.Class.ПараметрыПостройки(ФункцияПостройки, (byte)ТипРедактора), go);
-        public abstract void ФункцияПостройки(cs2305141215.IClass edit);
-    }
-}
-//empty
-//empty
-//empty
-namespace LIB.cs2306301504
-{
-    /// <summary>
-    ///
-    /// </summary>
-    public struct Class
-    {
-        static public string INFO = "INFO";
-        public string path;
-        public string namefile;
-        public Class(string ИмяМеша, string ПатчМеша = "")
-        {
-            this.path = ПатчМеша;
-            this.namefile = ИмяМеша;
-        }
-        public bool СуществуетМеш => st.Class.fun230516161901_СуществуетМеш(namefile);
-        public void ПривязатьМеш(GameObject go) => st.Class.fun230507204602_ПривязатьМешОтФайлаПоИмени(namefile, go, path);
-        public void Сохранить(Mesh M) => st.Class.fun230516171604_СохранитьМешПоИмени(M, namefile, path);
-        public void ПостроитьМеш(cs2305141208.Class.ПараметрыПостройки param_build, GameObject go = null)
-        {
-            //var param_build = new cs2305141208.Class.ПараметрыПостройки(ФункцияПостройки, НомерРедактора);
-            cs2305141208.IClass edit = go == null ? new cs2306291207.Class(this, param_build)/*Save*/ : new cs2306291245.Class(this, go, param_build)/*Save+go*/;
+            cs2305141208.IClass edit = new cs2306291123.Class(go, _param_build);
             edit.Закрыть();
         }
+        public override void Выполнить() => Построить(ИгровойОбъект);
+        public abstract void ФункцияПостройки(cs2305141215.IClass edit);
     }
 }
 //empty
@@ -518,24 +501,15 @@ namespace LIB.cs2305141208
     /// </summary>
     public interface IClass
     {
+        public enum Редактор { empty, Block, square, triangle };
         cs2305141215.IClass Editor { get; }
         Mesh ПолучитьМеш();
         Mesh Закрыть();
     }
     public class Class : IClass
     {
-        public class ПараметрыПостройки
-        {
-            public System.Action<cs2305141215.IClass> ФункцияПостройки;
-            public byte НомерРедактора;
-            public ПараметрыПостройки(System.Action<cs2305141215.IClass> ФункцияПостройки,byte НомерРедактора=1)
-            {
-                this.ФункцияПостройки = ФункцияПостройки;
-                this.НомерРедактора = НомерРедактора;
-            }
-        }
         private cs2305141215.IClass _editor; public cs2305141215.IClass Editor => _editor;
-        public Class(ПараметрыПостройки Параметры)
+        public Class(cs2307031203_ПараметрыПостройки.Class Параметры)
         {
             switch (Параметры.НомерРедактора)
             {
@@ -617,16 +591,16 @@ namespace LIB.cs2305141215
             (this as cs2305141222.IClass).Очистить();
         }
         void ФункцияПостройки();
-        cs2305141208.Class.ПараметрыПостройки ПараметрыПостройки { get; }
+        cs2307031203_ПараметрыПостройки.Class ПараметрыПостройки { get; }
     }
     /// <summary>
     /// 
     /// </summary>
     public abstract class Class : cs2305141222.Class, IClass
     {
-        private cs2305141208.Class.ПараметрыПостройки _param; public cs2305141208.Class.ПараметрыПостройки ПараметрыПостройки => _param;
+        private cs2307031203_ПараметрыПостройки.Class _param; public cs2307031203_ПараметрыПостройки.Class ПараметрыПостройки => _param;
         public void ФункцияПостройки() => _param.ФункцияПостройки(this);
-        public Class(cs2305141208.Class.ПараметрыПостройки param)
+        public Class(cs2307031203_ПараметрыПостройки.Class param)
         {
             _param = param;
         }
@@ -752,7 +726,7 @@ namespace LIB.cs2306291643
     public class Class : cs2305141209.Class, IClass
     {
         static public string INFO = "INFO";
-        public Class(cs2305141208.Class.ПараметрыПостройки param) : base(param)
+        public Class(cs2307031203_ПараметрыПостройки.Class param) : base(param)
         {
 
         }
@@ -838,7 +812,7 @@ namespace LIB.cs2305141209
     public class Class : cs2305141215.Class, IClass
     {
         cs2305141202.IClass ВершиныТреугольника;
-        public Class(cs2305141208.Class.ПараметрыПостройки param) : base(param)
+        public Class(cs2307031203_ПараметрыПостройки.Class param) : base(param)
         {
             ВершиныТреугольника = new cs2305141202.Class(this);
         }
@@ -920,6 +894,31 @@ namespace LIB.cs2305141202
 //empty
 //empty
 //empty
+namespace LIB.cs2307031203_ПараметрыПостройки
+{
+    /// <summary>
+    /// ПараметрыПостройки
+    /// </summary>
+    public struct Class
+    {
+        static public string INFO = "INFO";
+        public System.Action<cs2305141215.IClass> ФункцияПостройки;
+        public byte НомерРедактора;
+        public Class(System.Action<cs2305141215.IClass> ФункцияПостройки, byte НомерРедактора = 1)
+        {
+            this.ФункцияПостройки = ФункцияПостройки;
+            this.НомерРедактора = НомерРедактора;
+        }
+        public Class(System.Action<cs2305141215.IClass> ФункцияПостройки, cs2305141208.IClass.Редактор Редактор)
+        {
+            this.ФункцияПостройки = ФункцияПостройки;
+            this.НомерРедактора = (byte)Редактор;
+        }
+    }
+}
+//empty
+//empty
+//empty
 namespace LIB.cs2306301310
 {
     /// <summary>
@@ -936,7 +935,7 @@ namespace LIB.cs2306301310
     {
         static public string INFO = "INFO";
         private cs2305181555.IClass ВершиныКвадрата;
-        public Class(cs2305141208.Class.ПараметрыПостройки param) : base(param)
+        public Class(cs2307031203_ПараметрыПостройки.Class param) : base(param)
         {
             ВершиныКвадрата = new cs2305181555.Class(this);
         }
@@ -996,66 +995,6 @@ namespace LIB.cs2305181555
 //empty
 //empty
 //empty
-namespace LIB.cs2306291207
-{
-    /// <summary>
-    ///
-    /// </summary>
-    public interface IClass : cs2305141208.IClass
-    {
-    }
-    /// <summary>
-    /// Только Сохранить
-    /// </summary>
-    public class Class : cs2305141208.Class, IClass
-    {
-        static public string INFO = "INFO";
-        cs2306301504.Class Параметры;
-        public Class(cs2306301504.Class Параметры, cs2305141208.Class.ПараметрыПостройки param_build) : base(param_build)
-        {
-            this.Параметры = Параметры;
-        }
-        public override Mesh Закрыть()
-        {
-            var M = base.Закрыть();
-            Параметры.Сохранить(M);
-            return M;
-        }
-    }
-}
-//empty
-//empty
-//empty
-namespace LIB.cs2306291245
-{
-    /// <summary>
-    ///
-    /// </summary>
-    public interface IClass
-    {
-    }
-    /// <summary>
-    ///
-    /// </summary>
-    public class Class : cs2306291123.Class, IClass
-    {
-        static new public string INFO = "INFO";
-        cs2306301504.Class Параметры;
-        public Class(cs2306301504.Class Параметры, GameObject go, cs2305141208.Class.ПараметрыПостройки param_build) : base(go, param_build)
-        {
-            this.Параметры = Параметры;
-        }
-        public override Mesh Закрыть()
-        {
-            var M = base.Закрыть();
-            Параметры.Сохранить(M);
-            return M;
-        }
-    }
-}
-//empty
-//empty
-//empty
 namespace LIB.cs2306291123
 {
     /// <summary>
@@ -1072,7 +1011,7 @@ namespace LIB.cs2306291123
     {
         static public string INFO = "INFO";
         private GameObject _go; public GameObject GO => _go;
-        public Class(GameObject go, cs2305141208.Class.ПараметрыПостройки param_build) :base(param_build) => this._go = go;
+        public Class(GameObject go, cs2307031203_ПараметрыПостройки.Class param_build) :base(param_build) => this._go = go;
         public override Mesh Закрыть()
         {
             var M = base.Закрыть();
@@ -1084,139 +1023,75 @@ namespace LIB.cs2306291123
 //empty
 //empty
 //empty
-namespace LIB.cs2307011306_ТекстураЗемли
+namespace LIB.cs2306271146
 {
-    /// <summary>
-    /// Текстура Земли
-    /// </summary>
-    public interface IClass : cs2307011446_ТекстураФайл.IClass
-    {
-        public static byte РадиусВидимости = 32;
-        int ОтЦентра(int x);
-    }
     /// <summary>
     ///
     /// </summary>
-    public class Class : cs2307011446_ТекстураФайл.Class, IClass
+    public struct Class
     {
-        static new public string INFO = "INFO";
-        public override string PATH => "world.zero/texture" + SIZE;
-        static int ОпределениеСмещенияНачальнойВысоты => Random.Range(0, byte.MaxValue);
-        static int ОпределениеСмещенияВысоты => Random.Range(-1, 1);
-        static public Vector3Int ВекторПервойВершиныПоОси = Vector3Int.zero;
-        static public Vector3Int ВекторПоследнейВершиныПоОси = Vector3Int.zero;
-
-        static Vector3Int ВычислениеПервойВершины
+        static public string INFO = "INFO";
+        public Vector3 v0;
+        public cs2306271320.Class hlw;
+        public byte R;
+        public Class(byte R, cs2306271320.Class hlw, Vector3 v0)
         {
-            get
-            {
-                ВекторПервойВершиныПоОси = new Vector3Int(0, ОпределениеСмещенияНачальнойВысоты, 0);
-                ВекторПоследнейВершиныПоОси = ВекторПервойВершиныПоОси;
-                return ВекторПоследнейВершиныПоОси;
-            }
+            this.R = R;
+            this.v0 = v0;
+            this.hlw = hlw;
         }
-        static Vector3Int ВычислениеСледующейЗетВершины
+        private bool СуществуетВершина(Vector3 v)
         {
-            get
-            {
-                ВекторПервойВершиныПоОси += new Vector3Int(0, ОпределениеСмещенияВысоты, 0);
-                ВекторПоследнейВершиныПоОси = ВекторПервойВершиныПоОси;
-                return ВекторПоследнейВершиныПоОси;
-            }
+            if (v.x < v0.x || v.x > v0.x + hlw.Длинна + 1) return false;
+            if (v.y < v0.y || v.y > v0.y + hlw.Высота + 1) return false;
+            if (v.z < v0.z || v.z > v0.z + hlw.Ширина + 1) return false;
+            return true;
         }
-        static Vector3Int ВычислениеСледующейВершины
+        //собрать
+        public void СобратьЧанк(cs2305141215.IClass edit)
         {
-            get
-            {
-                ВекторПоследнейВершиныПоОси += new Vector3Int(0, ОпределениеСмещенияВысоты, 0);
-                return ВекторПоследнейВершиныПоОси;
-            }
-        }
-        static Vector3Int Вычисление(int x, int z)
-        {
-            if (z == -IClass.РадиусВидимости & x == -IClass.РадиусВидимости) return ВычислениеПервойВершины;
-            if (x == -IClass.РадиусВидимости) return ВычислениеСледующейЗетВершины;
-            return ВычислениеСледующейВершины;
-        }
-        public int ОтЦентра(int x) => R + x;
-        public override void Построить(GameObject go)
-        {
-            ВекторПоследнейВершиныПоОси = Vector3Int.zero;
-            ВекторПервойВершиныПоОси = Vector3Int.zero;
-            var tex = ТЕКСТУРА;
-            for (var z = -IClass.РадиусВидимости; z <= IClass.РадиусВидимости; z++)
-            {
-                for (var x = -IClass.РадиусВидимости; x <= IClass.РадиусВидимости; x++)
-                {
-                    Вычисление(x, z);
-                    tex.SetPixel(ОтЦентра(x), ОтЦентра(z), new Color32(0, 0, 0, (byte)ВекторПоследнейВершиныПоОси.y));
-                }
-            }
-            base.Построить(go);
+            Vector3 v;
+            byte code;
+            for (var x = 0; x <= R; x++)
+                for (var y = 0; y <= R; y++)
+                    for (var z = 0; z <= R; z++)
+                    {
+                        //получитьКод
+                        v = new Vector3(x, y, z);
+                        code = st.Class.fun230627120900_СформироватьКодБлока(v, СуществуетВершина);
+                        edit.ДОБАВИТЬ(new cs2306262134.Class(v, code));
+                    }
         }
     }
 }
 //empty
 //empty
 //empty
-namespace LIB.cs2307011446_ТекстураФайл
+namespace LIB.cs2306271320
 {
-    /// <summary>
-    /// Текстура файл
-    /// </summary>
-    public interface IClass : cs2305071643_Default.IClass
-    {
-        Texture2D ТЕКСТУРА { get; }
-        string PATH { get; }
-        void Сохранить();
-        void Открыть();
-    }
     /// <summary>
     ///
     /// </summary>
-    public class Class : cs2305071643_Default.Class, IClass
+    public struct Class
     {
-        static new public string INFO = "INFO";
-        public int SIZE = 8192;
-        public int R = 4096;
-        Texture2D НоваяТекстура => new Texture2D(SIZE, SIZE, TextureFormat.RGBA32, false);
-        Texture2D _tex; public Texture2D ТЕКСТУРА
+        static public string INFO = "INFO";
+        public byte Высота;//y
+        public byte Длинна;//x
+        public byte Ширина;//z
+        public Class(byte Высота, byte Длинна, byte Ширина)
         {
-            get
-            {
-                if (_tex == null)
-                {
-                    if (!Загрузить)
-                    {
-                        _tex = НоваяТекстура;
-                        Сохранить();
-                    }
-                }
-                return _tex;
-            }
+            this.Высота = Высота;
+            this.Длинна = Длинна;
+            this.Ширина = Ширина;
         }
-        protected string _path = "test"; public virtual string PATH => _path;
-        public string Файл => "TEXTURES/" + PATH + ".png";
-        public void Сохранить()
+        public Class(Vector3 v)
         {
-            st.Class.fun230625202100_SaveTextureToFile(ТЕКСТУРА, "Assets/Resources/" + Файл);
+            this.Высота = (byte)v.y;
+            this.Длинна = (byte)v.x;
+            this.Ширина = (byte)v.z;
         }
-        public bool Загрузить
-        {
-            get
-            {
-                if (!File.Exists(Файл)) return false;
-                _tex = Resources.Load(Path.GetFileName(Файл), typeof(Texture)) as Texture2D;
-                return true;
-            }
-        }
-        public override void Построить(GameObject go)
-        {
-            Сохранить();
-            //Открыть();
-        }
-        public void Открыть() => st.Class.fun230626135400_ОткрытьФайл("Assets/Resources/" + Файл);
-
+        public string PATH => "chunk.hlw";
+        public string ИмяЧанка => PATH + "." + Высота + "." + Длинна + "." + Ширина;
     }
 }
 //empty
@@ -1293,121 +1168,6 @@ static public class Class
             if (b)
                 proc?.Invoke();
             return b;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="namefile"></param>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        static public bool fun230516161901_СуществуетМеш(string namefile, string path = "default/") => File.Exists(Application.dataPath + "/" + field230516161900_РазделМешей + path + namefile + ".asset");
-        /// <summary>
-        /// PATH_mesh
-        /// </summary>
-        static public string field230516161900_РазделМешей => "Assets/Resources/MESHES/";
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="NameFile"></param>
-        /// <param name="go"></param>
-        /// <returns></returns>
-        static public Mesh fun230507204602_ПривязатьМешОтФайлаПоИмени(string NameFile, GameObject go, string path)
-        {
-            var m = st.Class.fun230628232401_ЗагрузитьМешПоИмени(NameFile, path);
-            fun230507204600_ПривязатьМешКОбъекту(m, go);
-            return m;
-        }
-        /// <summary>
-        /// ФАЙЛ_МЕША
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        static public Mesh fun230628232401_ЗагрузитьМешПоИмени(string NameFile, string path)
-        {
-            var asset = st.Class.fun230518153801_ПолучитьФайлМешаПоИмени(NameFile, path);
-            var Сохранен = st.Class.fun230516161800_СуществуетЛиФайл(asset);
-
-            return fun230628232400_ЗагрузитьМеш(asset, Сохранен);
-        }
-        /// <summary>
-        /// mesh_path_asset
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        static public string fun230518153801_ПолучитьФайлМешаПоИмени(this string id, string path = "") => st.Class.fun230516161700_ПолучитьФайлПоАргументам(st.Class.field230516161900_РазделМешей + path, id, "asset");
-        /// <summary>
-        /// PATH_id_exe
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="id"></param>
-        /// <param name="exe"></param>
-        /// <returns></returns>
-        static public string fun230516161700_ПолучитьФайлПоАргументам(string path, string id, string exe) => path + id + "." + exe;
-        /// <summary>
-        /// Сохранён
-        /// </summary>
-        /// <param name="asset"></param>
-        /// <returns></returns>
-        static public bool fun230516161800_СуществуетЛиФайл(string asset) => (asset != "" && System.IO.File.Exists(asset) == true);
-        /// <summary>
-        /// ФайлМеша
-        /// </summary>
-        /// <param name="asset"></param>
-        /// <param name="Сохранен"></param>
-        /// <returns></returns>
-        static public Mesh fun230628232400_ЗагрузитьМеш(string asset, bool Сохранен) => Сохранен ? (Mesh)AssetDatabase.LoadAssetAtPath(asset, typeof(Mesh)) : null;
-        /// <summary>
-        /// НастроитьИгровойОбъект
-        /// </summary>
-        /// <param name="m"></param>
-        /// <param name="go"></param>
-        static public void fun230507204600_ПривязатьМешКОбъекту(this Mesh m, GameObject go)
-        {
-            //GameObject
-            if (go == null) return;
-            //{
-            //go = new GameObject();
-            //go.transform.SetParent(GameObject.Find("contnent").transform);
-            //}
-
-            //MeshFilter
-            var filter = go.GetComponent<MeshFilter>();
-            if (filter == null)
-                filter = go.AddComponent<MeshFilter>();
-            //MeshCollider
-            var col = go.GetComponent<MeshCollider>();
-            if (col == null)
-                col = go.AddComponent<MeshCollider>();
-            //MeshRenderer
-            var ren = go.GetComponent<MeshRenderer>();
-            if (ren == null)
-                ren = go.AddComponent<MeshRenderer>();
-            //sharedMaterial
-            if (ren.sharedMaterial == null)
-                ren.sharedMaterial = Resources.Load("MATERIALS/default", typeof(Material)) as Material;
-
-            filter.sharedMesh = m;
-            col.sharedMesh = m;
-        }
-        /// <summary>
-        /// СохранитьМешПоИмени
-        /// </summary>
-        /// <param name="M"></param>
-        /// <param name="id"></param>
-        /// <param name="path"></param>
-        static public void fun230516171604_СохранитьМешПоИмени(Mesh M, string namefile, string path="")
-        {
-            M.fun230516171600_СохранитьМеш(st.Class.fun230518153801_ПолучитьФайлМешаПоИмени(namefile, path));
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        static public void fun230516171600_СохранитьМеш(this Mesh M,string asset)
-        {
-            if (System.IO.File.Exists(asset))
-                AssetDatabase.SaveAssets();
-            else
-                AssetDatabase.CreateAsset(M, asset);
         }
         /// <summary>
         ///
@@ -2162,34 +1922,48 @@ static public class Class
             return false;
         }
         /// <summary>
-        /// сохранить текстуру
+        /// НастроитьИгровойОбъект
         /// </summary>
-        /// <param name="texture">2D текстура</param>
-        /// <param name="f">файл сохранения (корень директории asset)</param>
-        static public void fun230625202100_SaveTextureToFile(Texture2D texture, string f="")
+        /// <param name="m"></param>
+        /// <param name="go"></param>
+        static public void fun230507204600_ПривязатьМешКОбъекту(this Mesh m, GameObject go)
         {
-            var открыть = f == "";
-            if (открыть) f = field230625202101_test;
-            byte[] bytes = texture.EncodeToPNG();
-            FileStream file = new FileStream(f, FileMode.Create);
-            BinaryWriter binary = new BinaryWriter(file);
-            binary.Write(bytes);
-            file.Close();
-            if (открыть) LIB.st.Class.fun230626135400_ОткрытьФайл(f);
+            //GameObject
+            if (go == null) return;
+            //{
+            //go = new GameObject();
+            //go.transform.SetParent(GameObject.Find("contnent").transform);
+            //}
+
+            //MeshFilter
+            var filter = go.GetComponent<MeshFilter>();
+            if (filter == null)
+                filter = go.AddComponent<MeshFilter>();
+            //MeshCollider
+            var col = go.GetComponent<MeshCollider>();
+            if (col == null)
+                col = go.AddComponent<MeshCollider>();
+            //MeshRenderer
+            var ren = go.GetComponent<MeshRenderer>();
+            if (ren == null)
+                ren = go.AddComponent<MeshRenderer>();
+            //sharedMaterial
+            if (ren.sharedMaterial == null)
+                ren.sharedMaterial = Resources.Load("MATERIALS/default", typeof(Material)) as Material;
+
+            filter.sharedMesh = m;
+            col.sharedMesh = m;
         }
         /// <summary>
-        /// размер текстуры
+        /// СформироватьКодБлока по функции
         /// </summary>
-        static public string field230625202101_test = "Assets/Resources/test/texture.png";
-        /// <summary>
-        ///ОткрытьФайл
-        /// </summary>
-        static public void fun230626135400_ОткрытьФайл(this string commandText)
+        static public byte fun230627120900_СформироватьКодБлока(Vector3 v, System.Func<Vector3,bool> СуществуетВершина)
         {
-            var proc = new System.Diagnostics.Process();
-            proc.StartInfo.FileName = commandText;
-            proc.StartInfo.UseShellExecute = true;
-            proc.Start();
+                float code = 0;
+                var arr = st.Class.field230515154300_ВекторОтЦентраКубаПоНомеруВершины;
+                for (var i = 0; i < arr.Length; i++)
+                    code += СуществуетВершина(v + arr[i]) ? Mathf.Pow(2, i) : 0;
+                return (byte)code;
         }
 }
 }
