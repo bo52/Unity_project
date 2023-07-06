@@ -61,7 +61,7 @@ static public class Class
                         i += 1;
                     }
                     //добавить в последнее
-                    if (i > -1)
+                    if (i > -1 && !path.cs_go.Class.Ёто омментарий(line))
                     {
                         lines.Add(uses.Class.ќбработка—трокиƒл€ћодул€(numbers, line, M, bs.Count, Ўапка));
                     }

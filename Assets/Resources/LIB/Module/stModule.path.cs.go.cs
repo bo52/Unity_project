@@ -4,9 +4,17 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-namespace stModule.path.cs_go {
+namespace stModule.path.cs_go
+{
     public class Class
     {
+        static public bool Ёто омментарий(string line)
+        {
+            line = line.Trim();
+            if (line.Length == 0) return true;
+            if (line.Length < 2) return false;
+            return line.Substring(0, 2) == "//";
+        }
         public static void ќбработка‘айла(ref List<path.Class.Body> bs, uint M, string f)
         {
             if (!File.Exists(f)) return;
@@ -17,9 +25,9 @@ namespace stModule.path.cs_go {
             var line = sr.ReadLine();
             while (line != null)
             {
-                if (path.Class.ЁтоЌеѕодключениеЅиблиотеки(line))
+                if (!Ёто омментарий(line) && path.Class.ЁтоЌеѕодключениеЅиблиотеки(line))
                 {
-                    ls.Add(uses.Class.ќбработка—трокиƒл€ћодул€(ns,line, M));
+                    ls.Add(uses.Class.ќбработка—трокиƒл€ћодул€(ns, line, M));
                 }
                 line = sr.ReadLine();
             }

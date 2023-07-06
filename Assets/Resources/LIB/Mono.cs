@@ -7,19 +7,12 @@ using UnityEditor;
 using UnityEngine;
 using System.IO;
 using System.Linq;
-//empty
-//empty
-//empty
-
 namespace LIB.go2306252014
 {
     public interface IInspector : go2305081120.IInspector
     {
         new IScene СЦЕНА { get; }
     }
-    /// <summary>
-    /// Список Миров
-    /// </summary>
     public class Inspector : go2305081120.Inspector, IInspector
     {
         new public IScene СЦЕНА => объектСЦЕНА as IScene;
@@ -37,25 +30,13 @@ namespace LIB.go2306252014
         }
     }
 }
-//empty
-//empty
-//empty
-/// <summary>
-/// 
-/// </summary>
 namespace LIB.go2305081120
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public interface IEvent
     {
         IInspector ОбъктМира { get; set; }
         bool Выполнить();
     }
-    /// <summary>
-    /// 
-    /// </summary>
     public class MyEvent : Object, IEvent
     {
         private IInspector ObjectWorld;
@@ -70,24 +51,12 @@ namespace LIB.go2305081120
         }
     }
 }
-//empty
-//empty
-//empty
-/// <summary>
-/// 
-/// </summary>
 namespace LIB.go2305081120
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public interface IInspector : go2305082132.IInspector
     {
         IScene СЦЕНА { get; }
     }
-    /// <summary>
-    /// 
-    /// </summary>
     public class Inspector : go2305082132.Inspector, IInspector
     {
         public IScene СЦЕНА => объектСЦЕНА as IScene;
@@ -107,26 +76,14 @@ namespace LIB.go2305081120
         }
     }
 }
-//empty
-//empty
-//empty
-/// <summary>
-/// 
-/// </summary>
 namespace LIB.go2305082132
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public interface IInspector
     {
     MonoBehaviour Моно { get; set; }
         bool Выполнить();
         T field<T>(ref T val) where T : class, new();
     }
-    /// <summary>
-    /// 
-    /// </summary>
     public class Inspector : object, IInspector
     {
         public Inspector() { }
@@ -154,24 +111,14 @@ namespace LIB.go2305082132
         public virtual T field<T>(ref T val, object[] args) where T : class
         {
             System.Type TestType = typeof(T);
-            //если класс не найден
             if (TestType == null) return null;
-            //получаем конструктор
             var ts = new List<System.Type>();
             foreach (var arg in args) ts.Add(arg.GetType());
-
             System.Reflection.ConstructorInfo ci = TestType.GetConstructor(ts.ToArray());
-            //вызываем конструтор
             return ci.Invoke(args) as T;
         }
     }
 }
-//empty
-//empty
-//empty
-/// <summary>
-/// 
-/// </summary>
 namespace LIB.cs2305161108
 {
     public interface IMono
@@ -180,7 +127,6 @@ namespace LIB.cs2305161108
         go2305081120.IInspector ОбъектМира { get; set; }
         Object ОбновитьОбъектМира { get; }
     }
-
     public class Mono : MonoBehaviour, IMono
     {
         [SerializeField]
@@ -210,7 +156,6 @@ namespace LIB.cs2305161108
         [CustomEditor(typeof(Mono))]
         public class gui : Editor
         {
-            //Манипуляция в Событии на Сцене OnSceneGUI
             public virtual void OnSceneGUI()
             {
                 if (target is IMono)
@@ -219,7 +164,6 @@ namespace LIB.cs2305161108
                     ((IMono)target).ОбъектМира?.СЦЕНА.Выполнить();
                 }
             }
-            //Манипуляция в Событии в Инспекторе OnInspectorGUI
             public override void OnInspectorGUI()
             {
                 if (target is IMono)
@@ -231,23 +175,11 @@ namespace LIB.cs2305161108
         }
     }
 }
-//empty
-//empty
-//empty
-/// <summary>
-/// 
-/// </summary>
 namespace LIB.go2305081120
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public interface IScene : IEvent
     {
     }
-    /// <summary>
-    /// 
-    /// </summary>
     public class Scene : MyEvent, IScene
     {
         override public bool Выполнить()
@@ -260,7 +192,6 @@ namespace LIB.go2305081120
             Event e = Event.current;
             int controlID = GUIUtility.GetControlID(FocusType.Passive);
             HandleUtility.AddDefaultControl(controlID);
-
             switch (e.GetTypeForControl(controlID))
             {
                 case EventType.MouseMove:
@@ -352,23 +283,14 @@ namespace LIB.go2305081120
         #endregion
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2307031414_Default
 {
-    /// <summary>
-    ///
-    /// </summary>
     public interface IClass
     {
         public string ИмяКнопки { get; }
         public void Выполнить() { }
         bool ИнтерфейсПоУмолчанию();
     }
-    /// <summary>
-    ///
-    /// </summary>
     public class Class : IClass
     {
         static public string INFO = "INFO";
@@ -380,61 +302,40 @@ namespace LIB.cs2307031414_Default
         }
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2306221522_ЧанкПаралепипеда
 {
-    /// <summary>
-    ///
-    /// </summary>
     public interface IClass : cs2307061242_СловарныйЧанк.IClass
     {
     }
-    /// <summary>
-    /// рекурсивный куб с координатой
-    /// </summary>
     public class Class : cs2307061242_СловарныйЧанк.Class, IClass
     {
         static new public string INFO = "INFO";
         public override string ИмяКнопки => "ПостроитьЧанкПаралепипед";
         #region ПараметрыКласса
         private cs2306271146_РедакторПаралепипеда.IClass РедакторПаралепипеда = new cs2306271146_РедакторПаралепипеда.Class();
-        public Class() :base()
+        public override string ИмяИгровогоОбъекта => "ЧанкПаралепипед";
+        public Class() : base()
         {
         }
         #endregion
         public override bool ИнтерфейсПоУмолчанию()
         {
             if (РедакторПаралепипеда.ИнтерфейсПоУмолчанию()) Выполнить();
-            return false;
+            return base.ИнтерфейсПоУмолчанию();
         }
-
         public override bool СуществуетВершина(Vector3 v) => РедакторПаралепипеда.СуществуетВершина(v);
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2307061242_СловарныйЧанк
 {
-    /// <summary>
-    ///
-    /// </summary>
     public interface IClass : cs2305071643_Chunk_default.IClass
     {
-        /// <summary>
-        /// РазмерЧанка
-        /// </summary>
         static public byte РазмерЧанка = 32;
         static public byte ГраничныйРазмерЧанка = 30;
         static public byte ПоловинаРазмераЧанка = 14;
         cs2307061139_КораЧанка.IClass КораЧанка { get; }
         cs2307061149_БлокиЧанка.IClass БлокиЧанка { get; }
     }
-    /// <summary>
-    ///
-    /// </summary>
     public abstract class Class : cs2305071643_Chunk_default.Class, IClass
     {
         static new public string INFO = "INFO";
@@ -460,7 +361,6 @@ namespace LIB.cs2307061242_СловарныйЧанк
         {
             _crust.Clear();
             _btns.Clear();
-
             Vector3 v;
             byte КОД;
             for (var x = 0; x < IClass.РазмерЧанка; x++)
@@ -479,12 +379,6 @@ namespace LIB.cs2307061242_СловарныйЧанк
         public abstract bool СуществуетВершина(Vector3 v);
     }
 }
-//empty
-//empty
-//универсальный класс по получению информации
-/// <summary>
-/// CLASS
-/// </summary>
 namespace LIB.cs2305071643_Chunk_default
 {
     public interface IClass : cs2307031414_Default.IClass
@@ -494,17 +388,29 @@ namespace LIB.cs2305071643_Chunk_default
         Mesh ПостроитьСЗакрытием();
         void ФункцияПостройки(cs2305141215.IClass edit);
     }
-    /// <summary>
-    /// универсальный класс по получению информации
-    /// </summary>
     public abstract class Class : cs2307031414_Default.Class, IClass
     {
         static new public string INFO = "INFO";
         public override string ИмяКнопки => "ПостроитьБезСохранения";
-        private GameObject _go; public GameObject ИгровойОбъект => _go;
+        public virtual string ИмяИгровогоОбъекта =>"empty";
+        private GameObject _go;
+        public virtual GameObject ИгровойОбъект
+        {
+            get
+            {
+                if (_go == null)
+                {
+                    _go = GameObject.Find(ИмяИгровогоОбъекта);
+                    if (_go == null)
+                    {
+                        _go = st.Class.prop230625163904_НовыйОбъектВКорнеМира(ИмяИгровогоОбъекта);
+                    }
+                }
+                return _go;
+            }
+        }
         public Class()
         {
-            _go = st.Class.prop230625163904_НовыйОбъектВКорнеМира;
         }
         public virtual cs2305141208.IClass.Редактор ТипРедактора => cs2305141208.IClass.Редактор.Block;
         private cs2307031203_ПараметрыПостройки.Class _param_build => new cs2307031203_ПараметрыПостройки.Class(ФункцияПостройки, ТипРедактора);
@@ -513,14 +419,8 @@ namespace LIB.cs2305071643_Chunk_default
         public abstract void ФункцияПостройки(cs2305141215.IClass edit);
     }
 }
-//empty
-//empty
-//vertices.close закрытие вертексов(stMesh.build.vertices.close.cs2305141208)
 namespace LIB.cs2305141208
 {
-    /// <summary>
-    /// stMesh.build.vertices.close.cs2305141208
-    /// </summary>
     public interface IClass
     {
         public enum Редактор { empty, Block, square, triangle };
@@ -555,7 +455,6 @@ namespace LIB.cs2305141208
         {
             var M = new Mesh();
             M.vertices = _editor.vs.ToArray();
-
             var uvs = (_editor as cs2305141222.IClass);
             M.uv = uvs.Развёртка[0].ToArray();
             M.uv2 = uvs.Развёртка[1].ToArray();
@@ -565,7 +464,6 @@ namespace LIB.cs2305141208
             M.uv6 = uvs.Развёртка[5].ToArray();
             M.uv7 = uvs.Развёртка[6].ToArray();
             M.uv8 = uvs.Развёртка[7].ToArray();
-
             M.triangles = _editor.ts.ToArray();
             M.normals = _editor.ns.ToArray();
             M.RecalculateNormals();
@@ -575,35 +473,15 @@ namespace LIB.cs2305141208
         }
     }
 }
-//empty
-//empty
-//IVertices строим по вертексу
 namespace LIB.cs2305141215
 {
-    /// <summary>
-    /// stMesh.build.vertices.cs2305141215
-    /// строим по вертексу
-    /// </summary>
     public interface IClass : cs2305141222.IClass
     {
         void ДОБАВИТЬ(object arg);
         void ДОБАВИТЬ(object[] args);
-        /// <summary>
-        /// набор вершин
-        /// </summary>
         List<Vector3> vs { get; }
-        /// <summary>
-        /// нумерация вершин
-        /// </summary>
         List<int> ts { get; }
-        /// <summary>
-        /// нормали
-        /// </summary>
         List<Vector3> ns { get; }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="v"></param>
         public void ДобавитьВершину(Vector3 v);
         public new void Очистить()
         {
@@ -615,9 +493,6 @@ namespace LIB.cs2305141215
         void ФункцияПостройки();
         cs2307031203_ПараметрыПостройки.Class ПараметрыПостройки { get; }
     }
-    /// <summary>
-    /// 
-    /// </summary>
     public abstract class Class : cs2305141222.Class, IClass
     {
         private cs2307031203_ПараметрыПостройки.Class _param; public cs2307031203_ПараметрыПостройки.Class ПараметрыПостройки => _param;
@@ -626,30 +501,13 @@ namespace LIB.cs2305141215
         {
             _param = param;
         }
-        /// <summary>
-        /// вертексы
-        /// </summary>
         private List<Vector3> _vs = new List<Vector3>(); public List<Vector3> vs => _vs;
-        /// <summary>
-        /// индексы
-        /// </summary>
         private List<int> _ts = new List<int>(); public List<int> ts => _ts;
-        /// <summary>
-        /// нормали
-        /// </summary>
         private List<Vector3> _ns = new List<Vector3>(); public List<Vector3> ns => _ns;
-        /// <summary>
-        /// Добавить вершину для постройки куба
-        /// </summary>
-        /// <param name="dv"></param>
-        /// <param name="ФункцияВерстки"></param>
         public void ДобавитьВершину(Vector3 v)
         {
-            //новый вертекс
             vs.Add(v);
-            //индексы вертексов
             ts.Add(vs.Count - 1);
-            //нормали
             ns.Add(v.normalized);
             ТреугольникВерстки(this);
         }
@@ -661,14 +519,8 @@ namespace LIB.cs2305141215
         public void ДОБАВИТЬ(object arg) => ДОБАВИТЬ(new object[] { arg });
     }
 }
-//empty
-//empty
-//Mesh.uv развертка текстуры
 namespace LIB.cs2305141222
 {
-    /// <summary>
-    /// stMesh.build.uv.cs2305141222
-    /// </summary>
     public interface IClass
     {
         System.Func<cs2305141215.IClass, Vector2[]> ФункцияВерстки { get; set; }
@@ -690,14 +542,7 @@ namespace LIB.cs2305141222
             new List<Vector2>(),
         };
         public List<Vector2>[] Развёртка => _uv;
-        /// <summary>
-        /// 
-        /// </summary>
         private System.Func<cs2305141215.IClass, Vector2[]> fun; public System.Func<cs2305141215.IClass, Vector2[]> ФункцияВерстки { get => fun; set => fun = value; }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="Редактор"></param>
         public virtual void ТреугольникВерстки(cs2305141215.IClass Редактор)
         {
             Vector2[]arr;
@@ -716,9 +561,6 @@ namespace LIB.cs2305141222
             for (int i = 0; i < arr.Length; i++)
                 Развёртка[i].Add(arr[i]);
         }
-        /// <summary>
-        /// 
-        /// </summary>
         public virtual void Очистить()
         {
             for (var i = 0; i < Развёртка.Length; i++)
@@ -726,42 +568,23 @@ namespace LIB.cs2305141222
         }
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2306291643
 {
-    /// <summary>
-    /// Форма блока
-    /// </summary>
     public interface IClass
     {
-        /// <summary>
-        /// форма блок для меша
-        /// </summary>
         cs2306262134.Class ТекущийБлок { get; set; }
         void ADD(cs2306262134.Class b);
     }
-    /// <summary>
-    ///
-    /// </summary>
     public class Class : cs2305141209.Class, IClass
     {
         static public string INFO = "INFO";
         public Class(cs2307031203_ПараметрыПостройки.Class param) : base(param)
         {
-
         }
         private cs2306262134.Class _b;
         public cs2306262134.Class ТекущийБлок { get => _b; set => _b = value; }
         public virtual Vector3 ВычислениеВектора(Vector3 dv) => ТекущийБлок.Центр + dv;
         public virtual Vector3 ВычислениеВектора(ushort ИндексУникальногоТреугольника, byte i) => ВычислениеВектора(ТочкаУникальногоТреугольника(ИндексУникальногоТреугольника, i));
-        /// <summary>
-        /// ВершинаГраниБлокаОси
-        /// </summary>
-        /// <param name="ИндексВершины"></param>
-        /// <param name="НомерОсиБлока"></param>
-        /// <returns></returns>
         static public Vector3 ВычислениеВектора(byte ИндексВершины, byte НомерОсиБлока)
         {
             var v = st.Class.fun230515154302_ВекторВершиныПоЦентруКуба(ИндексВершины);
@@ -769,25 +592,15 @@ namespace LIB.cs2306291643
                 v += 0.5f * st.Class.field230514115900_ВекторПоТремОсям[НомерОсиБлока];
             return v;
         }
-        /// <summary>
-        /// ВекторТреугольника
-        /// </summary>
-        /// <param name="ИндексУникальногоТреугольника"></param>
-        /// <param name="НомерОсиУникальногоТреугольника"></param>
-        /// <returns></returns>
         static public Vector3 ТочкаУникальногоТреугольника(ushort ИндексУникальногоТреугольника, byte НомерОси)
         {
             var НомерГрани = st.Class.fun230514115300_НомерГраниКуба(ИндексУникальногоТреугольника, НомерОси);
             return ВычислениеВектора(st.Class.field230514115901_НомерВершиныКубаПоНомеруГрани[НомерГрани, 0], st.Class.field230514115901_НомерВершиныКубаПоНомеруГрани[НомерГрани, 1]);
         }
-        /// <summary>
-        ///собрать куб в списки vs,ns,uvs
-        /// </summary>
         public void ADD(cs2306262134.Class b)
         {
             if (b.Код == 0) return;
             ТекущийБлок = b;
-            //треугольники
             Vector3 v1, v2, v3;
             foreach (var ИндексУникальногоТреугольника in st.Class.field230514131500_БлокИзТреугольников[ТекущийБлок.Код])
             {
@@ -799,14 +612,8 @@ namespace LIB.cs2306291643
         }
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2306262134
 {
-    /// <summary>
-    /// блок из координаты и кода
-    /// </summary>
     public struct Class
     {
         static public string INFO = "INFO";
@@ -819,14 +626,8 @@ namespace LIB.cs2306262134
         }
     }
 }
-//empty
-//empty
-//Vertices (stMesh.build.vertices)
 namespace LIB.cs2305141209
 {
-    /// <summary>
-    /// stMesh.build.vertices.cs2305141209
-    /// </summary>
     public interface IClass : cs2305141215.IClass
     {
         void ADD(cs2306301359.Class Triangle);
@@ -847,14 +648,8 @@ namespace LIB.cs2305141209
         }
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2306301359
 {
-    /// <summary>
-    ///
-    /// </summary>
     public struct Class
     {
         static public string INFO = "INFO";
@@ -869,14 +664,8 @@ namespace LIB.cs2306301359
         }
     }
 }
-//empty
-//empty
-//построить куб
 namespace LIB.cs2305141202
 {
-    /// <summary>
-    /// interface Закрыть МЕШ
-    /// </summary>
     public interface IClass
     {
         cs2305141215.IClass Редактор { get; }
@@ -885,9 +674,6 @@ namespace LIB.cs2305141202
         Vector3 v3 { get; set; }
         void ДобавитьТреугольник();
     }
-    /// <summary>
-    /// ВершиныТреугольника
-    /// </summary>
     public class Class : IClass
     {
         private cs2305141215.IClass _edit; public cs2305141215.IClass Редактор => _edit;
@@ -913,14 +699,8 @@ namespace LIB.cs2305141202
         }
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2307031203_ПараметрыПостройки
 {
-    /// <summary>
-    /// ПараметрыПостройки
-    /// </summary>
     public struct Class
     {
         static public string INFO = "INFO";
@@ -938,21 +718,12 @@ namespace LIB.cs2307031203_ПараметрыПостройки
         }
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2306301310
 {
-    /// <summary>
-    ///
-    /// </summary>
     public interface IClass: cs2305141215.IClass
     {
         public void ADD(cs2306301359.Class Triangle, Vector3 v4);
     }
-    /// <summary>
-    ///
-    /// </summary>
     public class Class : cs2305141215.Class, IClass
     {
         static public string INFO = "INFO";
@@ -971,26 +742,16 @@ namespace LIB.cs2306301310
         }
         public void Интерфейс()
         {
-            //st.Class.fun230514135401_Вектор(ref )
         }
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2305181555
 {
-    /// <summary>
-    ///
-    /// </summary>
     public interface IClass: cs2305141202.IClass
     {
         Vector3 v4 { get; set; }
         void ДобавитьКвадрат();
     }
-    /// <summary>
-    ///
-    /// </summary>
     public class Class : cs2305141202.Class, IClass
     {
         private Vector3 _v4 = Vector3.forward; public Vector3 v4 { get => _v4; set => _v4 = value; }
@@ -1014,27 +775,17 @@ namespace LIB.cs2305181555
         }
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2306291123
 {
-    /// <summary>
-    /// MESH с GO
-    /// </summary>
     public interface IClass : cs2305141208.IClass
     {
         GameObject GO { get; }
     }
-    /// <summary>
-    ///
-    /// </summary>
     public class Class : cs2305141208.Class, IClass
     {
         static public string INFO = "INFO";
         private GameObject _go; public GameObject GO => _go;
         public Class(GameObject go, cs2307031203_ПараметрыПостройки.Class param_build) : base(param_build) => this._go = go;
-
         public Mesh Привязать(GameObject go)
         {
             var M = base.Закрыть();
@@ -1044,21 +795,12 @@ namespace LIB.cs2306291123
         public override Mesh Закрыть() => Привязать(GO);
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2307061139_КораЧанка
 {
-    /// <summary>
-    ///
-    /// </summary>
     public interface IClass: cs2307051313_Словарь_Ulong.IClass
     {
         void Добавить(Vector3 v, byte КОД);
     }
-    /// <summary>
-    ///
-    /// </summary>
     public class Class : cs2307051313_Словарь_Ulong.Class<cs2307051205_ЦветнойКодБлока.Class>, IClass
     {
         static new public string INFO = "INFO";
@@ -1069,14 +811,8 @@ namespace LIB.cs2307061139_КораЧанка
         }
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2307051313_Словарь_Ulong
 {
-    /// <summary>
-    ///
-    /// </summary>
     public interface IClass : IDictionary
     {
         void Добавить(Vector3 v, object obj);
@@ -1088,9 +824,6 @@ namespace LIB.cs2307051313_Словарь_Ulong
         void Обойти(System.Func<Vector3, object, bool> Выполнить);
         void Очистить();
     }
-    /// <summary>
-    ///
-    /// </summary>
     public class Class<T> : Dictionary<ulong, T>, IClass where T:class
     {
         static public string INFO = "INFO";
@@ -1118,18 +851,12 @@ namespace LIB.cs2307051313_Словарь_Ulong
         #endregion
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2307051205_ЦветнойКодБлока
 {
     public interface IClass : cs2307061154_ЦветнойБлок.IClass
     {
         public byte КОД { get; set; }
     }
-    /// <summary>
-    /// БЛОК (цвет и код)
-    /// </summary>
     public class Class: cs2307061154_ЦветнойБлок.Class, IClass
     {
         static new public string INFO = "INFO";
@@ -1145,29 +872,19 @@ namespace LIB.cs2307051205_ЦветнойКодБлока
         }
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2307061154_ЦветнойБлок
 {
-    /// <summary>
-    ///
-    /// </summary>
     public interface IClass
     {
         static Color32 Green = new Color32(211, 151, 0, 255);
         public Color32 Цвет { get; set; }
     }
-    /// <summary>
-    ///
-    /// </summary>
     public class Class : IClass
     {
         static public string INFO = "INFO";
         private Color32 _c = IClass.Green; public Color32 Цвет { get => _c; set => _c = value; }
         public Class()
         {
-
         }
         public Class(Color32 c)
         {
@@ -1175,30 +892,18 @@ namespace LIB.cs2307061154_ЦветнойБлок
         }
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2307061149_БлокиЧанка
 {
-    /// <summary>
-    ///
-    /// </summary>
     public interface IClass: cs2307051313_Словарь_Ulong.IClass
     {
         void Добавить(Vector3 v);
     }
-    /// <summary>
-    ///
-    /// </summary>
     public class Class : cs2307051313_Словарь_Ulong.Class<cs2307061154_ЦветнойБлок.Class>, IClass
     {
         static new public string INFO = "INFO";
         public virtual void Добавить(Vector3 v)=>base.Добавить(v, new cs2307061154_ЦветнойБлок.Class());
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.cs2306271146_РедакторПаралепипеда
 {
     public interface IClass
@@ -1208,9 +913,6 @@ namespace LIB.cs2306271146_РедакторПаралепипеда
         bool СуществуетВершина(Vector3 v);
         bool ИнтерфейсПоУмолчанию();
     }
-    /// <summary>
-    ///
-    /// </summary>
     public class Class: IClass
     {
         Вектор D = new Вектор("ДЛИННА");
@@ -1231,7 +933,7 @@ namespace LIB.cs2306271146_РедакторПаралепипеда
                 this.header = header;
                 x_min = 0;
                 name_x = "x=левая "+ header;
-                name_z = "z=правая "+ header;
+                name_z = "x=правая "+ header;
                 z_min = 0;
                 x_max = IClass.r;
                 z_max = IClass.r;            
@@ -1275,13 +977,6 @@ namespace LIB.cs2306271146_РедакторПаралепипеда
                 W.Правая = 0;
                 h = 1;
             });
-            //ИзменитьНастройки.Add("left", () => { v0 = Vector3.zero; hlw.x = 0.5f * R; hlw.y = R; hlw.z = R; });
-            //ИзменитьНастройки.Add("right", () => { v0 = 0.5f * R * Vector3.right; hlw.x = 0.5f * R; hlw.y = R; hlw.z = R; });
-            //ИзменитьНастройки.Add("up", () => { v0 = 0.5f * R * Vector3.up; hlw.x = R; hlw.y = 0.5f * R; hlw.z = R; });
-            //ИзменитьНастройки.Add("center", () => { v0 = 0.25f * R * Vector3.one; hlw.x = 0.5f * R; hlw.y = 0.5f * R; hlw.z = 0.5f * R; });
-            //ИзменитьНастройки.Add("down", () => { v0 = Vector3.zero; hlw.x = R; hlw.y = 0.5f * R; hlw.z = R; });
-            //ИзменитьНастройки.Add("back", () => { v0 = Vector3.zero; hlw.x = R; hlw.y = R; hlw.z = 0.5f * R; });
-            //ИзменитьНастройки.Add("forward", () => { v0 = 0.5f * R * Vector3.forward; hlw.x = R; hlw.y = R; hlw.z = 0.5f * R; });
         }
         private Dictionary<string, System.Action> ИзменитьНастройки = new Dictionary<string, System.Action>();
         public bool ПоказатьИзменитьНастройки()
@@ -1315,14 +1010,9 @@ namespace LIB.cs2306271146_РедакторПаралепипеда
             var b3 = W.Показать();
             GUILayout.EndVertical();
             return b0 || b1 || b2 || b3;
-
         }
-        //exit
     }
 }
-//empty
-//empty
-//empty
 namespace LIB.go2306252014
 {
 public interface IScene:go2305081120.IScene
@@ -1340,12 +1030,6 @@ namespace LIB.st
 {
 static public class Class
 {
-        /// <summary>
-        /// СоздатьОбъектПоИмени
-        /// </summary>
-        /// <param name="INS"></param>
-        /// <param name="ev"></param>
-        /// <returns></returns>
         static public object fun230514161403(go2305081120.IInspector INS, string ev)
         {
             var mb = INS.Моно as cs2305161108.IMono;
@@ -1353,11 +1037,6 @@ static public class Class
             (obj as go2305081120.IEvent).ОбъктМира = INS;
             return obj;
         }
-        /// <summary>
-        /// СоздатьОбъектПоИмени(Инспектор)
-        /// </summary>
-        /// <param name="mb"></param>
-        /// <returns></returns>
         static public go2305081120.IInspector fun230514161404(cs2305161108.IMono mb)
         {
                 var obj = fun230514161402_СоздатьОбъектПоИмени("LIB.go" + mb.НомерМира.ToString() + ".Inspector");
@@ -1365,29 +1044,14 @@ static public class Class
                 mb.ОбъектМира.Моно = mb as MonoBehaviour;
                 return mb.ОбъектМира;
         }
-        /// <summary>
-        /// СоздатьОбъектПоИмени
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         static public object fun230514161402_СоздатьОбъектПоИмени(this string name)
         {
             System.Type TestType = System.Type.GetType(name, false, true);
-            //если класс не найден
             if (TestType == null) return null;
-            //получаем конструктор
             System.Reflection.ConstructorInfo ci = TestType.GetConstructor(new System.Type[] { });
-
-            //вызываем конструтор
             var obj = ci.Invoke(new object[] { });
             return obj;
         }
-        /// <summary>
-        /// btn
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="proc"></param>
-        /// <returns></returns>
         static public bool fun230516115102_btn_name(string name = "test", System.Action proc = null)
         {
             var b = GUILayout.Button(name);
@@ -1395,17 +1059,12 @@ static public class Class
                 proc?.Invoke();
             return b;
         }
-        /// <summary>
-        ///
-        /// </summary>
         static public Vector2[] fun230626171800_ВерсткаБлока(this cs2306291643.IClass Редактор)
         {
             return new Vector2[8]
             {
                 Vector2.zero,
-                //uv2 Координата вершины блока
                 new Vector2(Редактор.ТекущийБлок.Центр.x,Редактор.ТекущийБлок.Центр.y),
-                //uv3 Координата вершины блока и КодВешиныБлока
                 new Vector2(Редактор.ТекущийБлок.Центр.z,Редактор.ТекущийБлок.Код),
                 Vector2.zero,
                 Vector2.zero,
@@ -1414,19 +1073,10 @@ static public class Class
                 Vector2.zero,
             };
         }
-        /// <summary>
-        /// ВекторПоЦентруКуба
-        /// </summary>
-        /// <param name="ИндексВершины"></param>
-        /// <returns></returns>
         static public Vector3 fun230515154302_ВекторВершиныПоЦентруКуба(byte ИндексВершины)
         {
             return field230515154300_ВекторОтЦентраКубаПоНомеруВершины[ИндексВершины] - 0.5f * Vector3.one;
         }
-        /// <summary>
-        /// ВершиныОтносительноКоординатыБлока
-        /// 8 вершин как куб. Vector3.zero = new Vector3(-1,-1,-1)
-        /// </summary>
         static public readonly Vector3[] field230515154300_ВекторОтЦентраКубаПоНомеруВершины = new Vector3[]
         {
             Vector3.zero,//0
@@ -1438,28 +1088,13 @@ static public class Class
             Vector3.up+Vector3.forward,//6
             Vector3.right+Vector3.up+Vector3.forward,//7
         };
-        /// <summary>
-        /// ТриОси
-        /// три направленные оси точки (для определения граневая точка куба)
-        /// </summary>
         static public readonly Vector3[] field230514115900_ВекторПоТремОсям = new Vector3[3]
         {
             Vector3.right,
             Vector3.up,
             Vector3.forward
         };
-        /// <summary>
-        /// ТочкаТреугольника
-        /// </summary>
-        /// <param name="ИндексУникальногоТреугольника"></param>
-        /// <param name="НомерОси"></param>
-        /// <returns></returns>
         static public byte fun230514115300_НомерГраниКуба(this ushort ИндексУникальногоТреугольника, byte НомерОси) => field230514115301[ИндексУникальногоТреугольника, НомерОси];
-        /// <summary>
-        /// УниикальныеТреугольники
-        /// индекс строки массива - уникальная комбинация точек граней куба  
-        /// 0 - 11 индексы граней куба
-        /// </summary>
         public static readonly byte[,] field230514115301 = new byte[300, 3]
         {
         {0,2,4},//0
@@ -1763,12 +1398,6 @@ static public class Class
         {6,10,8},//298
         {1,10,3},//299
         };
-        /// <summary>
-        /// ИндексВершиныИНомерОси
-        /// строка - ребро куба или линия
-        /// x - по номеру грани определить связанную ОтносительнуюВершинуКуба или точку
-        /// y - номеру ОСИ, где располагается точка ребра куба, которая связана с ВершинойКуба (0..7)
-        /// </summary>
         static public readonly byte[,] field230514115901_НомерВершиныКубаПоНомеруГрани = new byte[,]
         {
             { 0, 0 },
@@ -1784,9 +1413,6 @@ static public class Class
             { 4, 1 },
             { 5, 1 },
         };
-        /// <summary>
-        /// УникальныеТриангуляционныеБлоки
-        /// </summary>
         static public readonly ushort[][] field230514131500_БлокИзТреугольников = new ushort[][]
         {
         new ushort[] {},//0 = 0
@@ -2046,53 +1672,58 @@ static public class Class
         new ushort[] {126,},//254
         new ushort[] {},//255 = 2^0 + 2^1 + 2^2 + 2^3 + 2^4 + 2^5 + 2^6+ 2^7
         };
-        /// <summary>
-        /// ПолзунокВектор
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="B"></param>
-        /// <param name="name"></param>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <param name="fun"></param>
-        /// <returns></returns>
-        static public bool fun230514135401_Вектор(this ref Vector3 i, ref bool B, string header = "Вектор", int min = 1, int max = 5, System.Action<Vector3> fun = null, string name = "default")
+        static public GameObject prop230625163904_НовыйОбъектВКорнеМира(string name = "empty")
         {
-            var b = false;
-            var v = i;
-            st.Class.fun230516124600(() =>
-            {
-                var x = (int)v.x;
-                var y = (int)v.y;
-                var z = (int)v.z;
-                GUILayout.BeginVertical();
-                st.Class.fun230508154400_lab(name);
-                var X = fun230514135400_slider_int(ref x, "x", min, max);
-                var Y = fun230514135400_slider_int(ref y, "y", min, max);
-                var Z = fun230514135400_slider_int(ref z, "z", min, max);
-                GUILayout.EndVertical();
-                if (X || Y || Z)
-                {
-                    v = new Vector3(x, y, z);
-                    b = true;
-                    return;
-                }
-                b = false;
-            }, header, ref B);
-            if (b)
-            {
-                i = v;
-                fun?.Invoke(v);
-            }
-            return b;
+            GameObject go = new GameObject();
+            go.transform.SetParent(prop230625163901_ОбъектКореньМира.transform);
+            go.name = name;
+            return go;
         }
-        /// <summary>
-        /// Foldout
-        /// </summary>
-        /// <param name="выполнить"></param>
-        /// <param name="Заголовок"></param>
-        /// <param name="but"></param>
-        /// <returns></returns>
+        static public GameObject prop230625163901_ОбъектКореньМира
+        {
+            get
+            {
+                if (field230625163902_ROOT == null) field230625163902_ROOT = GameObject.Find("Root");
+                return field230625163902_ROOT;
+            }
+        }
+        static private GameObject field230625163902_ROOT;
+        static public void fun230507204600_ПривязатьМешКОбъекту(this Mesh m, GameObject go)
+        {
+            if (go == null) return;
+            var filter = go.GetComponent<MeshFilter>();
+            if (filter == null)
+                filter = go.AddComponent<MeshFilter>();
+            var col = go.GetComponent<MeshCollider>();
+            if (col == null)
+                col = go.AddComponent<MeshCollider>();
+            var ren = go.GetComponent<MeshRenderer>();
+            if (ren == null)
+                ren = go.AddComponent<MeshRenderer>();
+            if (ren.sharedMaterial == null)
+                ren.sharedMaterial = Resources.Load("MATERIALS/default", typeof(Material)) as Material;
+            filter.sharedMesh = m;
+            col.sharedMesh = m;
+        }
+        static public Vector3 fun230521170204_ПолучитьВектор(this ulong id)
+        {
+            ulong z = id / field230521170202;
+            ulong y = (id - field230521170202 * z) / field230521170201;
+            ulong x = id - field230521170201 * y - field230521170202 * z;
+            return new Vector3(x, y, z) - field230521170200 * Vector3.one;
+        }
+        static private ulong field230521170202 = 513 * 513;
+        static private ulong field230521170201 = 513;
+        static private ulong field230521170200 = 256;
+        static public ulong fun230521170203_ПолучитьНомер(this Vector3 v) => (ulong)(v.x + field230521170200) + field230521170201 * (ulong)(v.y + field230521170200) + field230521170202 * (ulong)(v.z + field230521170200);
+        static public byte fun230627120900_СформироватьКодБлока(Vector3 v, System.Func<Vector3,bool> СуществуетВершина)
+        {
+                float code = 0;
+                var arr = st.Class.field230515154300_ВекторОтЦентраКубаПоНомеруВершины;
+                for (var i = 0; i < arr.Length; i++)
+                    code += СуществуетВершина(v + arr[i]) ? Mathf.Pow(2, i) : 0;
+                return (byte)code;
+        }
         static public bool fun230516124600(System.Action выполнить, string Заголовок, ref bool but)
         {
             var b = EditorGUILayout.Foldout(but, Заголовок) != but;
@@ -2100,8 +1731,6 @@ static public class Class
             {
                 but = !but;
             }
-
-
             if (but)
                 if (Selection.activeTransform)
                     выполнить();
@@ -2109,19 +1738,6 @@ static public class Class
                 but = false;
             return b;
         }
-        /// <summary>
-        /// lab
-        /// </summary>
-        /// <param name="text"></param>
-        static public void fun230508154400_lab(string text = "lab") => GUILayout.Label(text);
-        /// <summary>
-        /// ползунок
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="name"></param>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <returns></returns>
         static public bool fun230514135400_slider_int(ref int i, string name = "default", int min = 1, int max = 5)
         {
             GUILayout.BeginHorizontal();
@@ -2130,13 +1746,7 @@ static public class Class
             GUILayout.EndHorizontal();
             return b;
         }
-        /// <summary>
-        /// ползунок
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <returns></returns>
+        static public void fun230508154400_lab(string text = "lab") => GUILayout.Label(text);
         static public bool fun230514135805(this ref int i, int min = 1, int max = 5)
         {
             int new_lv = EditorGUILayout.IntSlider(i, min, max);
@@ -2146,111 +1756,6 @@ static public class Class
                 return true;
             }
             return false;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        static public GameObject prop230625163904_НовыйОбъектВКорнеМира
-        {
-            get
-            {
-                GameObject go = new GameObject();
-                go.transform.SetParent(prop230625163901_ОбъектКореньМира.transform);
-                return go;
-            }
-        }
-        /// <summary>
-        /// ИгровойКорень
-        /// </summary>
-        static public GameObject prop230625163901_ОбъектКореньМира
-        {
-            get
-            {
-                if (field230625163902_ROOT == null) field230625163902_ROOT = GameObject.Find("Root");
-                return field230625163902_ROOT;
-            }
-        }
-        /// <summary>
-        /// Root
-        /// </summary>
-        static private GameObject field230625163902_ROOT;
-        /// <summary>
-        /// НастроитьИгровойОбъект
-        /// </summary>
-        /// <param name="m"></param>
-        /// <param name="go"></param>
-        static public void fun230507204600_ПривязатьМешКОбъекту(this Mesh m, GameObject go)
-        {
-            //GameObject
-            if (go == null) return;
-            //{
-            //go = new GameObject();
-            //go.transform.SetParent(GameObject.Find("contnent").transform);
-            //}
-
-            //MeshFilter
-            var filter = go.GetComponent<MeshFilter>();
-            if (filter == null)
-                filter = go.AddComponent<MeshFilter>();
-            //MeshCollider
-            var col = go.GetComponent<MeshCollider>();
-            if (col == null)
-                col = go.AddComponent<MeshCollider>();
-            //MeshRenderer
-            var ren = go.GetComponent<MeshRenderer>();
-            if (ren == null)
-                ren = go.AddComponent<MeshRenderer>();
-            //sharedMaterial
-            if (ren.sharedMaterial == null)
-                ren.sharedMaterial = Resources.Load("MATERIALS/default", typeof(Material)) as Material;
-
-            filter.sharedMesh = m;
-            col.sharedMesh = m;
-        }
-        /// <summary>
-        /// GET_V
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        static public Vector3 fun230521170204_ПолучитьВектор(this ulong id)
-        {
-
-            ulong z = id / field230521170202;
-            ulong y = (id - field230521170202 * z) / field230521170201;
-            ulong x = id - field230521170201 * y - field230521170202 * z;
-            return new Vector3(x, y, z) - field230521170200 * Vector3.one;
-        }
-        /// <summary>
-        /// nnn
-        /// </summary>
-        static private ulong field230521170202 = 513 * 513;
-        /// <summary>
-        /// nn
-        /// </summary>
-        static private ulong field230521170201 = 513;
-        /// <summary>
-        /// n
-        /// </summary>
-        static private ulong field230521170200 = 256;
-        /// <summary>
-        /// GET_ID
-        /// вектор конвертировать в идентификатор
-        /// </summary>
-        /// <param name="v">вектор для конвертирования</param>
-        /// <param name="min">граница - минимальная положительная целая координата (от 0,1...255 без знака минус)</param>
-        /// <param name="max">граница - максимальная положительная целая координата(от 1,2...255 и т.д)</param>
-        /// <returns>идентификатор в диапазоне (0...18446744073709551615)</returns>
-        static public ulong fun230521170203_ПолучитьНомер(this Vector3 v) => (ulong)(v.x + field230521170200) + field230521170201 * (ulong)(v.y + field230521170200) + field230521170202 * (ulong)(v.z + field230521170200);
-        /// <summary>
-        /// СформироватьКодБлока по функции
-        /// </summary>
-        static public byte fun230627120900_СформироватьКодБлока(Vector3 v, System.Func<Vector3,bool> СуществуетВершина)
-        {
-                float code = 0;
-                var arr = st.Class.field230515154300_ВекторОтЦентраКубаПоНомеруВершины;
-                for (var i = 0; i < arr.Length; i++)
-                    code += СуществуетВершина(v + arr[i]) ? Mathf.Pow(2, i) : 0;
-                return (byte)code;
         }
 }
 }
