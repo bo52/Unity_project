@@ -26,7 +26,7 @@ namespace LIB.go2306252014
         private cs2307031414_Default.IClass _X; public cs2307031414_Default.IClass X {
             get
             {
-                if (_X==null) _X = new cs2306221522.Class(Моно.gameObject);
+                if (_X==null) _X = new cs2306221522_ЧанкПаралепипеда.Class();
                 return _X;
             } 
         }
@@ -363,7 +363,6 @@ namespace LIB.cs2307031414_Default
     public interface IClass
     {
         public string ИмяКнопки { get; }
-        public GameObject ИгровойОбъект { get; }
         public void Выполнить() { }
         bool ИнтерфейсПоУмолчанию();
     }
@@ -373,12 +372,7 @@ namespace LIB.cs2307031414_Default
     public class Class : IClass
     {
         static public string INFO = "INFO";
-        private GameObject _go; public GameObject ИгровойОбъект => _go;
         public virtual string ИмяКнопки => "Выполнить";
-        public Class(GameObject go)
-        {
-            _go = go;
-        }
         public virtual void Выполнить() { }
         public virtual bool ИнтерфейсПоУмолчанию()
         {
@@ -389,67 +383,100 @@ namespace LIB.cs2307031414_Default
 //empty
 //empty
 //empty
-namespace LIB.cs2306221522
+namespace LIB.cs2306221522_ЧанкПаралепипеда
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public interface IClass : cs2307061242_СловарныйЧанк.IClass
+    {
+    }
+    /// <summary>
+    /// рекурсивный куб с координатой
+    /// </summary>
+    public class Class : cs2307061242_СловарныйЧанк.Class, IClass
+    {
+        static new public string INFO = "INFO";
+        public override string ИмяКнопки => "ПостроитьЧанкПаралепипед";
+        #region ПараметрыКласса
+        private cs2306271146_РедакторПаралепипеда.IClass РедакторПаралепипеда = new cs2306271146_РедакторПаралепипеда.Class();
+        public Class() :base()
+        {
+        }
+        #endregion
+        public override bool ИнтерфейсПоУмолчанию()
+        {
+            if (РедакторПаралепипеда.ИнтерфейсПоУмолчанию()) Выполнить();
+            return false;
+        }
+
+        public override bool СуществуетВершина(Vector3 v) => РедакторПаралепипеда.СуществуетВершина(v);
+    }
+}
+//empty
+//empty
+//empty
+namespace LIB.cs2307061242_СловарныйЧанк
 {
     /// <summary>
     ///
     /// </summary>
     public interface IClass : cs2305071643_Chunk_default.IClass
     {
+        /// <summary>
+        /// РазмерЧанка
+        /// </summary>
+        static public byte РазмерЧанка = 32;
+        static public byte ГраничныйРазмерЧанка = 30;
+        static public byte ПоловинаРазмераЧанка = 14;
+        cs2307061139_КораЧанка.IClass КораЧанка { get; }
+        cs2307061149_БлокиЧанка.IClass БлокиЧанка { get; }
     }
     /// <summary>
-    /// рекурсивный куб с координатой
+    ///
     /// </summary>
-    public class Class : cs2305071643_Chunk_default.Class, IClass
+    public abstract class Class : cs2305071643_Chunk_default.Class, IClass
     {
         static new public string INFO = "INFO";
-        #region ПараметрыКласса
-        Vector3 hlw = Vector3.one;
-        bool hlw_btn = false;
-        Vector3 v0 = Vector3.zero;
-        bool v0_btn = false;
-        private byte R => IClass.Chunk_R;
-        private Dictionary<string, System.Action> ИзменитьНастройки = new Dictionary<string, System.Action>();
-        public Class(GameObject go):base(go)
+        private cs2307061139_КораЧанка.IClass _crust = new cs2307061139_КораЧанка.Class(); public cs2307061139_КораЧанка.IClass КораЧанка => _crust;
+        public cs2307061149_БлокиЧанка.IClass _btns = new cs2307061149_БлокиЧанка.Class(); public cs2307061149_БлокиЧанка.IClass БлокиЧанка => _btns;
+        public Class() : base()
         {
-            ИзменитьНастройки.Add("ПоУмолчанию", () => { v0 = Vector3.zero; hlw.x = R; hlw.y = 1; hlw.z = R; });
-            ИзменитьНастройки.Add("left", () => { v0 = Vector3.zero; hlw.x = 0.5f * R; hlw.y = R; hlw.z = R; });
-            ИзменитьНастройки.Add("right", () => { v0 = 0.5f * R * Vector3.right; hlw.x = 0.5f * R; hlw.y = R; hlw.z = R; });
-            ИзменитьНастройки.Add("up", () => { v0 = 0.5f * R * Vector3.up; hlw.x = R; hlw.y = 0.5f * R; hlw.z = R; });
-            ИзменитьНастройки.Add("center", () => { v0 = 0.25f * R * Vector3.one; hlw.x = 0.5f * R; hlw.y = 0.5f * R; hlw.z = 0.5f * R; });
-            ИзменитьНастройки.Add("down", () => { v0 = Vector3.zero; hlw.x = R; hlw.y = 0.5f * R; hlw.z = R; });
-            ИзменитьНастройки.Add("back", () => { v0 = Vector3.zero; hlw.x = R; hlw.y = R; hlw.z = 0.5f * R; });
-            ИзменитьНастройки.Add("forward", () => { v0 = 0.5f * R * Vector3.forward; hlw.x = R; hlw.y = R; hlw.z = 0.5f * R; });
         }
-        public void ПоказатьИзменитьНастройки()
+        public override Mesh ПостроитьСЗакрытием()
         {
-            GUILayout.BeginHorizontal();
-            foreach (var val in ИзменитьНастройки)
-                st.Class.fun230516115102_btn_name(val.Key, () =>
-                {
-                    val.Value();
-                    Построить(ИгровойОбъект);
-                });
-            GUILayout.EndHorizontal();
+            СформироватьСловарьЧанка();
+            return base.ПостроитьСЗакрытием();
         }
-        private cs2306271146.Class СобранныеПараметры => new cs2306271146.Class(R, new cs2306271320.Class(this.hlw), this.v0);
-        #endregion
-        public override bool ИнтерфейсПоУмолчанию()
+        public override void ФункцияПостройки(cs2305141215.IClass edit)
         {
-            ПоказатьИзменитьНастройки();
-            GUILayout.BeginVertical();
-            var b_hlw = st.Class.fun230514135401_Вектор(ref hlw, ref hlw_btn, "hlw", 0, R);
-            var b_v0 = st.Class.fun230514135401_Вектор(ref v0, ref v0_btn, "v0", 0, R);
-            GUILayout.EndVertical();
+            _crust.Обойти((Vector3 v, cs2307051205_ЦветнойКодБлока.Class b) =>
+            {
+                edit.ДОБАВИТЬ(new cs2306262134.Class(v, b.КОД));
+                return true;
+            });
+        }
+        public void СформироватьСловарьЧанка()
+        {
+            _crust.Clear();
+            _btns.Clear();
 
-            if (b_hlw || b_v0) Построить(ИгровойОбъект);
-            return false;
+            Vector3 v;
+            byte КОД;
+            for (var x = 0; x < IClass.РазмерЧанка; x++)
+                for (var y = 0; y < IClass.РазмерЧанка; y++)
+                    for (var z = 0; z < IClass.РазмерЧанка; z++)
+                    {
+                        v = new Vector3(x, y, z);
+                        КОД = st.Class.fun230627120900_СформироватьКодБлока(v, СуществуетВершина);
+                        if (КОД == 0) continue;
+                        if (КОД == byte.MaxValue)
+                            _btns.Добавить(v);
+                        else
+                            _crust.Добавить(v, КОД);
+                    }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="edit"></param>
-        public override void ФункцияПостройки(cs2305141215.IClass edit) => СобранныеПараметры.СобратьЧанк(edit);
+        public abstract bool СуществуетВершина(Vector3 v);
     }
 }
 //empty
@@ -462,12 +489,9 @@ namespace LIB.cs2305071643_Chunk_default
 {
     public interface IClass : cs2307031414_Default.IClass
     {
-        /// <summary>
-        /// РадиусЧанка
-        /// </summary>
-        static public byte Chunk_R = 32;
+        GameObject ИгровойОбъект { get; }
         cs2305141208.IClass.Редактор ТипРедактора { get; }
-        void Построить(GameObject go);
+        Mesh ПостроитьСЗакрытием();
         void ФункцияПостройки(cs2305141215.IClass edit);
     }
     /// <summary>
@@ -477,17 +501,15 @@ namespace LIB.cs2305071643_Chunk_default
     {
         static new public string INFO = "INFO";
         public override string ИмяКнопки => "ПостроитьБезСохранения";
-        public Class(GameObject go) : base(go)
+        private GameObject _go; public GameObject ИгровойОбъект => _go;
+        public Class()
         {
+            _go = st.Class.prop230625163904_НовыйОбъектВКорнеМира;
         }
         public virtual cs2305141208.IClass.Редактор ТипРедактора => cs2305141208.IClass.Редактор.Block;
         private cs2307031203_ПараметрыПостройки.Class _param_build => new cs2307031203_ПараметрыПостройки.Class(ФункцияПостройки, ТипРедактора);
-        public virtual void Построить(GameObject go)
-        {
-            cs2305141208.IClass edit = new cs2306291123.Class(go, _param_build);
-            edit.Закрыть();
-        }
-        public override void Выполнить() => Построить(ИгровойОбъект);
+        public virtual Mesh ПостроитьСЗакрытием() => new cs2306291123.Class(ИгровойОбъект, _param_build).Закрыть();
+        public override void Выполнить() => ПостроитьСЗакрытием();
         public abstract void ФункцияПостройки(cs2305141215.IClass edit);
     }
 }
@@ -1007,91 +1029,295 @@ namespace LIB.cs2306291123
     /// <summary>
     ///
     /// </summary>
-    public class Class: cs2305141208.Class,IClass
+    public class Class : cs2305141208.Class, IClass
     {
         static public string INFO = "INFO";
         private GameObject _go; public GameObject GO => _go;
-        public Class(GameObject go, cs2307031203_ПараметрыПостройки.Class param_build) :base(param_build) => this._go = go;
-        public override Mesh Закрыть()
+        public Class(GameObject go, cs2307031203_ПараметрыПостройки.Class param_build) : base(param_build) => this._go = go;
+
+        public Mesh Привязать(GameObject go)
         {
             var M = base.Закрыть();
-            st.Class.fun230507204600_ПривязатьМешКОбъекту(M, GO);
+            st.Class.fun230507204600_ПривязатьМешКОбъекту(M, go);
             return M;
         }
+        public override Mesh Закрыть() => Привязать(GO);
     }
 }
 //empty
 //empty
 //empty
-namespace LIB.cs2306271146
+namespace LIB.cs2307061139_КораЧанка
 {
     /// <summary>
     ///
     /// </summary>
-    public struct Class
+    public interface IClass: cs2307051313_Словарь_Ulong.IClass
+    {
+        void Добавить(Vector3 v, byte КОД);
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    public class Class : cs2307051313_Словарь_Ulong.Class<cs2307051205_ЦветнойКодБлока.Class>, IClass
+    {
+        static new public string INFO = "INFO";
+        public void Добавить(Vector3 v, byte КОД)
+        {
+            var b = new cs2307051205_ЦветнойКодБлока.Class(КОД);
+            this.Добавить(v, b);
+        }
+    }
+}
+//empty
+//empty
+//empty
+namespace LIB.cs2307051313_Словарь_Ulong
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public interface IClass : IDictionary
+    {
+        void Добавить(Vector3 v, object obj);
+        void Добавить<T>(Vector3 v, T obj) where T : class;
+        Vector3 ПолучитьВектор(ulong id);
+        ulong ПолучитьНомер(Vector3 v);
+        void Обойти<T>(System.Func<Vector3, T, bool> Выполнить) where T : class;
+        void Обойти(System.Func<ulong, object, bool> Выполнить);
+        void Обойти(System.Func<Vector3, object, bool> Выполнить);
+        void Очистить();
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    public class Class<T> : Dictionary<ulong, T>, IClass where T:class
     {
         static public string INFO = "INFO";
-        public Vector3 v0;
-        public cs2306271320.Class hlw;
-        public byte R;
-        public Class(byte R, cs2306271320.Class hlw, Vector3 v0)
+        #region ФункцииКласса
+        public void Очистить() => this.Clear();
+        public virtual void Добавить(Vector3 v, object obj) => this.Add(ПолучитьНомер(v), (T)obj);
+        public virtual void Добавить<t>(Vector3 v, t obj) where t:class => this.Add(ПолучитьНомер(v), obj as T);
+        public Vector3 ПолучитьВектор(ulong id) => st.Class.fun230521170204_ПолучитьВектор(id);
+        public ulong ПолучитьНомер(Vector3 v) => st.Class.fun230521170203_ПолучитьНомер(v);
+        public void Обойти(System.Func<ulong, object, bool> Выполнить)
         {
-            this.R = R;
-            this.v0 = v0;
-            this.hlw = hlw;
+            foreach (var val in this)
+                if (!Выполнить(val.Key, val.Value)) return;
         }
-        private bool СуществуетВершина(Vector3 v)
+        public void Обойти(System.Func<Vector3, object, bool> Выполнить)
         {
-            if (v.x < v0.x || v.x > v0.x + hlw.Длинна + 1) return false;
-            if (v.y < v0.y || v.y > v0.y + hlw.Высота + 1) return false;
-            if (v.z < v0.z || v.z > v0.z + hlw.Ширина + 1) return false;
+            foreach (var val in this)
+                if (!Выполнить(ПолучитьВектор(val.Key), val.Value)) return;
+        }
+        public void Обойти<t>(System.Func<Vector3, t, bool> Выполнить) where t : class
+        {
+            foreach (var val in this)
+                if (!Выполнить(ПолучитьВектор(val.Key), val.Value as t)) return;
+        }
+        #endregion
+    }
+}
+//empty
+//empty
+//empty
+namespace LIB.cs2307051205_ЦветнойКодБлока
+{
+    public interface IClass : cs2307061154_ЦветнойБлок.IClass
+    {
+        public byte КОД { get; set; }
+    }
+    /// <summary>
+    /// БЛОК (цвет и код)
+    /// </summary>
+    public class Class: cs2307061154_ЦветнойБлок.Class, IClass
+    {
+        static new public string INFO = "INFO";
+        private byte _code; public byte КОД { get => _code; set => _code = value; }
+        public Color32 c;
+        public Class(byte КОД, Color32 c):base(c)
+        {
+            this.КОД = КОД;
+        }
+        public Class(byte КОД) : base()
+        {
+            this.КОД = КОД;
+        }
+    }
+}
+//empty
+//empty
+//empty
+namespace LIB.cs2307061154_ЦветнойБлок
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public interface IClass
+    {
+        static Color32 Green = new Color32(211, 151, 0, 255);
+        public Color32 Цвет { get; set; }
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    public class Class : IClass
+    {
+        static public string INFO = "INFO";
+        private Color32 _c = IClass.Green; public Color32 Цвет { get => _c; set => _c = value; }
+        public Class()
+        {
+
+        }
+        public Class(Color32 c)
+        {
+            this._c = c;
+        }
+    }
+}
+//empty
+//empty
+//empty
+namespace LIB.cs2307061149_БлокиЧанка
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public interface IClass: cs2307051313_Словарь_Ulong.IClass
+    {
+        void Добавить(Vector3 v);
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    public class Class : cs2307051313_Словарь_Ulong.Class<cs2307061154_ЦветнойБлок.Class>, IClass
+    {
+        static new public string INFO = "INFO";
+        public virtual void Добавить(Vector3 v)=>base.Добавить(v, new cs2307061154_ЦветнойБлок.Class());
+    }
+}
+//empty
+//empty
+//empty
+namespace LIB.cs2306271146_РедакторПаралепипеда
+{
+    public interface IClass
+    {
+        public static int R = cs2307061242_СловарныйЧанк.IClass.РазмерЧанка;
+        public static int r = (int)(0.5f * R - 1);
+        bool СуществуетВершина(Vector3 v);
+        bool ИнтерфейсПоУмолчанию();
+    }
+    /// <summary>
+    ///
+    /// </summary>
+    public class Class: IClass
+    {
+        Вектор D = new Вектор("ДЛИННА");
+        Вектор W = new Вектор("ШИРИНА");
+        class Вектор
+        {
+            private bool Развернуть = false;
+            private Vector2 _v; public int Левая { get => (int)_v.x; set => _v.x = value; } public int Правая { get => (int)_v.y; set => _v.y = value; }
+            private string name_x = "x";
+            private string name_z = "z";
+            private int x_min = 0;
+            private int z_min = 0;
+            private int x_max = 100;
+            private int z_max = 100;
+            private string header = "Вектор";
+            public Вектор(string header)
+            {
+                this.header = header;
+                x_min = 0;
+                name_x = "x=левая "+ header;
+                name_z = "z=правая "+ header;
+                z_min = 0;
+                x_max = IClass.r;
+                z_max = IClass.r;            
+            }
+            public bool Показать(System.Action<Vector3> fun = null)
+            {
+                var b = false;
+                var v = _v;
+                st.Class.fun230516124600(() =>
+                {
+                    var x = (int)v.x;
+                    var z = (int)v.y;
+                    GUILayout.BeginVertical();
+                    var X = st.Class.fun230514135400_slider_int(ref x, name_x, x_min, x_max);
+                    var Z = st.Class.fun230514135400_slider_int(ref z, name_z, z_min, z_max);
+                    GUILayout.EndVertical();
+                    if (X || Z)
+                    {
+                        v = new Vector3(x, z);
+                        b = true;
+                        return;
+                    }
+                    b = false;
+                }, header, ref Развернуть);
+                if (b)
+                {
+                    _v = v;
+                    fun?.Invoke(v);
+                }
+                return b;
+            }
+        }
+        static public string INFO = "INFO";
+        int h = 1;
+        public Class()
+        {
+            ИзменитьНастройки.Add("ПоУмолчанию", () => {
+                D.Левая = 0;
+                D.Правая = 0;
+                W.Левая = 0;
+                W.Правая = 0;
+                h = 1;
+            });
+            //ИзменитьНастройки.Add("left", () => { v0 = Vector3.zero; hlw.x = 0.5f * R; hlw.y = R; hlw.z = R; });
+            //ИзменитьНастройки.Add("right", () => { v0 = 0.5f * R * Vector3.right; hlw.x = 0.5f * R; hlw.y = R; hlw.z = R; });
+            //ИзменитьНастройки.Add("up", () => { v0 = 0.5f * R * Vector3.up; hlw.x = R; hlw.y = 0.5f * R; hlw.z = R; });
+            //ИзменитьНастройки.Add("center", () => { v0 = 0.25f * R * Vector3.one; hlw.x = 0.5f * R; hlw.y = 0.5f * R; hlw.z = 0.5f * R; });
+            //ИзменитьНастройки.Add("down", () => { v0 = Vector3.zero; hlw.x = R; hlw.y = 0.5f * R; hlw.z = R; });
+            //ИзменитьНастройки.Add("back", () => { v0 = Vector3.zero; hlw.x = R; hlw.y = R; hlw.z = 0.5f * R; });
+            //ИзменитьНастройки.Add("forward", () => { v0 = 0.5f * R * Vector3.forward; hlw.x = R; hlw.y = R; hlw.z = 0.5f * R; });
+        }
+        private Dictionary<string, System.Action> ИзменитьНастройки = new Dictionary<string, System.Action>();
+        public bool ПоказатьИзменитьНастройки()
+        {
+            var b = false;
+            GUILayout.BeginHorizontal();
+            foreach (var val in ИзменитьНастройки)
+            {
+                st.Class.fun230516115102_btn_name(val.Key, () =>
+                {
+                    val.Value();
+                    b = true;
+                });
+            }
+            GUILayout.EndHorizontal();
+            return b;
+        }
+        public bool СуществуетВершина(Vector3 v)
+        {
+            if (v.x > IClass.R - D.Правая || v.x < D.Левая) return false;
+            if (v.z > IClass.R - W.Правая || v.z < W.Левая) return false;
+            if (v.y > h + 1) return false;
             return true;
         }
-        //собрать
-        public void СобратьЧанк(cs2305141215.IClass edit)
+        public bool ИнтерфейсПоУмолчанию()
         {
-            Vector3 v;
-            byte code;
-            for (var x = 0; x <= R; x++)
-                for (var y = 0; y <= R; y++)
-                    for (var z = 0; z <= R; z++)
-                    {
-                        //получитьКод
-                        v = new Vector3(x, y, z);
-                        code = st.Class.fun230627120900_СформироватьКодБлока(v, СуществуетВершина);
-                        edit.ДОБАВИТЬ(new cs2306262134.Class(v, code));
-                    }
+            GUILayout.BeginVertical();
+            var b0 = ПоказатьИзменитьНастройки();
+            var b1 = st.Class.fun230514135400_slider_int(ref h, "Высота", 1, cs2307061242_СловарныйЧанк.IClass.ГраничныйРазмерЧанка);
+            var b2 = D.Показать();
+            var b3 = W.Показать();
+            GUILayout.EndVertical();
+            return b0 || b1 || b2 || b3;
+
         }
-    }
-}
-//empty
-//empty
-//empty
-namespace LIB.cs2306271320
-{
-    /// <summary>
-    ///
-    /// </summary>
-    public struct Class
-    {
-        static public string INFO = "INFO";
-        public byte Высота;//y
-        public byte Длинна;//x
-        public byte Ширина;//z
-        public Class(byte Высота, byte Длинна, byte Ширина)
-        {
-            this.Высота = Высота;
-            this.Длинна = Длинна;
-            this.Ширина = Ширина;
-        }
-        public Class(Vector3 v)
-        {
-            this.Высота = (byte)v.y;
-            this.Длинна = (byte)v.x;
-            this.Ширина = (byte)v.z;
-        }
-        public string PATH => "chunk.hlw";
-        public string ИмяЧанка => PATH + "." + Высота + "." + Длинна + "." + Ширина;
+        //exit
     }
 }
 //empty
@@ -1922,6 +2148,33 @@ static public class Class
             return false;
         }
         /// <summary>
+        /// 
+        /// </summary>
+        static public GameObject prop230625163904_НовыйОбъектВКорнеМира
+        {
+            get
+            {
+                GameObject go = new GameObject();
+                go.transform.SetParent(prop230625163901_ОбъектКореньМира.transform);
+                return go;
+            }
+        }
+        /// <summary>
+        /// ИгровойКорень
+        /// </summary>
+        static public GameObject prop230625163901_ОбъектКореньМира
+        {
+            get
+            {
+                if (field230625163902_ROOT == null) field230625163902_ROOT = GameObject.Find("Root");
+                return field230625163902_ROOT;
+            }
+        }
+        /// <summary>
+        /// Root
+        /// </summary>
+        static private GameObject field230625163902_ROOT;
+        /// <summary>
         /// НастроитьИгровойОбъект
         /// </summary>
         /// <param name="m"></param>
@@ -1954,6 +2207,40 @@ static public class Class
             filter.sharedMesh = m;
             col.sharedMesh = m;
         }
+        /// <summary>
+        /// GET_V
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        static public Vector3 fun230521170204_ПолучитьВектор(this ulong id)
+        {
+
+            ulong z = id / field230521170202;
+            ulong y = (id - field230521170202 * z) / field230521170201;
+            ulong x = id - field230521170201 * y - field230521170202 * z;
+            return new Vector3(x, y, z) - field230521170200 * Vector3.one;
+        }
+        /// <summary>
+        /// nnn
+        /// </summary>
+        static private ulong field230521170202 = 513 * 513;
+        /// <summary>
+        /// nn
+        /// </summary>
+        static private ulong field230521170201 = 513;
+        /// <summary>
+        /// n
+        /// </summary>
+        static private ulong field230521170200 = 256;
+        /// <summary>
+        /// GET_ID
+        /// вектор конвертировать в идентификатор
+        /// </summary>
+        /// <param name="v">вектор для конвертирования</param>
+        /// <param name="min">граница - минимальная положительная целая координата (от 0,1...255 без знака минус)</param>
+        /// <param name="max">граница - максимальная положительная целая координата(от 1,2...255 и т.д)</param>
+        /// <returns>идентификатор в диапазоне (0...18446744073709551615)</returns>
+        static public ulong fun230521170203_ПолучитьНомер(this Vector3 v) => (ulong)(v.x + field230521170200) + field230521170201 * (ulong)(v.y + field230521170200) + field230521170202 * (ulong)(v.z + field230521170200);
         /// <summary>
         /// СформироватьКодБлока по функции
         /// </summary>
