@@ -16,17 +16,9 @@ namespace LIB.go2306252014
     public class Inspector : go2305081120.Inspector, IInspector
     {
         new public IScene СЦЕНА => объектСЦЕНА as IScene;
-        private cs2307031414_Default.IClass _X; public cs2307031414_Default.IClass X {
-            get
-            {
-                if (_X==null) _X = new cs2306221522_ЧанкПаралепипеда.Class();
-                return _X;
-            } 
-        }
-        override public bool Выполнить()
+        private cs2307051626_ЗЕМЛЯ.IClass ЗЕМЛЯ = new cs2307051626_ЗЕМЛЯ.Class();
+        public Inspector()
         {
-            X.ИнтерфейсПоУмолчанию();
-            return base.Выполнить();
         }
     }
 }
@@ -55,12 +47,14 @@ namespace LIB.go2305081120
 {
     public interface IInspector : go2305082132.IInspector
     {
+        cs2307031414_Default.IClass Объект { get; set; }
         IScene СЦЕНА { get; }
     }
     public class Inspector : go2305082132.Inspector, IInspector
     {
         public IScene СЦЕНА => объектСЦЕНА as IScene;
         private object Scene;
+        private cs2307031414_Default.IClass _obj; public cs2307031414_Default.IClass Объект { get=> _obj; set=> _obj=value; }
         public object объектСЦЕНА
         {
             get
@@ -71,6 +65,7 @@ namespace LIB.go2305081120
         }
         public override bool Выполнить()
         {
+            Объект?.ИнтерфейсПоУмолчанию();
             GUILayout.Label("КлассМира=" + this.GetType().ToString());
             return base.Выполнить();
         }
@@ -116,6 +111,25 @@ namespace LIB.go2305082132
             foreach (var arg in args) ts.Add(arg.GetType());
             System.Reflection.ConstructorInfo ci = TestType.GetConstructor(ts.ToArray());
             return ci.Invoke(args) as T;
+        }
+    }
+}
+namespace LIB.cs2307031414_Default
+{
+    public interface IClass
+    {
+        public string ИмяКнопки { get; }
+        public void Выполнить() { }
+        bool ИнтерфейсПоУмолчанию();
+    }
+    public class Class : IClass
+    {
+        static public string INFO = "INFO";
+        public virtual string ИмяКнопки => "Выполнить";
+        public virtual void Выполнить() { }
+        public virtual bool ИнтерфейсПоУмолчанию()
+        {
+            return st.Class.fun230516115102_btn_name(ИмяКнопки, Выполнить);
         }
     }
 }
@@ -283,22 +297,108 @@ namespace LIB.go2305081120
         #endregion
     }
 }
-namespace LIB.cs2307031414_Default
+namespace LIB.cs2307051626_ЗЕМЛЯ
 {
     public interface IClass
     {
-        public string ИмяКнопки { get; }
-        public void Выполнить() { }
-        bool ИнтерфейсПоУмолчанию();
+        static public byte РадиусВидимости = 3;
     }
-    public class Class : IClass
+    public class Class : cs2307051313_Словарь_Ulong.Class<cs2307071139_ЧанкЗемли.IClass>, IClass
+    {
+        static new public string INFO = "INFO";
+        public Class()
+        {
+            Генерация();
+        }
+        public void Генерация()
+        {
+            this.Clear();
+            for (var z = -IClass.РадиусВидимости; z <= IClass.РадиусВидимости; z++)
+                for (var x = -IClass.РадиусВидимости; x <= IClass.РадиусВидимости; x++)
+                {
+                    this.ДобавитьЧанк(new Vector2Int(x, z));
+                }
+        }
+        public void ДобавитьЧанк(Vector2Int v)
+        {
+            var obj = new cs2307071139_ЧанкЗемли.Class(v);
+            this.Добавить(v, obj);
+            obj.Выполнить();
+        }
+    }
+}
+namespace LIB.cs2307051313_Словарь_Ulong
+{
+    public interface IClass : IDictionary
+    {
+        void Добавить(Vector3 v, object obj);
+        void Добавить(Vector2 v, object obj);
+        void Добавить<T>(Vector3 v, T obj) where T : class;
+        Vector3 ПолучитьВектор(ulong id);
+        Vector2 ПолучитьВЕКТОР(ulong id);
+        ulong ПолучитьНомер(Vector3 v);
+        void Обойти<T>(System.Func<Vector3, T, bool> Выполнить) where T : class;
+        void Обойти(System.Func<ulong, object, bool> Выполнить);
+        void Обойти(System.Func<Vector3, object, bool> Выполнить);
+        void Очистить();
+    }
+    public class Class<T> : Dictionary<ulong, T>, IClass where T:class
     {
         static public string INFO = "INFO";
-        public virtual string ИмяКнопки => "Выполнить";
-        public virtual void Выполнить() { }
-        public virtual bool ИнтерфейсПоУмолчанию()
+        #region ФункцииКласса
+        public void Очистить() => this.Clear();
+        public virtual void Добавить(Vector3 v, object obj) => this.Add(ПолучитьНомер(v), (T)obj);
+        public virtual void Добавить(Vector2 v, object obj) => this.Add(ПолучитьНомер(v), (T)obj);
+        public virtual void Добавить<t>(Vector3 v, t obj) where t:class => this.Add(ПолучитьНомер(v), obj as T);
+        public Vector3 ПолучитьВектор(ulong id) => st.Class.fun230521170204_ПолучитьВектор(id);
+        public Vector2 ПолучитьВЕКТОР(ulong id) => st.Class.fun230521170207_ПолучитьВектор(id);
+        public ulong ПолучитьНомер(Vector3 v) => st.Class.fun230521170203_ПолучитьНомер(v);
+        public ulong ПолучитьНомер(Vector2 v) => st.Class.fun230521170206_ПолучитьНомер(v);
+        public void Обойти(System.Func<ulong, object, bool> Выполнить)
         {
-            return st.Class.fun230516115102_btn_name(ИмяКнопки, Выполнить);
+            foreach (var val in this)
+                if (!Выполнить(val.Key, val.Value)) return;
+        }
+        public void Обойти(System.Func<Vector3, object, bool> Выполнить)
+        {
+            foreach (var val in this)
+                if (!Выполнить(ПолучитьВектор(val.Key), val.Value)) return;
+        }
+        public void Обойти<t>(System.Func<Vector3, t, bool> Выполнить) where t : class
+        {
+            foreach (var val in this)
+                if (!Выполнить(ПолучитьВектор(val.Key), val.Value as t)) return;
+        }
+        #endregion
+    }
+}
+namespace LIB.cs2307071139_ЧанкЗемли
+{
+    public interface IClass : cs2306221522_ЧанкПаралепипеда.IClass
+    {
+        Vector2Int Координата { get; }
+        static int ДлинаЧанкаЗемли = 32;
+    }
+    public class Class : cs2306221522_ЧанкПаралепипеда.Class, IClass
+    {
+        static new public string INFO = "INFO";
+        private Vector2Int _v; public Vector2Int Координата => _v;
+        public virtual Vector3 ВычисляемыеКоординаты => IClass.ДлинаЧанкаЗемли * new Vector3(_v.x, 0, _v.y);
+        public override string ИмяИгровогоОбъекта => base.ИмяИгровогоОбъекта + _v.x + "_" + _v.y;
+        public override GameObject НовыйИгровойОбъект
+        {
+            get
+            {
+                var go = base.НовыйИгровойОбъект;
+                go.transform.position = ВычисляемыеКоординаты;
+                var mb = st.Class.fun230514161407_ПривязатьМоноКОбъекту(go);
+                mb.ОбъектМира.Объект = this;
+                return go;
+            }
+        }
+        public Class(Vector2Int v)
+        {
+            _v = v;
         }
     }
 }
@@ -387,13 +487,15 @@ namespace LIB.cs2305071643_Chunk_default
         cs2305141208.IClass.Редактор ТипРедактора { get; }
         Mesh ПостроитьСЗакрытием();
         void ФункцияПостройки(cs2305141215.IClass edit);
+        GameObject НовыйИгровойОбъект { get; }
     }
     public abstract class Class : cs2307031414_Default.Class, IClass
     {
         static new public string INFO = "INFO";
         public override string ИмяКнопки => "ПостроитьБезСохранения";
-        public virtual string ИмяИгровогоОбъекта =>"empty";
+        public virtual string ИмяИгровогоОбъекта => "empty";
         private GameObject _go;
+        public virtual GameObject НовыйИгровойОбъект => st.Class.prop230625163904_НовыйОбъектВКорнеМира(ИмяИгровогоОбъекта);
         public virtual GameObject ИгровойОбъект
         {
             get
@@ -403,12 +505,13 @@ namespace LIB.cs2305071643_Chunk_default
                     _go = GameObject.Find(ИмяИгровогоОбъекта);
                     if (_go == null)
                     {
-                        _go = st.Class.prop230625163904_НовыйОбъектВКорнеМира(ИмяИгровогоОбъекта);
+                        _go = НовыйИгровойОбъект;
                     }
                 }
                 return _go;
             }
         }
+        public void СохранитьЧанк() => st.Class.fun230516171601_ПереСохранитьМешОбъекта(ИгровойОбъект);
         public Class()
         {
         }
@@ -417,6 +520,14 @@ namespace LIB.cs2305071643_Chunk_default
         public virtual Mesh ПостроитьСЗакрытием() => new cs2306291123.Class(ИгровойОбъект, _param_build).Закрыть();
         public override void Выполнить() => ПостроитьСЗакрытием();
         public abstract void ФункцияПостройки(cs2305141215.IClass edit);
+        public override bool ИнтерфейсПоУмолчанию()
+        {
+            GUILayout.BeginHorizontal();
+            st.Class.fun230516115102_btn_name("СохранитьЧанк", СохранитьЧанк);
+            base.ИнтерфейсПоУмолчанию();
+            GUILayout.EndHorizontal();
+            return true;
+        }
     }
 }
 namespace LIB.cs2305141208
@@ -811,46 +922,6 @@ namespace LIB.cs2307061139_КораЧанка
         }
     }
 }
-namespace LIB.cs2307051313_Словарь_Ulong
-{
-    public interface IClass : IDictionary
-    {
-        void Добавить(Vector3 v, object obj);
-        void Добавить<T>(Vector3 v, T obj) where T : class;
-        Vector3 ПолучитьВектор(ulong id);
-        ulong ПолучитьНомер(Vector3 v);
-        void Обойти<T>(System.Func<Vector3, T, bool> Выполнить) where T : class;
-        void Обойти(System.Func<ulong, object, bool> Выполнить);
-        void Обойти(System.Func<Vector3, object, bool> Выполнить);
-        void Очистить();
-    }
-    public class Class<T> : Dictionary<ulong, T>, IClass where T:class
-    {
-        static public string INFO = "INFO";
-        #region ФункцииКласса
-        public void Очистить() => this.Clear();
-        public virtual void Добавить(Vector3 v, object obj) => this.Add(ПолучитьНомер(v), (T)obj);
-        public virtual void Добавить<t>(Vector3 v, t obj) where t:class => this.Add(ПолучитьНомер(v), obj as T);
-        public Vector3 ПолучитьВектор(ulong id) => st.Class.fun230521170204_ПолучитьВектор(id);
-        public ulong ПолучитьНомер(Vector3 v) => st.Class.fun230521170203_ПолучитьНомер(v);
-        public void Обойти(System.Func<ulong, object, bool> Выполнить)
-        {
-            foreach (var val in this)
-                if (!Выполнить(val.Key, val.Value)) return;
-        }
-        public void Обойти(System.Func<Vector3, object, bool> Выполнить)
-        {
-            foreach (var val in this)
-                if (!Выполнить(ПолучитьВектор(val.Key), val.Value)) return;
-        }
-        public void Обойти<t>(System.Func<Vector3, t, bool> Выполнить) where t : class
-        {
-            foreach (var val in this)
-                if (!Выполнить(ПолучитьВектор(val.Key), val.Value as t)) return;
-        }
-        #endregion
-    }
-}
 namespace LIB.cs2307051205_ЦветнойКодБлока
 {
     public interface IClass : cs2307061154_ЦветнойБлок.IClass
@@ -909,65 +980,16 @@ namespace LIB.cs2306271146_РедакторПаралепипеда
     public interface IClass
     {
         public static int R = cs2307061242_СловарныйЧанк.IClass.РазмерЧанка;
-        public static int r = (int)(0.5f * R - 1);
         bool СуществуетВершина(Vector3 v);
         bool ИнтерфейсПоУмолчанию();
+        cs2307071130_ВысотаПаралепипеда.IClass H { get; }
     }
     public class Class: IClass
     {
-        Вектор D = new Вектор("ДЛИННА");
-        Вектор W = new Вектор("ШИРИНА");
-        class Вектор
-        {
-            private bool Развернуть = false;
-            private Vector2 _v; public int Левая { get => (int)_v.x; set => _v.x = value; } public int Правая { get => (int)_v.y; set => _v.y = value; }
-            private string name_x = "x";
-            private string name_z = "z";
-            private int x_min = 0;
-            private int z_min = 0;
-            private int x_max = 100;
-            private int z_max = 100;
-            private string header = "Вектор";
-            public Вектор(string header)
-            {
-                this.header = header;
-                x_min = 0;
-                name_x = "x=левая "+ header;
-                name_z = "x=правая "+ header;
-                z_min = 0;
-                x_max = IClass.r;
-                z_max = IClass.r;            
-            }
-            public bool Показать(System.Action<Vector3> fun = null)
-            {
-                var b = false;
-                var v = _v;
-                st.Class.fun230516124600(() =>
-                {
-                    var x = (int)v.x;
-                    var z = (int)v.y;
-                    GUILayout.BeginVertical();
-                    var X = st.Class.fun230514135400_slider_int(ref x, name_x, x_min, x_max);
-                    var Z = st.Class.fun230514135400_slider_int(ref z, name_z, z_min, z_max);
-                    GUILayout.EndVertical();
-                    if (X || Z)
-                    {
-                        v = new Vector3(x, z);
-                        b = true;
-                        return;
-                    }
-                    b = false;
-                }, header, ref Развернуть);
-                if (b)
-                {
-                    _v = v;
-                    fun?.Invoke(v);
-                }
-                return b;
-            }
-        }
+        cs2307071119_ВекторПаралепипеда.IClass D = new cs2307071119_ВекторПаралепипеда.Class("ДЛИННА");
+        cs2307071119_ВекторПаралепипеда.IClass W = new cs2307071119_ВекторПаралепипеда.Class("ШИРИНА");
+        cs2307071130_ВысотаПаралепипеда.IClass _H = new cs2307071130_ВысотаПаралепипеда.Class(); public cs2307071130_ВысотаПаралепипеда.IClass H => _H;
         static public string INFO = "INFO";
-        int h = 1;
         public Class()
         {
             ИзменитьНастройки.Add("ПоУмолчанию", () => {
@@ -975,7 +997,7 @@ namespace LIB.cs2306271146_РедакторПаралепипеда
                 D.Правая = 0;
                 W.Левая = 0;
                 W.Правая = 0;
-                h = 1;
+                H.Высота = 1;
             });
         }
         private Dictionary<string, System.Action> ИзменитьНастройки = new Dictionary<string, System.Action>();
@@ -998,18 +1020,95 @@ namespace LIB.cs2306271146_РедакторПаралепипеда
         {
             if (v.x > IClass.R - D.Правая || v.x < D.Левая) return false;
             if (v.z > IClass.R - W.Правая || v.z < W.Левая) return false;
-            if (v.y > h + 1) return false;
+            if (v.y > H.Высота + 1) return false;
             return true;
         }
         public bool ИнтерфейсПоУмолчанию()
         {
             GUILayout.BeginVertical();
             var b0 = ПоказатьИзменитьНастройки();
-            var b1 = st.Class.fun230514135400_slider_int(ref h, "Высота", 1, cs2307061242_СловарныйЧанк.IClass.ГраничныйРазмерЧанка);
+            var b1 = H.Показать();
             var b2 = D.Показать();
             var b3 = W.Показать();
             GUILayout.EndVertical();
             return b0 || b1 || b2 || b3;
+        }
+    }
+}
+namespace LIB.cs2307071130_ВысотаПаралепипеда
+{
+    public interface IClass
+    {
+        int Высота { get; set; }
+        bool Показать(System.Action<Vector3> fun = null);
+    }
+    public class Class : IClass
+    {
+        static public string INFO = "INFO";
+        private int _h = 1; public int Высота { get => _h; set => _h = value; }
+        public bool Показать(System.Action<Vector3> fun = null) => st.Class.fun230514135400_slider_int(ref _h, "Высота", 1, cs2307061242_СловарныйЧанк.IClass.ГраничныйРазмерЧанка);
+    }
+}
+namespace LIB.cs2307071119_ВекторПаралепипеда
+{
+    public interface IClass
+    {
+        public static int R = cs2307061242_СловарныйЧанк.IClass.РазмерЧанка;
+        public static int r = (int)(0.5f * R - 1);
+        int Левая { get; set; }
+        int Правая { get; set; }
+        bool Показать(System.Action<Vector3> fun = null);
+    }
+    public class Class : IClass
+    {
+        static public string INFO = "INFO";
+        private bool Развернуть = false;
+        private Vector2 _v; 
+        public int Левая { get => (int)_v.x; set => _v.x = value; }
+        public int Правая { get => (int)_v.y; set => _v.y = value; }
+        private string name_x = "x";
+        private string name_z = "z";
+        private int x_min = 0;
+        private int z_min = 0;
+        private int x_max = 100;
+        private int z_max = 100;
+        private string header = "Вектор";
+        public Class(string header)
+        {
+            this.header = header;
+            x_min = 0;
+            name_x = "x=левая " + header;
+            name_z = "z=правая " + header;
+            z_min = 0;
+            x_max = IClass.r;
+            z_max = IClass.r;
+        }
+        public bool Показать(System.Action<Vector3> fun = null)
+        {
+            var b = false;
+            var v = _v;
+            st.Class.fun230516124600(() =>
+            {
+                var x = (int)v.x;
+                var z = (int)v.y;
+                GUILayout.BeginVertical();
+                var X = st.Class.fun230514135400_slider_int(ref x, name_x, x_min, x_max);
+                var Z = st.Class.fun230514135400_slider_int(ref z, name_z, z_min, z_max);
+                GUILayout.EndVertical();
+                if (X || Z)
+                {
+                    v = new Vector3(x, z);
+                    b = true;
+                    return;
+                }
+                b = false;
+            }, header, ref Развернуть);
+            if (b)
+            {
+                _v = v;
+                fun?.Invoke(v);
+            }
+            return b;
         }
     }
 }
@@ -1030,6 +1129,13 @@ namespace LIB.st
 {
 static public class Class
 {
+        static public bool fun230516115102_btn_name(string name = "test", System.Action proc = null)
+        {
+            var b = GUILayout.Button(name);
+            if (b)
+                proc?.Invoke();
+            return b;
+        }
         static public object fun230514161403(go2305081120.IInspector INS, string ev)
         {
             var mb = INS.Моно as cs2305161108.IMono;
@@ -1052,13 +1158,24 @@ static public class Class
             var obj = ci.Invoke(new object[] { });
             return obj;
         }
-        static public bool fun230516115102_btn_name(string name = "test", System.Action proc = null)
+        static public Vector3 fun230521170204_ПолучитьВектор(this ulong id)
         {
-            var b = GUILayout.Button(name);
-            if (b)
-                proc?.Invoke();
-            return b;
+            ulong z = id / field230521170202;
+            ulong y = (id - field230521170202 * z) / field230521170201;
+            ulong x = id - field230521170201 * y - field230521170202 * z;
+            return new Vector3(x, y, z) - field230521170200 * Vector3.one;
         }
+        static private ulong field230521170202 = 513 * 513;
+        static private ulong field230521170201 = 513;
+        static private ulong field230521170200 = 256;
+        static public Vector2 fun230521170207_ПолучитьВектор(this ulong id)
+        {
+            ulong y = id / field230521170201;
+            ulong x = id - field230521170201 * y;
+            return new Vector2(x, y) - field230521170200 * Vector2.one;
+        }
+        static public ulong fun230521170203_ПолучитьНомер(this Vector3 v) => fun230521170206_ПолучитьНомер(new Vector2(v.x, v.y)) + field230521170202 * (ulong)(v.z + field230521170200);
+        static public ulong fun230521170206_ПолучитьНомер(this Vector2 v) => (ulong)(v.x + field230521170200) + field230521170201 * (ulong)(v.y + field230521170200);
         static public Vector2[] fun230626171800_ВерсткаБлока(this cs2306291643.IClass Редактор)
         {
             return new Vector2[8]
@@ -1688,6 +1805,20 @@ static public class Class
             }
         }
         static private GameObject field230625163902_ROOT;
+        static public void fun230516171601_ПереСохранитьМешОбъекта(this GameObject go)
+        {
+            go.GetComponent<MeshFilter>().sharedMesh.fun230516171600_СохранитьМеш(st.Class.fun230518153802_ПолучитьФайлМешаПоОбъекту(go));
+        }
+        static public void fun230516171600_СохранитьМеш(this Mesh M,string asset)
+        {
+            if (System.IO.File.Exists(asset))
+                AssetDatabase.SaveAssets();
+            else
+                AssetDatabase.CreateAsset(M, asset);
+        }
+        static public string fun230518153802_ПолучитьФайлМешаПоОбъекту(this GameObject go) => st.Class.fun230516161700_ПолучитьФайлПоАргументам(st.Class.field230516161900_РазделМешей, go.name, "asset");
+        static public string fun230516161700_ПолучитьФайлПоАргументам(string path, string id, string exe) => path + id + "." + exe;
+        static public string field230516161900_РазделМешей => "Assets/Resources/MESHES/";
         static public void fun230507204600_ПривязатьМешКОбъекту(this Mesh m, GameObject go)
         {
             if (go == null) return;
@@ -1705,17 +1836,6 @@ static public class Class
             filter.sharedMesh = m;
             col.sharedMesh = m;
         }
-        static public Vector3 fun230521170204_ПолучитьВектор(this ulong id)
-        {
-            ulong z = id / field230521170202;
-            ulong y = (id - field230521170202 * z) / field230521170201;
-            ulong x = id - field230521170201 * y - field230521170202 * z;
-            return new Vector3(x, y, z) - field230521170200 * Vector3.one;
-        }
-        static private ulong field230521170202 = 513 * 513;
-        static private ulong field230521170201 = 513;
-        static private ulong field230521170200 = 256;
-        static public ulong fun230521170203_ПолучитьНомер(this Vector3 v) => (ulong)(v.x + field230521170200) + field230521170201 * (ulong)(v.y + field230521170200) + field230521170202 * (ulong)(v.z + field230521170200);
         static public byte fun230627120900_СформироватьКодБлока(Vector3 v, System.Func<Vector3,bool> СуществуетВершина)
         {
                 float code = 0;
@@ -1723,20 +1843,6 @@ static public class Class
                 for (var i = 0; i < arr.Length; i++)
                     code += СуществуетВершина(v + arr[i]) ? Mathf.Pow(2, i) : 0;
                 return (byte)code;
-        }
-        static public bool fun230516124600(System.Action выполнить, string Заголовок, ref bool but)
-        {
-            var b = EditorGUILayout.Foldout(but, Заголовок) != but;
-            if (b)
-            {
-                but = !but;
-            }
-            if (but)
-                if (Selection.activeTransform)
-                    выполнить();
-            if (!Selection.activeTransform)
-                but = false;
-            return b;
         }
         static public bool fun230514135400_slider_int(ref int i, string name = "default", int min = 1, int max = 5)
         {
@@ -1756,6 +1862,26 @@ static public class Class
                 return true;
             }
             return false;
+        }
+        static public bool fun230516124600(System.Action выполнить, string Заголовок, ref bool but)
+        {
+            var b = EditorGUILayout.Foldout(but, Заголовок) != but;
+            if (b)
+            {
+                but = !but;
+            }
+            if (but)
+                if (Selection.activeTransform)
+                    выполнить();
+            if (!Selection.activeTransform)
+                but = false;
+            return b;
+        }
+        static public cs2305161108.Mono fun230514161407_ПривязатьМоноКОбъекту(GameObject go,uint number = 2305081120)
+        {
+            var scr = go.AddComponent<cs2305161108.Mono>();
+            scr.ИзменитьМир(number);
+            return scr;
         }
 }
 }

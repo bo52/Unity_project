@@ -28,18 +28,19 @@ namespace stModule.file
             if (noproject)
                 switch (Номер)
                 {
-                    case 0:
+                    case (byte)path.Class.Разделы.PROG:
                         Обновить = Создать("Мир", PATH, НовыйМир, ref rect);
                         break;
-                    case 1:
+                    case (byte)path.Class.Разделы.GO:
+                    case (byte)path.Class.Разделы.CLASS:
                         Обновить = Создать("Объект", PATH, НовыйОбъектМира, ref rect);
                         break;
                 }
             var Обновить_f = Создать("Фун", PATH, НовыйФункционал, ref rect);
-            if ((byte)stModule.path.Class.Разделы.FUNS != Номер)
+            if ((byte)path.Class.Разделы.FUNS != Номер)
             {
                 var Обновить_s = Создать("Структура", PATH, НоваяСтруктура, ref rect);
-                if ((byte)stModule.path.Class.Разделы.STRUCT != Номер)
+                if ((byte)path.Class.Разделы.STRUCT != Номер)
                 {
                     Обновить = Обновить || Создать("Класс", PATH, НовыйКласс, ref rect);
                 }
