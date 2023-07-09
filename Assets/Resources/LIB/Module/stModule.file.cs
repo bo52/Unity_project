@@ -202,13 +202,13 @@ namespace stModule.file
                 sw.WriteLine("/// <summary>");
                 sw.WriteLine("///");
                 sw.WriteLine("/// </summary>");
-                sw.WriteLine("public interface IClass");
+                sw.WriteLine("public interface IClass:cs2307031414_Default.IClass");
                 sw.WriteLine("{");
                 sw.WriteLine("}");
                 sw.WriteLine("/// <summary>");
                 sw.WriteLine("///");
                 sw.WriteLine("/// </summary>");
-                sw.WriteLine("public class Class:IClass");
+                sw.WriteLine("public class Class:cs2307031414_Default.Class,IClass");
                 sw.WriteLine("{");
                 sw.WriteLine("static public string INFO = \"INFO\";");
                 sw.WriteLine("}");
