@@ -14,7 +14,7 @@ namespace UnityEditor.TreeViewExamples
             public static GUIStyle headerBackground = "RL Header";
         }
 
-        public CustomHeightTreeView(System.Action ќбновить,TreeViewState state, TreeModel<MyTreeElement> model): base(state, model)
+        public CustomHeightTreeView(System.Action ќбновить, TreeViewState state, TreeModel<MyTreeElement> model) : base(state, model)
         {
             this.ќбновить = ќбновить;
             // Custom setup
@@ -112,7 +112,7 @@ namespace UnityEditor.TreeViewExamples
             }
             header_path(item.data.path, ref labelRect);
             header_info(item.data.path, ref labelRect);
-            header_new(item.data.NoProject,item.data.path, ref labelRect);
+            header_new(item.data.NoProject, item.data.path, ref labelRect);
 
             labelRect.xMin += 2 * labelRect.width + 2f;
             GUI.Label(labelRect, item.data.description);
@@ -147,11 +147,11 @@ namespace UnityEditor.TreeViewExamples
             labelRect.width = 25;
             if (EditorGUI.LinkButton(labelRect, "info")) stModule.file.Class.ќткрыть‘айл(path + "/info.txt", true);
         }
-        void header_new(bool NoProject,string path, ref Rect labelRect)
+        void header_new(bool NoProject, string path, ref Rect labelRect)
         {
             //new
             //labelRect.x = labelRect.x + labelRect.width + 2f;
-            if (stModule.path.Class.—оздать(NoProject,path, labelRect)) ќбновить();
+            if (stModule.path.Class.—оздать(NoProject, path, labelRect)) ќбновить();
         }
         #endregion
         //ui вложенненные данные в узле дерева
@@ -162,7 +162,7 @@ namespace UnityEditor.TreeViewExamples
 
             if (myItem.data.enabled)
                 //открытый контейнер
-                return min + (myItem.data.text.Length==0?0:18) + myItem.data.‘айлы.Count * 18;
+                return min + (myItem.data.text.Length == 0 ? 0 : 18) + myItem.data.‘айлы.Count * 18;
 
             return min;
         }
@@ -170,23 +170,18 @@ namespace UnityEditor.TreeViewExamples
         {
             var rect = controlsRect;
             rect.y += 3f;
-            rect.height = EditorGUIUtility.singleLineHeight+5;
+            rect.height = EditorGUIUtility.singleLineHeight + 5;
             //GUILayout.BeginArea(rect);
             if (item.data.text.Length != 0)
             {
-                GUI.Label(rect, item.data.text);
+                GUI.Label(rect, item.data.text, stFile.«елень);
                 rect.y += EditorGUIUtility.standardVerticalSpacing + 10;
             }
             //файлы
             foreach (var f in item.data.‘айлы)
-            {              
+            {
                 rect.height = EditorGUIUtility.singleLineHeight;
-                rect.width = System.IO.Path.GetFileName(f).Length * 7;
-                var name = System.IO.Path.GetFileName(f);
-                if (name.Substring(0,3)=="st.") GUI.color = Color.green;
-                if (name.Substring(0, 3) == "cs.") GUI.color = Color.red;
-                if (EditorGUI.LinkButton(rect, name)) stModule.file.Class.ќткрыть‘айл(f);
-                GUI.color = Color.white;
+                stFile.GUI_btn(rect,f, new Color32(79, 79, 79, 255));
                 rect.y += EditorGUIUtility.standardVerticalSpacing + 15;
             }
         }

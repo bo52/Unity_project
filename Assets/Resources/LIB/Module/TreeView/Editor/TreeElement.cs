@@ -91,6 +91,21 @@ namespace UnityEditor.TreeViewExamples
             }
             sr.Close();
         }
+        private static FileAttributes RemoveAttribute(FileAttributes attributes, FileAttributes attributesToRemove)
+        {
+            return attributes & ~attributesToRemove;
+        }
+        public void ќбработка‘айла(string f)
+        {
+            FileAttributes attributes = File.GetAttributes(f);
+
+            if ((attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
+            {
+                // Show the file.
+                attributes = RemoveAttribute(attributes, FileAttributes.Hidden);
+                File.SetAttributes(f, attributes);
+            }
+        }
         public void ѕолучить‘айлы()
         {
             ‘айлы.Clear();
