@@ -16,6 +16,11 @@ static public class stFile
         style.fontStyle = FontStyle.Bold;
         return style;
     }
+    static public GUIStyle —тиль(int w)
+    {
+        var style = new GUIStyle("box");
+        return style;
+    }
     public static Color GUI_btn(Rect rect, string f, Color ÷вет)
     {
         ÷вет = —уществуетјтрибут(f, FileAttributes.Archive, ÷вет);

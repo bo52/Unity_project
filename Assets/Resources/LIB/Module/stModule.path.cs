@@ -111,14 +111,16 @@ namespace stModule.path
             foreach (string f in Directory.GetFiles(D))
             {
                 if (join.Class.РасширениеФайла(f) != "cs") continue;
+
+                #region Получить M
                 var m = Path.GetFileName(f);
                 m = m.Substring(0, m.LastIndexOf("."));
                 m = m.Substring(m.LastIndexOf(".") + 1);
                 m = Regex.Replace(Path.GetFileName(m), "[^0-9]", "");
-
                 if (m == "") continue;
+                var M = System.Convert.ToUInt32(m); 
+                #endregion
 
-                var M = System.Convert.ToUInt32(m);
                 if (Библиотеки.ContainsKey(M)) continue;
 
                 string t = Path.GetFileName(f).Substring(0, 3);
@@ -144,7 +146,7 @@ namespace stModule.path
             foreach (string d in Directory.GetDirectories(D))
                 ОбновитьВсеМодули(d);
         }
-        public static void Обновить(uint M)
+        public static void СобратьБиблиотеки()
         {
             Библиотеки.Clear();
             ОбновитьВсеМодули(КореньСисМира);
@@ -153,6 +155,10 @@ namespace stModule.path
             ОбновитьВсеМодули(КореньКласс);
             ОбновитьВсеМодули(КореньСтрукт);
             ОбновитьВсеМодули(КореньФунМира);
+        }
+        public static void Обновить(uint M)
+        {
+            СобратьБиблиотеки();
             join.Class.ОбщийМодуль(M);
         }
     }

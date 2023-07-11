@@ -1,42 +1,28 @@
-using UnityEditor.IMGUI.Controls;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.IMGUI.Controls;
 
 
 namespace UnityEditor.TreeViewExamples
 {
 
-    internal class CustomHeightTreeView : TreeViewWithTreeModel<MyTreeElement>
+    internal class Relation_CustomHeight : CustomHeightTreeView<Relation_TreeElement>
     {
-        System.Action Обновить;
-        static class Styles
+        private object MyTree;
+        private void Обновить() => MyTree.GetType().GetMethod("InitIfNeeded").Invoke(MyTree, new object[] { });
+        public Relation_CustomHeight() : base(null, null)
         {
-            public static GUIStyle background = "RL Background";
-            public static GUIStyle headerBackground = "RL Header";
+
         }
-
-        public CustomHeightTreeView(System.Action Обновить, TreeViewState state, TreeModel<MyTreeElement> model) : base(state, model)
+        public Relation_CustomHeight(object MyTree, TreeViewState state, TreeModel<Relation_TreeElement> model) : base(state, model)
         {
-            this.Обновить = Обновить;
-            // Custom setup
-            showBorder = true;
-            customFoldoutYOffset = 3f;
-
-            Reload();
-        }
-
-        public override void OnGUI(Rect rect)
-        {
-            // Background
-            if (Event.current.type == EventType.Repaint)
-                DefaultStyles.backgroundOdd.Draw(rect, false, false, false, false);
-
-            // TreeView
-            base.OnGUI(rect);
+            this.MyTree = MyTree;
         }
 
         protected override void RowGUI(RowGUIArgs args)
         {
-            var item = (TreeViewItem<MyTreeElement>)args.item;
+            var item = (TreeViewItem<Section_TreeElement>)args.item;
             var contentIndent = GetContentIndent(item);
             // Background
             var bgRect = args.rowRect;
@@ -77,7 +63,7 @@ namespace UnityEditor.TreeViewExamples
             }
         }
         //заголовок родительского узла корня
-        void HeaderGUI(Rect headerRect, string label, TreeViewItem<MyTreeElement> item)
+        void HeaderGUI(Rect headerRect, string label, TreeViewItem<Section_TreeElement> item)
         {
             headerRect.y += 1f;
             GUI.backgroundColor = item.data.NoProject ? Color.cyan : Color.white;
@@ -158,7 +144,7 @@ namespace UnityEditor.TreeViewExamples
         protected override float GetCustomRowHeight(int row, TreeViewItem item)
         {
             var min = 30f;
-            var myItem = (TreeViewItem<MyTreeElement>)item;
+            var myItem = (TreeViewItem<Section_TreeElement>)item;
 
             if (myItem.data.enabled)
                 //открытый контейнер
@@ -166,7 +152,7 @@ namespace UnityEditor.TreeViewExamples
 
             return min;
         }
-        void ControlsGUI(Rect controlsRect, TreeViewItem<MyTreeElement> item)
+        void ControlsGUI(Rect controlsRect, TreeViewItem<Section_TreeElement> item)
         {
             var rect = controlsRect;
             rect.y += 3f;
@@ -181,18 +167,11 @@ namespace UnityEditor.TreeViewExamples
             foreach (var f in item.data.Файлы)
             {
                 rect.height = EditorGUIUtility.singleLineHeight;
-                stFile.GUI_btn(rect,f, new Color32(79, 79, 79, 255));
+                stFile.GUI_btn(rect, f, new Color32(206, 68, 21, 255));
                 rect.y += EditorGUIUtility.standardVerticalSpacing + 15;
             }
         }
-
-        protected override Rect GetRenameRect(Rect rowRect, int row, TreeViewItem item)
-        {
-            // Match label perfectly
-            var renameRect = base.GetRenameRect(rowRect, row, item);
-            renameRect.xMin += 25f;
-            renameRect.y += 2f;
-            return renameRect;
-        }
     }
 }
+
+

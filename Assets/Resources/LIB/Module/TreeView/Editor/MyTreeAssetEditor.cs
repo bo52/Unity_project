@@ -5,17 +5,27 @@ using UnityEditor.IMGUI.Controls;
 
 namespace UnityEditor.TreeViewExamples
 {
+	[CreateAssetMenu(fileName = "TreeDataAsset", menuName = "Tree Asset", order = 1)]
+	public class MyTreeAsset<TTreeElement> : ScriptableObject where TTreeElement: TreeElement
+	{
+		[SerializeField] List<TTreeElement> m_TreeElements = new List<TTreeElement>();
 
-	[CustomEditor (typeof(MyTreeAsset))]
+		internal List<TTreeElement> treeElements
+		{
+			get { return m_TreeElements; }
+			set { m_TreeElements = value; }
+		}
+	}
+	[CustomEditor (typeof(MyTreeAsset<TreeElement>))] 
 	public class MyTreeAssetEditor : Editor
 	{
 		MyTreeView m_TreeView;
 		SearchField m_SearchField;
 		const string kSessionStateKeyPrefix = "TVS";
 
-		MyTreeAsset asset
+		MyTreeAsset<TreeElement> asset
 		{
-			get { return (MyTreeAsset) target; }
+			get { return (MyTreeAsset<TreeElement>) target; }
 		}
 
 		void OnEnable ()
@@ -26,7 +36,7 @@ namespace UnityEditor.TreeViewExamples
 			var jsonState = SessionState.GetString (kSessionStateKeyPrefix + asset.GetInstanceID (), "");
 			if (!string.IsNullOrEmpty (jsonState))
 				JsonUtility.FromJsonOverwrite (jsonState, treeViewState);
-			var treeModel = new TreeModel<MyTreeElement> (asset.treeElements);
+			var treeModel = new TreeModel<TreeElement> (asset.treeElements);
 			m_TreeView = new MyTreeView(treeViewState, treeModel);
 			m_TreeView.beforeDroppingDraggedItems += OnBeforeDroppingDraggedItems;
 			m_TreeView.Reload ();
@@ -110,7 +120,7 @@ namespace UnityEditor.TreeViewExamples
 					TreeElement parent = (selection.Count == 1 ? m_TreeView.treeModel.Find (selection[0]) : null) ?? m_TreeView.treeModel.root;
 					int depth = parent != null ? parent.depth + 1 : 0;
 					int id = m_TreeView.treeModel.GenerateUniqueID ();
-					var element = new MyTreeElement (false,"Item " + id,"empty","path", depth, id);
+					var element = new Section_TreeElement ("path",false,"Item " + id,"empty", depth, id);
 					m_TreeView.treeModel.AddElement(element, parent, 0);
 
 					// Select newly created element
@@ -127,9 +137,9 @@ namespace UnityEditor.TreeViewExamples
 		}
 
 
-		class MyTreeView : TreeViewWithTreeModel<MyTreeElement>
+		class MyTreeView : TreeViewWithTreeModel<TreeElement>
 		{
-			public MyTreeView(TreeViewState state, TreeModel<MyTreeElement> model)
+			public MyTreeView(TreeViewState state, TreeModel<TreeElement> model)
 				: base(state, model)
 			{
 				showBorder = true;
