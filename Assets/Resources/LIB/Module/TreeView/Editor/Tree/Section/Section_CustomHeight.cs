@@ -163,14 +163,6 @@ namespace UnityEditor.TreeViewExamples
             return min;
         }
         #region Item
-        private void Item_descript(ref Rect rect, string descript)
-        {
-            if (descript.Length != 0)
-            {
-                GUI.Label(rect, descript, stFile.ַוכוםü);
-                rect.y += EditorGUIUtility.standardVerticalSpacing + 10;
-            }
-        }
         private void Item_fs(ref Rect rect, List<string> װאיכû)
         {
             //פאיכû

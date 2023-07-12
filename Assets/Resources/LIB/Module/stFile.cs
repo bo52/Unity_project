@@ -8,6 +8,14 @@ using System.Text.RegularExpressions;
 
 static public class stFile
 {
+    static public string ВытащитьКомментарий(string path)
+    {
+        if (!File.Exists(path)) return "";
+        var sr = new StreamReader(path);
+        var line = sr.ReadLine();
+        sr.Close();
+        return line;
+    }
     static public uint НомерФайла(string f)
     {
         f = Path.GetFileNameWithoutExtension(f);

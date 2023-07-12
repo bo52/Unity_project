@@ -22,7 +22,14 @@ namespace UnityEditor.TreeViewExamples
 
             Reload();
         }
-
+        protected void Item_descript(ref Rect rect, string descript)
+        {
+            if (descript.Length != 0)
+            {
+                GUI.Label(rect, descript, stFile.Зелень);
+                rect.y += EditorGUIUtility.standardVerticalSpacing + 10;
+            }
+        }
         public override void OnGUI(Rect rect)
         {
             // Background

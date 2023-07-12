@@ -97,9 +97,9 @@ namespace UnityEditor.TreeViewExamples
             var min = 30f;
             var myItem = (TreeViewItem<Relation_TreeElement>)item;
 
-            //if (myItem.data.enabled)
+            if (myItem.data.enabled)
                 //открытый контейнер
-                //return min + (myItem.data.text.Length == 0 ? 0 : 18) + myItem.data.Файлы.Count * 18;
+                return min + (myItem.data.description.Length == 0 ? 0 : 18);
 
             return min;
         }
@@ -108,6 +108,8 @@ namespace UnityEditor.TreeViewExamples
             var rect = controlsRect;
             rect.y += 3f;
             rect.height = EditorGUIUtility.singleLineHeight + 5;
+
+            Item_descript(ref rect, item.data.description);
         }
         bool ЭтоРаздел(string path) =>path == "uses"|| path == "used";
         void header_relation(TreeViewItem<Relation_TreeElement> item, ref Rect labelRect)

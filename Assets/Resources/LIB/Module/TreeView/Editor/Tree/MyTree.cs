@@ -22,10 +22,10 @@ namespace UnityEditor.TreeViewExamples
         private int IDCounter; public int ПоследнийЭлемент { get => IDCounter; set => IDCounter = value; }
         public List<TTreeElement> GenerateRandomTree()
         {
-            IDCounter = 0;
+            ПоследнийЭлемент = 0;
 
             var treeElements = new List<TTreeElement>();
-            var root = stExemple.СоздатьЭкземпляр<TTreeElement>(new object[] { PATH, false, "Root", "КореньМира", -1, IDCounter });
+            var root = stExemple.СоздатьЭкземпляр<TTreeElement>(new object[] { PATH, false, "Root", "КореньМира", -1, ПоследнийЭлемент });
             treeElements.Add(root);
             AddChildrenRecursive(PATH, root, treeElements);
 
@@ -41,8 +41,12 @@ namespace UnityEditor.TreeViewExamples
             treeElements.Add(child);
             return child;
         }
-        public TTreeElement Создать(string path, string name, TreeElement element) => stExemple.СоздатьЭкземпляр<TTreeElement>(new object[] {
-                path, stModule.join.Class.ЭтоНеЦифры(path), name, "empty", element.depth + 1, ++IDCounter });
+        public TTreeElement Создать(string path, string name, TreeElement element)
+        {
+            var b = stModule.join.Class.ЭтоНеЦифры(path);
+            return stExemple.СоздатьЭкземпляр<TTreeElement>(new object[] {
+                path, b, name, stFile.ВытащитьКомментарий(path), element.depth + 1, ++ПоследнийЭлемент });
+        }
         public virtual void AddChildrenRecursive(string path, TreeElement element, List<TTreeElement> treeElements)
         {
             foreach (string d in Directory.GetDirectories(path))
