@@ -58,15 +58,27 @@ namespace stModule.path
 
         public struct Библиотека
         {
+            /// <summary>
+            /// путь модуля
+            /// </summary>
+            public string path;
+            /// <summary>
+            /// тип модуля
+            /// </summary>
             public string t;
+            /// <summary>
+            /// тела модуля
+            /// </summary>
             public Body[] fs;
-            public Библиотека(string t, List<Body> fs)
+            public Библиотека(string path,string t, List<Body> fs)
             {
+                this.path = path;
                 this.t = t;
                 this.fs = fs.ToArray();
             }
-            public Библиотека(string t, Body[] fs)
+            public Библиотека(string path, string t, Body[] fs)
             {
+                this.path = path;
                 this.t = t;
                 this.fs = fs;
             }
@@ -74,8 +86,14 @@ namespace stModule.path
         public struct Body
         {
             public int i;
+            /// <summary>
+            /// строки модуля
+            /// </summary>
             public string[] lines;
-            public link.Class.Ссылка[] numbers;
+            /// <summary>
+            /// ссылки к другим модулям
+            /// </summary>
+            public link.Class.Ссылка[] numbers;//Зависимости
             public Body(List<string> lines, List<link.Class.Ссылка> numbers, int i = -1)
             {
                 this.i = i;
@@ -122,7 +140,7 @@ namespace stModule.path
                 #endregion
 
                 if (Библиотеки.ContainsKey(M)) continue;
-
+                //тип модуля
                 string t = Path.GetFileName(f).Substring(0, 3);
                 System.Func<uint, string, Body[]> act;
                 switch (t)
@@ -141,7 +159,7 @@ namespace stModule.path
                         break;
                 }
 
-                Библиотеки.Add(M, new Библиотека(t, act(M, f)));
+                Библиотеки.Add(M, new Библиотека(f,t, act(M, f)));
             }
             foreach (string d in Directory.GetDirectories(D))
                 ОбновитьВсеМодули(d);

@@ -1,18 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class stRelation : MonoBehaviour
+namespace UnityEditor.TreeViewExamples
 {
-    // Start is called before the first frame update
-    void Start()
+    static public class stRelation
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

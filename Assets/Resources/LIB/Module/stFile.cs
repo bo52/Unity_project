@@ -4,10 +4,21 @@ using UnityEngine;
 using System.IO;
 using UnityEditor;
 using UnityEngine.UI;
+using System.Text.RegularExpressions;
 
 static public class stFile
 {
+    static public uint НомерФайла(string f)
+    {
+        f = Path.GetFileNameWithoutExtension(f);
+        var i = f.LastIndexOf('.');
+        if (i == -1) return 0;
+        f = f.Substring(i+1);
+        f = Regex.Replace(f, "[^0-9]", "");
+        return f==""?0:System.Convert.ToUInt32(f);
+    }
     static public Color32 Серый = Color.gray;
+    static public Color32 Фиолетовый = new Color32(195, 0, 255, 255);
     static public GUIStyle Зелень => Стиль(new Color32(0, 158, 26, 255));
     static public GUIStyle Стиль(Color32 Цвет = default)
     {
@@ -21,7 +32,7 @@ static public class stFile
         var style = new GUIStyle("box");
         return style;
     }
-    public static Color GUI_btn(Rect rect, string f, Color Цвет)
+    public static Color GUI_btn(Rect rect, string f, Color Цвет,System.Action Relation)
     {
         Цвет = СуществуетАтрибут(f, FileAttributes.Archive, Цвет);
         rect.y += 2;
@@ -31,13 +42,15 @@ static public class stFile
         if (GUI.Button(rect, Path.GetFileName(f), Стиль(Цвет)))
             stModule.file.Class.ОткрытьФайл(f);
 
+        //open|close
         rect.x = rect.x + rect.width + 2f;
         rect.width = 48;
         var btn = GUI.Button(rect, Цвет == Серый ? "Open!!!" : "CLOSE", Стиль(Цвет == Серый ? Color.gray : Color.red));
-        if (btn)
-        {
-            Цвет = ИнверсияАтрибутаФайла(f, Цвет);
-        }
+        if (btn) Цвет = ИнверсияАтрибутаФайла(f, Цвет);
+        //Зависимости
+        rect.x = rect.x + rect.width + 10f;
+        rect.width = 75;
+        if (GUI.Button(rect, "Зависимости", Стиль(Фиолетовый))) Relation();
         return Цвет;
     }
     public static Color СуществуетАтрибут(string f, FileAttributes Attribute, Color Цвет) => СуществуетАтрибут(f, Attribute) ? Цвет : Серый;

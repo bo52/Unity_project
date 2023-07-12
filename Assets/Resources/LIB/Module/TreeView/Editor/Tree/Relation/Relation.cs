@@ -5,6 +5,8 @@ namespace UnityEditor.TreeViewExamples
 {
     public class Relation
     {
+        static public Relation Single;
+        public void Обновить(string PATH) => Разделы[0].fun_f(PATH);
         private Relation_myTree[] Разделы;
         private EditorGUILayoutTest edit;
         private int tabs = 0;
@@ -15,6 +17,7 @@ namespace UnityEditor.TreeViewExamples
                 new Relation_myTree(edit),
                 new Relation_myTree(edit),
             };
+            Single = this;
         }
         public void Показать()
         {

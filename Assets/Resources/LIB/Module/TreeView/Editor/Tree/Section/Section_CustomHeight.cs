@@ -105,6 +105,15 @@ namespace UnityEditor.TreeViewExamples
             GUI.Label(labelRect, item.data.description);
             GUI.backgroundColor = Color.white;
         }
+        void ControlsGUI(Rect controlsRect, TreeViewItem<Section_TreeElement> item)
+        {
+            var rect = controlsRect;
+            rect.y += 3f;
+            rect.height = EditorGUIUtility.singleLineHeight + 5;
+
+            Item_descript(ref rect, item.data.text);
+            Item_fs(ref rect, item.data.Файлы);
+        }
         #region ссылки на header
         void header_scene(uint num, string path, ref Rect labelRect)
         {
@@ -153,25 +162,26 @@ namespace UnityEditor.TreeViewExamples
 
             return min;
         }
-        void ControlsGUI(Rect controlsRect, TreeViewItem<Section_TreeElement> item)
+        #region Item
+        private void Item_descript(ref Rect rect, string descript)
         {
-            var rect = controlsRect;
-            rect.y += 3f;
-            rect.height = EditorGUIUtility.singleLineHeight + 5;
-            //GUILayout.BeginArea(rect);
-            if (item.data.text.Length != 0)
+            if (descript.Length != 0)
             {
-                GUI.Label(rect, item.data.text, stFile.Зелень);
+                GUI.Label(rect, descript, stFile.Зелень);
                 rect.y += EditorGUIUtility.standardVerticalSpacing + 10;
             }
+        }
+        private void Item_fs(ref Rect rect, List<string> Файлы)
+        {
             //файлы
-            foreach (var f in item.data.Файлы)
+            foreach (var f in Файлы)
             {
                 rect.height = EditorGUIUtility.singleLineHeight;
-                stFile.GUI_btn(rect, f, new Color32(206, 68, 21, 255));
+                stFile.GUI_btn(rect, f, new Color32(206, 68, 21, 255),()=>Relation.Single.Обновить(f));
                 rect.y += EditorGUIUtility.standardVerticalSpacing + 15;
             }
-        }
+        } 
+        #endregion
     }
 }
 

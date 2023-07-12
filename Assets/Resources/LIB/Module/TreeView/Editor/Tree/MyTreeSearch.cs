@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 namespace UnityEditor.TreeViewExamples
@@ -24,13 +22,7 @@ namespace UnityEditor.TreeViewExamples
             tree.searchString = m_SearchField.OnGUI(search_rect, tree.searchString);
         }
         #region rect
-        private Rect search_rect
-        {
-            get
-            {
-                return new Rect(20f, 25f, edit.position.width - edit.dw - 30, 50f);
-            }
-        } 
+        private Rect search_rect=>new Rect(20f, 25f, edit.dw - 30, 50f); 
         #endregion
     }
 }

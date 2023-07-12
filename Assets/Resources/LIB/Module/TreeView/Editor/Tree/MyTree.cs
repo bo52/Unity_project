@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -6,13 +5,12 @@ using System.IO;
 
 namespace UnityEditor.TreeViewExamples
 {
-    internal class MyTree<TTreeElement, TCustomHeightTreeView> 
+    internal class MyTree<TTreeElement, TCustomHeightTreeView>
         where TTreeElement : TreeElementProp
-        where TCustomHeightTreeView:CustomHeightTreeView<TTreeElement>,new()
+        where TCustomHeightTreeView : CustomHeightTreeView<TTreeElement>, new()
     {
         public EditorGUILayoutTest edit;
         public string PATH;
-        public int n=1;
         [NonSerialized] public bool m_Initialized;
         [SerializeField] IMGUI.Controls.TreeViewState m_TreeViewState;
         public TCustomHeightTreeView m_TreeView;
@@ -21,29 +19,36 @@ namespace UnityEditor.TreeViewExamples
 
         }
         #region Generate
-        private int IDCounter;
+        private int IDCounter; public int ПоследнийЭлемент { get => IDCounter; set => IDCounter = value; }
         public List<TTreeElement> GenerateRandomTree()
         {
             IDCounter = 0;
 
             var treeElements = new List<TTreeElement>();
-            //var PATH = stModule.path.Class.КореньМира;
             var root = stExemple.СоздатьЭкземпляр<TTreeElement>(new object[] { PATH, false, "Root", "КореньМира", -1, IDCounter });
             treeElements.Add(root);
             AddChildrenRecursive(PATH, root, treeElements);
 
             return treeElements;
         }
+
+        #region ADD
+        public TTreeElement ДобавитьИмя(string name, TreeElement element, List<TTreeElement> treeElements) => Добавить(name, name, element, treeElements);
+        public TTreeElement Добавить(string path, TreeElement element, List<TTreeElement> treeElements) => Добавить(path, Path.GetFileName(path), element, treeElements);
+        public virtual TTreeElement Добавить(string path, string name, TreeElement element, List<TTreeElement> treeElements)
+        {
+            var child = Создать(path, name, element);
+            treeElements.Add(child);
+            return child;
+        }
+        public TTreeElement Создать(string path, string name, TreeElement element) => stExemple.СоздатьЭкземпляр<TTreeElement>(new object[] {
+                path, stModule.join.Class.ЭтоНеЦифры(path), name, "empty", element.depth + 1, ++IDCounter });
         public virtual void AddChildrenRecursive(string path, TreeElement element, List<TTreeElement> treeElements)
         {
             foreach (string d in Directory.GetDirectories(path))
-            {
-
-                var child = stExemple.СоздатьЭкземпляр<TTreeElement>(new object[] { d, stModule.join.Class.ЭтоНеЦифры(d), Path.GetFileName(d), "empty", element.depth + 1, ++IDCounter });
-                treeElements.Add(child);
-                AddChildrenRecursive(d, child, treeElements);
-            }
-        } 
+                AddChildrenRecursive(d, Добавить(d, element, treeElements), treeElements);
+        }
+        #endregion
         #endregion
         public MyTree(EditorGUILayoutTest edit, string PATH)
         {
@@ -71,7 +76,7 @@ namespace UnityEditor.TreeViewExamples
 
             m_Initialized = true;
         }
-        public virtual void fun_project(int key = 0,System.Action Castom_Bar=null)
+        public virtual void fun_project(int key = 0, System.Action Castom_Bar = null)
         {
             if (!m_Initialized) InitIfNeeded();
             Bar(Castom_Bar);
@@ -94,14 +99,8 @@ namespace UnityEditor.TreeViewExamples
             GUILayout.EndArea();
         }
         #region Rect
-        Rect toolbarRect
-        {
-            get { return new Rect(20f, 50f,n *edit.dw, 60f); }
-        }
-        Rect multiColumnTreeViewRect
-        {
-            get { return new Rect(20, 100, n * edit.dw, edit.position.height - 200); }
-        } 
+        public virtual Rect toolbarRect => new Rect(20, 50, edit.dw - 10, 60);
+        public virtual Rect multiColumnTreeViewRect => new Rect(20, 100, edit.dw, edit.position.height - 200);
         #endregion
     }
 }

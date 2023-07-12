@@ -48,6 +48,7 @@ namespace stModule.join
         static public bool Добавить(uint M, int i = -1)
         {
             var m_i = System.Convert.ToUInt64(M.ToString() + (i == -1 ? "" : (ЭтоЦифра(i)+i.ToString())));
+            //НеСтатика
             if (i == -1)
             {
                 if (Добавлен.IndexOf(m_i) != -1) return false;
@@ -67,7 +68,9 @@ namespace stModule.join
 
         static public void ОбъединениеФайлов(StreamWriter sw, uint M, int i=-1)
         {
+            //проверка на УжеДобавлен
             if (!Добавить(M, i)) return;
+            //проверка в Библиотеки
             if (path.Class.Библиотеки.ContainsKey(M) == false) return;
             //не статические модули
             if (i == -1) foreach (var b in path.Class.Библиотеки[M].fs) ДобавитьСтроки(sw, b);

@@ -18,7 +18,9 @@ namespace stModule.path.cs_go
         public static void ќбработка‘айла(ref List<path.Class.Body> bs, uint M, string f)
         {
             if (!File.Exists(f)) return;
+            //строки модул€
             var ls = new List<string>();
+            //ссылки к другим модул€м
             var ns = new Dictionary<ulong, link.Class.—сылка>();
 
             var sr = new StreamReader(f);

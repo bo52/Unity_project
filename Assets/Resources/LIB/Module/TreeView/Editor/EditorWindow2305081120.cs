@@ -71,7 +71,7 @@ public class EditorGUILayoutTest : EditorWindow, IEditorGUILayoutPopup
     }
     private void OnEnable()
     {
-       dw= 0.5f * position.width;
+       dw= 0.5f * 1200;
        Section = new Section(this);
        Relation = new Relation(this);
     }
