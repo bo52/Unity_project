@@ -21,9 +21,9 @@ static public class stFile
         f = Path.GetFileNameWithoutExtension(f);
         var i = f.LastIndexOf('.');
         if (i == -1) return 0;
-        f = f.Substring(i+1);
+        f = f.Substring(i + 1);
         f = Regex.Replace(f, "[^0-9]", "");
-        return f==""?0:System.Convert.ToUInt32(f);
+        return f == "" ? 0 : System.Convert.ToUInt32(f);
     }
     static public Color32 Серый = Color.gray;
     static public Color32 Фиолетовый = new Color32(195, 0, 255, 255);
@@ -35,19 +35,26 @@ static public class stFile
         style.fontStyle = FontStyle.Bold;
         return style;
     }
+    static public GUIStyle СтильИталия(Color32 Цвет = default)
+    {
+        var style = new GUIStyle();
+        style.normal.textColor = Цвет;
+        style.fontStyle = FontStyle.BoldAndItalic;
+        return style;
+    }
     static public GUIStyle Стиль(int w)
     {
         var style = new GUIStyle("box");
         return style;
     }
-    public static Color GUI_btn(Rect rect, string f, Color Цвет,System.Action Relation)
+    public static Color GUI_btn(Rect rect, bool b, string f, Color Цвет, System.Action Relation)
     {
         Цвет = СуществуетАтрибут(f, FileAttributes.Archive, Цвет);
         rect.y += 2;
 
         rect.width = Path.GetFileName(f).Length * 7;
         //кнопка
-        if (GUI.Button(rect, Path.GetFileName(f), Стиль(Цвет)))
+        if (GUI.Button(rect, Path.GetFileName(f), b ? СтильИталия(Color.blue) : Стиль(Цвет)))
             stModule.file.Class.ОткрытьФайл(f);
 
         //open|close

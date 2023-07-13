@@ -36,7 +36,11 @@ namespace UnityEditor.TreeViewExamples
 		{
 			return m_Data.FirstOrDefault (element => element.id == id);
 		}
-	
+		public bool Find(System.Func<T,bool>fun)
+		{
+			foreach (var element in m_Data) if (fun(element)) return true;
+			return false;
+		}
 		public void SetData (IList<T> data)
 		{
 			Init (data);

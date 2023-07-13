@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,15 +7,15 @@ using UnityEditor.IMGUI.Controls;
 namespace UnityEditor.TreeViewExamples
 {
 
-    internal class Section_CustomHeightTreeView : CustomHeightTreeView<Section_TreeElement>
+    internal class Section_HTML_CustomHeightTreeView : CustomHeightTreeView<Section_HTML_TreeElement>
     {
         private object MyTree;
         private void ќбновить() => MyTree.GetType().GetMethod("InitIfNeeded").Invoke(MyTree, new object[] { });
-        public Section_CustomHeightTreeView() : base(null, null)
+        public Section_HTML_CustomHeightTreeView() : base(null, null)
         {
 
         }
-        public Section_CustomHeightTreeView(object MyTree, TreeViewState state, TreeModel<Section_TreeElement> model) : base(state, model)
+        public Section_HTML_CustomHeightTreeView(object MyTree, TreeViewState state, TreeModel<Section_HTML_TreeElement> model) : base(state, model)
         {
             this.MyTree = MyTree;
         }
@@ -91,15 +90,8 @@ namespace UnityEditor.TreeViewExamples
             else
                 GUI.Label(labelRect, label);
 
-            if (!item.data.NoProject)
-            {
-                var num = item.data.Ќомерћира;
-                header_inspector(num, item.data.path, ref labelRect);
-                header_scene(num, item.data.path, ref labelRect);
-            }
             header_path(item.data.path, ref labelRect);
             header_info(item.data.path, ref labelRect);
-            header_new(item.data.NoProject, item.data.path, ref labelRect);
 
             labelRect.xMin += 2 * labelRect.width + 2f;
             GUI.Label(labelRect, item.data.description);
@@ -115,20 +107,6 @@ namespace UnityEditor.TreeViewExamples
             Item_fs(ref rect, item.data.‘айлы, item.id);
         }
         #region ссылки на header
-        void header_scene(uint num, string path, ref Rect labelRect)
-        {
-            //scene
-            labelRect.x = labelRect.x + labelRect.width + 2f;
-            labelRect.width = 35;
-            if (EditorGUI.LinkButton(labelRect, "scene")) stModule.file.Class.ќткрыть‘айл(path + "/scene" + num + ".cs");
-        }
-        void header_inspector(uint num, string path, ref Rect labelRect)
-        {
-            //inspector
-            labelRect.x = labelRect.x + labelRect.width + 2f;
-            labelRect.width = 57;
-            if (EditorGUI.LinkButton(labelRect, "inspector")) stModule.file.Class.ќткрыть‘айл(path + "/inspector" + num + ".cs");
-        }
         void header_path(string path, ref Rect labelRect)
         {
             //path
@@ -142,12 +120,6 @@ namespace UnityEditor.TreeViewExamples
             labelRect.x = labelRect.x + labelRect.width + 2f;
             labelRect.width = 25;
             if (EditorGUI.LinkButton(labelRect, "info")) stModule.file.Class.ќткрыть‘айл(path + "/info.txt", true);
-        }
-        void header_new(bool NoProject, string path, ref Rect labelRect)
-        {
-            //new
-            //labelRect.x = labelRect.x + labelRect.width + 2f;
-            if (stModule.path.Class.—оздать(NoProject, path, labelRect)) ќбновить();
         }
         #endregion
         //ui вложенненные данные в узле дерева
@@ -179,4 +151,3 @@ namespace UnityEditor.TreeViewExamples
         #endregion
     }
 }
-

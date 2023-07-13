@@ -8,6 +8,12 @@ namespace UnityEditor.TreeViewExamples
     internal class Relation_myTree : MyTree<Relation_TreeElement, Relation_CustomHeight>
     {
         public string NameFile = "empty";
+        public static class Отмечен
+        {
+            public static int tabs =-1;
+            public static int element = -1;
+            public static int f = -1;
+        }
         public Relation_myTree(EditorGUILayoutTest edit) : base(edit, "empty")
         {
         }

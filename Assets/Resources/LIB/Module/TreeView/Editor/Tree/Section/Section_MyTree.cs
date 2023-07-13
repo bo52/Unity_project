@@ -1,11 +1,14 @@
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-using UnityEditor.IMGUI.Controls;
-
 namespace UnityEditor.TreeViewExamples
 {
-    internal class Section_MyTree : MyTree<Section_TreeElement, Section_CustomHeightTreeView>
+    internal class Section_MyTree : Section_MyTree<Section_TreeElement, Section_CustomHeightTreeView>
+    {
+        public Section_MyTree(EditorGUILayoutTest edit, byte Номер, string PATH) : base(edit, Номер, PATH)
+        {
+        }
+    }
+    internal class Section_MyTree<TTreeElement, TCustomHeightTreeView> : MyTree<TTreeElement, TCustomHeightTreeView>
+        where TTreeElement : TreeElementProp, new()
+        where TCustomHeightTreeView : CustomHeightTreeView<TTreeElement>, new()
     {
         public byte Номер;
         TreeSearch _search;

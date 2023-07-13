@@ -12,6 +12,7 @@ namespace UnityEditor.TreeViewExamples
         private object MyTree;
         private void Обновить() => MyTree.GetType().GetMethod("InitIfNeeded").Invoke(MyTree, new object[] { });
         private void Зависимости(TreeViewItem<Relation_TreeElement> item) => MyTree.GetType().GetMethod("ВыполнитьЗависимости").Invoke(MyTree, new object[] { item });
+        bool ЭтоРаздел(string path) => path == "uses" || path == "used";
         public Relation_CustomHeight() : base(null, null)
         {
 
@@ -66,27 +67,37 @@ namespace UnityEditor.TreeViewExamples
         //заголовок родительского узла корня
         void HeaderGUI(Rect headerRect, string label, TreeViewItem<Relation_TreeElement> item)
         {
+            var _ЭтоРаздел = ЭтоРаздел(item.data.path);
             headerRect.y += 1f;
             GUI.backgroundColor = item.data.NoProject ? Color.cyan : Color.white;
-            
+
 
             Rect labelRect = headerRect;
             //text
-            labelRect.width = 300;
-            GUI.Label(labelRect, label,stFile.Стиль(ЭтоРаздел(item.data.path) ? Color.red : new Color32(0, 158, 26, 255)));
-
-            header_path(item.data.path, ref labelRect);
+            header_name(ref labelRect, label, _ЭтоРаздел);
             header_relation(item, ref labelRect);
+            if (!_ЭтоРаздел) header_path(item.data.path, ref labelRect);
 
             labelRect.xMin += 2 * labelRect.width + 2f;
             GUI.Label(labelRect, item.data.description);
             GUI.backgroundColor = Color.white;
         }
         #region ссылки на header
+        void header_name(ref Rect Rect, string name, bool _ЭтоРаздел)
+        {
+            Color color = _ЭтоРаздел ? Color.red : new Color32(0, 158, 26, 255);
+            //text
+            Rect.width = 300;
+            if (_ЭтоРаздел)
+                GUI.Label(Rect, name, stFile.Стиль(color));
+            else
+            if (GUI.Button(Rect, name, stFile.Стиль(color)))
+                Section.Single.Поиск(name);
+        }
         void header_path(string path, ref Rect labelRect)
         {
-            //path
-            labelRect.x = labelRect.x + labelRect.width + 2f;
+            labelRect.y -= 3f;
+            labelRect.x = labelRect.x + labelRect.width + 10f;
             labelRect.width = 28;
             if (EditorGUI.LinkButton(labelRect, "path")) stModule.file.Class.ОткрытьФайл(path);
         }
@@ -111,17 +122,16 @@ namespace UnityEditor.TreeViewExamples
 
             Item_descript(ref rect, item.data.description);
         }
-        bool ЭтоРаздел(string path) =>path == "uses"|| path == "used";
         void header_relation(TreeViewItem<Relation_TreeElement> item, ref Rect labelRect)
         {
+            labelRect.y += 3f;
             if (ЭтоРаздел(item.data.path)) return;
             //info
-            labelRect.y += 3f;
             labelRect.x = labelRect.x + labelRect.width + 10f;
             labelRect.width = 75;
             if (GUI.Button(labelRect, "Зависимости", stFile.Стиль(stFile.Фиолетовый))) Зависимости(item);
-            }
         }
+    }
 }
 
 

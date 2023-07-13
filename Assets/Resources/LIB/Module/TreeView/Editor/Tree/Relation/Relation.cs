@@ -6,17 +6,16 @@ namespace UnityEditor.TreeViewExamples
     public class Relation
     {
         static public Relation Single;
-        public void Обновить(string PATH) => Разделы[0].fun_f(PATH);
-        private Relation_myTree[] Разделы;
+        public void Обновить(string PATH) => myRelation.fun_f(PATH);
         private EditorGUILayoutTest edit;
         private int tabs = 0;
+        private Relation_myTree myRelation;
+        private HTML Html;
         public Relation(EditorGUILayoutTest edit)
         {
             this.edit = edit;
-            Разделы = new Relation_myTree[2] {
-                new Relation_myTree(edit),
-                new Relation_myTree(edit),
-            };
+            myRelation = new Relation_myTree(edit);
+            Html = new HTML();
             Single = this;
         }
         public void Показать()
@@ -24,7 +23,15 @@ namespace UnityEditor.TreeViewExamples
             GUILayout.BeginArea(new Rect(edit.dw + 10, 20, edit.dw - 10, 20));
             tabs = GUILayout.Toolbar(tabs, new string[] { "Зависимости","HTML" });
             GUILayout.EndArea();
-            Разделы[tabs].fun_project(tabs);
+            switch (tabs)
+            {
+                case 0:
+                    myRelation.fun_project(tabs);
+                    break;
+                case 1:
+                    Html.Показать();
+                    break;
+            }
         }
     }
 }

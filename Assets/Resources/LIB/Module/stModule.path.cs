@@ -9,10 +9,11 @@ namespace stModule.path
         public enum Разделы {
             PROG,
             GO,
-            FUNS,
             CLASS,
             STRUCT,
+            FUNS,
             SHADER,
+            HTML,
         };
         public static string МусорСкриптов => КореньМодулей + "temp/";
         public static string ПереносимыеСкрипты => КореньМодулей + "backup/";

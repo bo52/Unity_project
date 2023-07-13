@@ -86,12 +86,17 @@ namespace UnityEditor.TreeViewExamples
             Bar(Castom_Bar);
             m_TreeView.OnGUI(multiColumnTreeViewRect);
         }
+        public virtual void bar()
+        {
+
+        }
         public virtual void Bar(System.Action CastomBar)
         {
             GUILayout.BeginArea(toolbarRect);
             var style = "miniButton";
             using (new EditorGUILayout.HorizontalScope())
             {
+                bar();
                 if (GUILayout.Button("Обновить", style)) m_Initialized = false;
                 if (GUILayout.Button("Expand All", style))
                     m_TreeView.ExpandAll();

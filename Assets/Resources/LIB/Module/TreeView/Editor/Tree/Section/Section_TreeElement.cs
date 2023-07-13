@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
 using System.Text.RegularExpressions;
 using System;
@@ -39,11 +38,23 @@ namespace UnityEditor.TreeViewExamples
             foreach (string f in Directory.GetFiles(this.path, "*.shader"))
                 Файлы.Add(f);
         }
-        public Section_TreeElement():base("empty", false, "empty", "empty", 0, -1) 
-        { 
+        public int ПоискФайла(string f)
+        {
+            int i = -1;
+            Файлы.Find(
+                (string F) =>
+                {
+                    var b = Path.GetFileName(F) == f;
+                    if (b) i = Файлы.IndexOf(F);
+                    return b;
+                });
+            return i;
+        }
+        public Section_TreeElement() : base("empty", false, "empty", "empty", 0, -1)
+        {
         }
 
-        public Section_TreeElement(string path,bool NoProject, string name, string description, int depth, int id) : base(path,NoProject, name, description, depth,  id)
+        public Section_TreeElement(string path, bool NoProject, string name, string description, int depth, int id) : base(path, NoProject, name, description, depth, id)
         {
             this.path = path + "/";
             Информация();

@@ -13,7 +13,9 @@ namespace UnityEditor.TreeViewExamples
             public static GUIStyle background = "RL Background";
             public static GUIStyle headerBackground = "RL Header";
         }
-
+        public CustomHeightTreeView() : base(null, null)
+        {
+        }
         public CustomHeightTreeView(TreeViewState state, TreeModel<TTreeElement> model) : base(state, model)
         {
             // Custom setup
@@ -95,7 +97,7 @@ namespace UnityEditor.TreeViewExamples
         void ControlsGUI(Rect controlsRect, TreeViewItem<TTreeElement> item)
         {
         }
-
+        #region Rename
         protected override Rect GetRenameRect(Rect rowRect, int row, TreeViewItem item)
         {
             // Match label perfectly
@@ -104,5 +106,27 @@ namespace UnityEditor.TreeViewExamples
             renameRect.y += 2f;
             return renameRect;
         }
+
+        // Rename
+        //--------
+
+        protected override bool CanRename(TreeViewItem item)
+        {
+            // Only allow rename if we can show the rename overlay with a certain width (label might be clipped by other columns)
+            Rect renameRect = GetRenameRect(treeViewRect, 0, item);
+            return renameRect.width > 30;
+        }
+
+        protected override void RenameEnded(RenameEndedArgs args)
+        {
+            // Set the backend name and reload the tree to reflect the new model
+            if (args.acceptedRename)
+            {
+                var element = treeModel.Find(args.itemID);
+                element.name = args.newName;
+                Reload();
+            }
+        } 
+        #endregion
     }
 }

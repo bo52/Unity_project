@@ -10,6 +10,9 @@ namespace UnityEditor.TreeViewExamples
         public string description;
         public string text = "";
         public bool NoProject;
+        public TreeElementProp() : base("empty", 0, -1)
+        {
+        }
         public TreeElementProp(string path,bool NoProject,string name, string description, int depth, int id) : base(name, depth,id)
         {
             this.path = path;
