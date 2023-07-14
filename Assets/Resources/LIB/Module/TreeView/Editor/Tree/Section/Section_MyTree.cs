@@ -2,15 +2,16 @@ namespace UnityEditor.TreeViewExamples
 {
     internal class Section_MyTree : Section_MyTree<Section_TreeElement, Section_CustomHeightTreeView>
     {
-        public Section_MyTree(EditorGUILayoutTest edit, byte Номер, string PATH) : base(edit, Номер, PATH)
+        public byte Номер;
+        public Section_MyTree(EditorGUILayoutTest edit, byte Номер, string PATH) : base(edit, PATH)
         {
+            this.Номер = Номер;
         }
     }
     internal class Section_MyTree<TTreeElement, TCustomHeightTreeView> : MyTree<TTreeElement, TCustomHeightTreeView>
         where TTreeElement : TreeElementProp, new()
         where TCustomHeightTreeView : CustomHeightTreeView<TTreeElement>, new()
     {
-        public byte Номер;
         TreeSearch _search;
         TreeSearch Search
         {
@@ -20,9 +21,8 @@ namespace UnityEditor.TreeViewExamples
                 return _search;
             }
         }
-        public Section_MyTree(EditorGUILayoutTest edit, byte Номер, string PATH) : base(edit, PATH)
+        public Section_MyTree(EditorGUILayoutTest edit, string PATH) : base(edit, PATH)
         {
-            this.Номер = Номер;
         }
         public override void InitIfNeeded()
         {

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System;
+
 namespace UnityEditor.TreeViewExamples
 {
     [Serializable]
@@ -11,7 +12,7 @@ namespace UnityEditor.TreeViewExamples
         {
         }
 
-        public Section_HTML_TreeElement(string path, bool NoProject, string name, string description, int depth, int id) : base(path, NoProject, name, description, depth, id)
+        public Section_HTML_TreeElement(string path, string name, string description, int depth, int id) : base(path, false, name, description, depth, id)
         {
         }
     }

@@ -13,7 +13,8 @@ namespace stModule.path
             STRUCT,
             FUNS,
             SHADER,
-            HTML,
+            Texture,
+            Material,
         };
         public static string МусорСкриптов => КореньМодулей + "temp/";
         public static string ПереносимыеСкрипты => КореньМодулей + "backup/";
@@ -31,14 +32,18 @@ namespace stModule.path
         public static string КореньСтрукт => КореньМодулей + "STRUCT/";
         public static string КореньФунМира => КореньМодулей + "FUNS/";
         public static string КореньШейдеров => РазделРесурсов + "SHADERS/";
+        public static string КореньМатериалов => РазделРесурсов + "MATERIALS/";
+        public static string КореньТекстуры => РазделРесурсов + "TEXTURES/";
         public static byte ОпределитьРаздел(string path)
         {
             if (path.IndexOf(КореньМира) != -1) return (byte)Разделы.PROG;
             if (path.IndexOf(КореньОбъектМира) != -1) return (byte)Разделы.GO;
-            if (path.IndexOf(КореньФунМира) != -1) return (byte)Разделы.FUNS;
             if (path.IndexOf(КореньКласс) != -1) return (byte)Разделы.CLASS;
             if (path.IndexOf(КореньСтрукт) != -1) return (byte)Разделы.STRUCT;
+            if (path.IndexOf(КореньФунМира) != -1) return (byte)Разделы.FUNS;
             if (path.IndexOf(КореньШейдеров) != -1) return (byte)Разделы.SHADER;
+            if (path.IndexOf(КореньМатериалов) != -1) return (byte)Разделы.Material;
+            if (path.IndexOf(КореньТекстуры) != -1) return (byte)Разделы.Texture;
             return byte.MaxValue;
         }
         public static string ОпределитьКореньРаздела(byte x)
@@ -47,10 +52,12 @@ namespace stModule.path
             {
                 case Разделы.PROG:return КореньМира;
                 case Разделы.GO: return КореньОбъектМира;
-                case Разделы.FUNS: return КореньФунМира;
                 case Разделы.CLASS: return КореньКласс;
                 case Разделы.STRUCT: return КореньСтрукт;
+                case Разделы.FUNS: return КореньФунМира;
                 case Разделы.SHADER: return КореньШейдеров;
+                case Разделы.Material: return КореньМатериалов;
+                case Разделы.Texture: return КореньТекстуры;
             }
             return null;
         }

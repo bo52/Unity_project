@@ -20,12 +20,13 @@ namespace UnityEditor.TreeViewExamples
         }
         #region Generate
         private int IDCounter; public int ПоследнийЭлемент { get => IDCounter; set => IDCounter = value; }
+        public virtual object[] ПараметрыКорня => new object[] { PATH, false, "Root", "КореньМира", -1, ПоследнийЭлемент };
         public List<TTreeElement> GenerateRandomTree()
         {
             ПоследнийЭлемент = 0;
 
             var treeElements = new List<TTreeElement>();
-            var root = stExemple.СоздатьЭкземпляр<TTreeElement>(new object[] { PATH, false, "Root", "КореньМира", -1, ПоследнийЭлемент });
+            var root = stExemple.СоздатьЭкземпляр<TTreeElement>(ПараметрыКорня);
             treeElements.Add(root);
             AddChildrenRecursive(PATH, root, treeElements);
 

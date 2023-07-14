@@ -22,7 +22,7 @@ namespace UnityEditor.TreeViewExamples
 
         protected override void RowGUI(RowGUIArgs args)
         {
-            var item = (TreeViewItem<Section_TreeElement>)args.item;
+            var item = (TreeViewItem<Section_HTML_TreeElement>)args.item;
             var contentIndent = GetContentIndent(item);
             // Background
             var bgRect = args.rowRect;
@@ -63,91 +63,79 @@ namespace UnityEditor.TreeViewExamples
             }
         }
         //заголовок родительского узла корня
-        void HeaderGUI(Rect headerRect, string label, TreeViewItem<Section_TreeElement> item)
+        void HeaderGUI(Rect headerRect, string label, TreeViewItem<Section_HTML_TreeElement> item)
         {
-            headerRect.y += 1f;
-            GUI.backgroundColor = item.data.NoProject ? Color.cyan : Color.white;
-            // Do toggle
-            Rect toggleRect = headerRect;
-            toggleRect.width = 16;
-            EditorGUI.BeginChangeCheck();
-            item.data.enabled = EditorGUI.Toggle(toggleRect, item.data.enabled); // hide when outside cell rect
-            if (EditorGUI.EndChangeCheck())
-                RefreshCustomRowHeights();
-
+            headerRect.y += 1f;        
             Rect labelRect = headerRect;
-            labelRect.xMin += toggleRect.width + 2f;
             //text
             labelRect.width = 300;
-            if (!item.data.NoProject)
-            {
-                if (EditorGUI.LinkButton(labelRect, label))
-                {
-                    IEditorGUILayoutPopup.НомерМира = item.data.НомерМира;
-                    IEditorGUILayoutPopup.info = item.data.text;
-                }
-            }
-            else
-                GUI.Label(labelRect, label);
+            GUI.Label(labelRect, label);
 
+            labelRect.y += 3f;
+            header_edit(ref labelRect, item);
+            labelRect.y -= 3f;
             header_path(item.data.path, ref labelRect);
-            header_info(item.data.path, ref labelRect);
 
             labelRect.xMin += 2 * labelRect.width + 2f;
             GUI.Label(labelRect, item.data.description);
-            GUI.backgroundColor = Color.white;
         }
-        void ControlsGUI(Rect controlsRect, TreeViewItem<Section_TreeElement> item)
+        void ControlsGUI(Rect controlsRect, TreeViewItem<Section_HTML_TreeElement> item)
         {
             var rect = controlsRect;
             rect.y += 3f;
             rect.height = EditorGUIUtility.singleLineHeight + 5;
 
-            Item_descript(ref rect, item.data.text);
-            Item_fs(ref rect, item.data.Файлы, item.id);
+            Item_descript(ref rect, item.data.description);
         }
         #region ссылки на header
+        static public string html = "https://evgbobrecov.blogspot.com/";
         void header_path(string path, ref Rect labelRect)
         {
             //path
             labelRect.x = labelRect.x + labelRect.width + 2f;
             labelRect.width = 28;
-            if (EditorGUI.LinkButton(labelRect, "path")) stModule.file.Class.ОткрытьФайл(path);
+            if (EditorGUI.LinkButton(labelRect, "path")) stModule.file.Class.ОткрытьФайл(html+ path + ".html");
         }
-        void header_info(string path, ref Rect labelRect)
+        static private TreeViewItem<Section_HTML_TreeElement> element;
+        static public bool ПоказатьРедактор(Rect barEdit1, Rect barEdit2, Rect barEdit3)
         {
-            //info
+            var b = false;
+            if (element != null)
+            {
+                GUILayout.BeginVertical();
+                var e = GUI.TextField(barEdit1, element.data.name);
+                if (e!= element.data.name)
+                {
+                    element.data.name = e;
+                    b = true;
+                }
+
+                element.data.description = GUI.TextField(barEdit2, element.data.description);
+                element.data.path = GUI.TextField(barEdit3, element.data.path);
+                GUILayout.EndVertical();
+            }
+            return b;
+        }
+        void header_edit(ref Rect labelRect, TreeViewItem<Section_HTML_TreeElement> item)
+        {
+            //path
             labelRect.x = labelRect.x + labelRect.width + 2f;
-            labelRect.width = 25;
-            if (EditorGUI.LinkButton(labelRect, "info")) stModule.file.Class.ОткрытьФайл(path + "/info.txt", true);
+            labelRect.width = 28;
+            if (GUI.Button(labelRect, "edit",stFile.Стиль(Color.black))) element = item;
         }
         #endregion
-        //ui вложенненные данные в узле дерева
+        #region ui вложенненные данные в узле дерева
         protected override float GetCustomRowHeight(int row, TreeViewItem item)
         {
             var min = 30f;
-            var myItem = (TreeViewItem<Section_TreeElement>)item;
+            var myItem = (TreeViewItem<Section_HTML_TreeElement>)item;
 
             if (myItem.data.enabled)
                 //открытый контейнер
-                return min + (myItem.data.text.Length == 0 ? 0 : 18) + myItem.data.Файлы.Count * 18;
+                return min + (myItem.data.description.Length == 0 ? 0 : 25);
 
             return min;
-        }
-        #region Item
-        private void Item_fs(ref Rect rect, List<string> Файлы, int id)
-        {
-            //файлы
-            int cnt = 0;
-            foreach (var f in Файлы)
-            {
-                rect.height = EditorGUIUtility.singleLineHeight;
-                var b = Relation_myTree.Отмечен.element == id && Relation_myTree.Отмечен.tabs == Section.tabs && cnt == Relation_myTree.Отмечен.f;
-                stFile.GUI_btn(rect, b, f, new Color32(206, 68, 21, 255), () => Relation.Single.Обновить(f));
-                rect.y += EditorGUIUtility.standardVerticalSpacing + 15;
-                cnt++;
-            }
-        }
+        } 
         #endregion
     }
 }

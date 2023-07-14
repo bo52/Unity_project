@@ -10,7 +10,6 @@ namespace UnityEditor.TreeViewExamples
         private Section_MyTree[] Разделы;
         static public int tabs = 3;
         private EditorGUILayoutTest edit;
-        private Section_HTML Html;
         public Section(EditorGUILayoutTest edit)
         {
             this.edit = edit;
@@ -22,7 +21,6 @@ namespace UnityEditor.TreeViewExamples
                 new Section_MyTree(edit,(byte)stModule.path.Class.Разделы.FUNS,stModule.path.Class.КореньФунМира),
                 new Section_MyTree(edit,(byte)stModule.path.Class.Разделы.SHADER,stModule.path.Class.КореньШейдеров)
             };
-            Html = new Section_HTML(edit, (byte)stModule.path.Class.Разделы.HTML, "https://evgbobrecov.blogspot.com/");
             Single = this;
         }
         public void Показать()

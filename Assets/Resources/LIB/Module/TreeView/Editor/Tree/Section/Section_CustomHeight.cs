@@ -16,6 +16,7 @@ namespace UnityEditor.TreeViewExamples
         {
 
         }
+
         public Section_CustomHeightTreeView(object MyTree, TreeViewState state, TreeModel<Section_TreeElement> model) : base(state, model)
         {
             this.MyTree = MyTree;
