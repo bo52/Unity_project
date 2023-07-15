@@ -26,7 +26,7 @@ namespace UnityEditor.TreeViewExamples
         public void Показать()
         {
 
-            GUILayout.BeginArea(new Rect(0, 20, edit.dw, 20));
+            GUILayout.BeginArea(new Rect(10, 20, edit.position.width - 20, 20));
             tabs = GUILayout.Toolbar(tabs, (from x in Разделы select System.Enum.GetName(typeof(stModule.path.Class.Разделы), x.Номер)).ToArray<string>());
             GUILayout.EndArea();
             Разделы[tabs].fun_project(tabs);

@@ -23,7 +23,7 @@ namespace UnityEditor.TreeViewExamples
         }
         public void Показать()
         {
-            GUILayout.BeginArea(new Rect(edit.dw + 10, 20, edit.dw - 10, 20));
+            GUILayout.BeginArea(new Rect(20, 0.5f * edit.position.height + 50, edit.position.width - 40, 20));
             tabs = GUILayout.Toolbar(tabs, new string[] { "Зависимости","HTML" });
             GUILayout.EndArea();
             switch (tabs)

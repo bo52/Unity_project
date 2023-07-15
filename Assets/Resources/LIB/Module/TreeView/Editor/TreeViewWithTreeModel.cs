@@ -26,6 +26,14 @@ namespace UnityEditor.TreeViewExamples
         readonly List<TreeViewItem> m_Rows = new List<TreeViewItem>(100);
         public event Action treeChanged;
 
+        public TreeViewWithTreeModel(TreeViewState state, TreeModel<T> model) : base(state)
+        {          
+            Init(model);
+        }
+        public TreeViewWithTreeModel(TreeViewState state, MultiColumnHeader multiColumnHeader, TreeModel<T> model) : base(state, multiColumnHeader)
+        {
+            Init(model);
+        }
         private void SetUseHorizontalScroll(bool value)
         {
             FieldInfo guiFieldInfo = typeof(TreeView).GetField("m_GUI", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -45,17 +53,6 @@ namespace UnityEditor.TreeViewExamples
         public TreeModel<T> treeModel { get { return m_TreeModel; } }
         public event Action<IList<TreeViewItem>> beforeDroppingDraggedItems;
 
-
-        public TreeViewWithTreeModel(TreeViewState state, TreeModel<T> model) : base(state)
-        {
-            Init(model);
-        }
-
-        public TreeViewWithTreeModel(TreeViewState state, MultiColumnHeader multiColumnHeader, TreeModel<T> model)
-            : base(state, multiColumnHeader)
-        {
-            Init(model);
-        }
         void Init(TreeModel<T> model)
         {
 
@@ -66,7 +63,7 @@ namespace UnityEditor.TreeViewExamples
             showBorder = true;
             showAlternatingRowBackgrounds = false;
             useScrollView = true; // We are using the Inspector ScrollView
-
+            SetUseHorizontalScroll(true);
             //MultiColumnHeaderState.Column[] columns = new MultiColumnHeaderState.Column[2];
             //for (int i = 0; i < columns.Length; ++i)
             //{

@@ -109,8 +109,8 @@ namespace UnityEditor.TreeViewExamples
             GUILayout.EndArea();
         }
         #region Rect
-        public virtual Rect toolbarRect => new Rect(20, 50, edit.dw - 10, 60);
-        public virtual Rect multiColumnTreeViewRect => new Rect(20, 100, edit.dw, edit.position.height - 200);
+        public virtual Rect toolbarRect => new Rect(20, 50, edit.position.width - 20, 60);
+        public virtual Rect multiColumnTreeViewRect => new Rect(20, 100, edit.position.width - 40, 0.5f*edit.position.height - 100);
         #endregion
     }
 }

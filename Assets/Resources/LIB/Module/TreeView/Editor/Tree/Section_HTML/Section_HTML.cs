@@ -58,17 +58,17 @@ namespace UnityEditor.TreeViewExamples
         }
         public override void Bar(System.Action CastomBar)
         {
-            var y = 50;
+            var y = 0.5f * edit.position.height + 75;
             var h = 20;
-            var x = 20 + edit.dw;
-            var w = 500;
+            var x = 20;
+            var w = edit.position.width - 40;
             if (Section_HTML_CustomHeightTreeView.ПоказатьРедактор(new Rect(x, y, w, h), new Rect(x, y + 20, w, h), new Rect(x, y + 40, w, h))) m_TreeView.Reload();
             base.Bar(null);
         }
         #region Rect
-        public Rect barEdit => new Rect(20 + edit.dw, 50 + 40, edit.dw - 10, 20);
-        public override Rect toolbarRect => new Rect(20 + edit.dw, 75 + 40, edit.dw - 10, 60);
-        public override Rect multiColumnTreeViewRect => new Rect(20 + edit.dw, 125 + 40, edit.dw, edit.position.height - 200);
+        public Rect barEdit => new Rect(20, 0.5f * edit.position.height + 70 + 40, 0.5f * edit.position.width, 20);
+        public override Rect toolbarRect => new Rect(20, 0.5f * edit.position.height + 150, edit.position.width - 40, 60);
+        public override Rect multiColumnTreeViewRect => new Rect(20, 0.5f * edit.position.height + 200, edit.position.width - 40, 250);
         #endregion
     }
 }

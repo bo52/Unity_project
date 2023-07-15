@@ -29,8 +29,8 @@ namespace UnityEditor.TreeViewExamples
             base.fun_project(key);
         }
         #region Rect
-        public override Rect toolbarRect => new Rect(edit.dw + 20, 50, edit.dw, 60);
-        public override Rect multiColumnTreeViewRect => new Rect(edit.dw + 20, 100, edit.dw, edit.position.height - 200);
+        public override Rect toolbarRect => new Rect(20, 0, edit.position.width, 60);
+        public override Rect multiColumnTreeViewRect => new Rect(20, 50 + 0.5f * edit.position.height+20, edit.position.width - 40, 350);
         #endregion
         #region Зависимости
         public override void AddChildrenRecursive(string path, TreeElement element, List<Relation_TreeElement> treeElements)
@@ -46,8 +46,13 @@ namespace UnityEditor.TreeViewExamples
         }
         public void AddChildrenRecursive2(string path, TreeViewItem<Relation_TreeElement> element)
         {
-            if (element.children != null && element.children.Count > 0&& element.children[0]!=null)
-                m_TreeView.treeModel.RemoveElements(new List<int> { element.children[0].id, element.children[1].id });
+            if (element.children != null && element.children.Count > 0)
+            {
+                if (element.children[0] != null)
+                    m_TreeView.treeModel.RemoveElements(new List<int> { element.children[0].id });
+                if (element.children[1] != null)
+                    m_TreeView.treeModel.RemoveElements(new List<int> { element.children[1].id });
+            }
 
             TreeElement fun1(string Имя)
             {

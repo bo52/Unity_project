@@ -56,7 +56,7 @@ namespace UnityEditor.TreeViewExamples
         }
         Rect bottomToolbarRect
         {
-            get { return new Rect(20f, edit.position.height - 100f, edit.position.width - edit.dw, 150f); }
+            get { return new Rect(20f, 0.5f*edit.position.height, edit.position.width - 50, 150f); }
         }
     }
 }

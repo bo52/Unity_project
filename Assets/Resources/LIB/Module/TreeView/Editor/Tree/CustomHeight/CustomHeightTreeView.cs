@@ -15,6 +15,7 @@ namespace UnityEditor.TreeViewExamples
         }
         public CustomHeightTreeView() : base(null, null)
         {
+
         }
         public CustomHeightTreeView(TreeViewState state, TreeModel<TTreeElement> model) : base(state, model)
         {

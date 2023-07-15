@@ -56,10 +56,10 @@ public class EditorGUILayoutTest : EditorWindow, IEditorGUILayoutPopup
     void OnGUI()
     {
         stModule.file.Class.Открыть();
-        //GUILayout.BeginHorizontal();
+        //GUILayout.BeginVertical();
         Section.Показать();
         Relation.Показать();
-        //GUILayout.EndHorizontal();
+        //GUILayout.EndVertical();
         //GUILayout.BeginHorizontal();
         //GUILayout.Label("100");
         //GUILayout.EndHorizontal();

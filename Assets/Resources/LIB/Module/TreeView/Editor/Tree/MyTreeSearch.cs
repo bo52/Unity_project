@@ -22,7 +22,7 @@ namespace UnityEditor.TreeViewExamples
             tree.searchString = m_SearchField.OnGUI(search_rect, tree.searchString);
         }
         #region rect
-        private Rect search_rect=>new Rect(20f, 25f, edit.dw - 30, 50f); 
+        private Rect search_rect=>new Rect(20f, 25f, edit.position.width - 60, 50f); 
         #endregion
     }
 }
